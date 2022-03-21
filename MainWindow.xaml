@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Visual_filtering_referable_objects"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Software de filtrado visual" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="9*"/>
-            <ColumnDefinition Width="91*"/>
+            <ColumnDefinition Width="19*"/>
+            <ColumnDefinition Width="181*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnEnable" Content="Activar reconocimiento de voz" HorizontalAlignment="Left" Height="60" Margin="65,335,0,0" VerticalAlignment="Top" Width="286" RenderTransformOrigin="0.5,0.5" Click="Button_Click" Background="#FFD4FFBF" Grid.ColumnSpan="2" AutomationProperties.Name="BtnActivate">
+        <Button x:Name="btnEnable" Content="Activar reconocimiento de voz" HorizontalAlignment="Left" Height="60" Margin="2,335,0,0" VerticalAlignment="Top" Width="286" RenderTransformOrigin="0.5,0.5" Click="Button_Click" Background="#FFD4FFBF" AutomationProperties.Name="BtnActivate" Grid.Column="1" FontSize="14" FontWeight="Bold">
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -26,13 +26,13 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <Button x:Name="btnDisable" Content="Desactivar reconocimiento de voz" HorizontalAlignment="Left" Height="57" Margin="328,336,0,0" VerticalAlignment="Top" Width="299" Background="#FFFFBEBE" Click="Button_Click_1" Grid.Column="1" AutomationProperties.Name="btnDisable">
+        <Button x:Name="btnDisable" Content="Desactivar reconocimiento de voz" HorizontalAlignment="Left" Height="57" Margin="328,336,0,0" VerticalAlignment="Top" Width="299" Background="#FFFFBEBE" Click="Button_Click_1" Grid.Column="1" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="7"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <TextBlock x:Name="showShapesText" HorizontalAlignment="Left" Height="249" Margin="46,49,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="677" Grid.ColumnSpan="2" FontSize="16"/>
+        <TextBlock x:Name="showShapesText" HorizontalAlignment="Left" Height="249" Margin="-2,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="649" FontSize="16" Grid.Column="1" Padding="10,10,10,10"/>
     </Grid>
 </Window>

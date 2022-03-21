@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Speech.Recognition;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace Visual_filtering_referable_objects
 {
@@ -35,21 +35,26 @@ namespace Visual_filtering_referable_objects
 
 			GrammarBuilder pluralGrammar = new GrammarBuilder("borra los");
 			Choices shapesChoices = new Choices("triangulos", "cuadrados", "circulos");
-			//Choices colorChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
+			Choices colorsChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
 			pluralGrammar.Append(shapesChoices);
-			//grammarBuilder.Append(colorChoices);
+			pluralGrammar.Append(colorsChoices, 0, 1);
 
-			GrammarBuilder singularGrammar = new GrammarBuilder("borra un");
-			Choices shapeChoices = new Choices("triangulo", "cuadrado", "circulo");
-			//Choices colorChoices = new Choices("rojo", "azul", "amarillo", "verde", "negro");
-			singularGrammar.Append(shapeChoices);
-			//grammarBuilder.Append(colorChoices);
+			Grammar referableObjectsGrammar = CreateGrammarFromFile();
 
-			speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
-			speechRecognizer.LoadGrammar(new Grammar(singularGrammar));
+			//speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
+			speechRecognizer.LoadGrammar(referableObjectsGrammar);
+			Trace.WriteLine(referableObjectsGrammar.ToString());
+
 			speechRecognizer.SetInputToDefaultAudioDevice();
 			btnDisable.IsEnabled = false;
 			showShapesText.Text = getShapesText();
+		}
+
+		private static Grammar CreateGrammarFromFile()
+		{
+			Grammar shapesGrammar = new Grammar(@"..\..\grammars\Grammar.xml");
+			shapesGrammar.Name = "SRGS File Grammar";
+			return shapesGrammar;
 		}
 
 		private string getShapesText()
@@ -73,50 +78,126 @@ namespace Visual_filtering_referable_objects
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			if (e.Result.Words.Count == 3)
+			btnDisable.IsEnabled = false;
+			btnEnable.IsEnabled = true;
+			Shape shapeToSearch = new Shape();
+
+			if (e.Result.Words.Count>2)
 			{
-				MessageBox.Show("Has hablado! Has dicho esto: " + e.Result.Words[0].Text +" "+ e.Result.Words[1].Text + " "+ e.Result.Words[2].Text);
 				string command = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
 				string shape = e.Result.Words[2].Text.ToLower();
+				string adjetive = e.Result.Words.Count > 3 ? e.Result.Words[3].Text.ToLower() : null;
+				string secondCommand = e.Result.Words.Count > 4 ? e.Result.Words[4].Text.ToLower() + " " + (e.Result.Words.Count > 4 ? e.Result.Words[5].Text.ToLower() : "") : null;
+				string whole = "";
+				for (int i = 0; i < e.Result.Words.Count; i++)
+                {
+					whole = whole + ' ' + e.Result.Words[i].Text;
+                }
+				MessageBox.Show("Has hablado! Has dicho esto: " + whole);
+
 				switch (command)
 				{
 					case "borra los":
 						switch (shape)
 						{
 							case "triangulos":
-								MessageBox.Show("Borrando los triangulos...");
-								triangles = 0;
+								shapeToSearch.shape = ShapeType.Triangle;
 								break;
 							case "cuadrados":
-								MessageBox.Show("Borrando los cuadrados...");
-								squares = 0;
+								shapeToSearch.shape = ShapeType.Square;
 								break;
 							case "circulos":
-								MessageBox.Show("Borrando los circulos...");
-								circles = 0;
+								shapeToSearch.shape = ShapeType.Circle;
+								break;
+							default:
 								break;
 						}
-						break;
-					case "borra un":
-						switch (shape)
-						{
-							case "triangulo":
-								MessageBox.Show("Borrando un triangulo...");
-								triangles--;
+						shapeToSearch = setAdjetives(shapeToSearch, adjetive);
+						switch (secondCommand)
+                        {
+							case "que estén":
+								string[] locationStrings = new string[2];
+								locationStrings[0] = e.Result.Words[6].Text.ToLower();
+								locationStrings[1] = e.Result.Words.Count > 7 ? e.Result.Words[9].Text.ToLower() : "";
+								shapeToSearch = setLocation(shapeToSearch, locationStrings[0]);
+								shapeToSearch = setLocation(shapeToSearch, locationStrings[1]);
 								break;
-							case "cuadrado":
-								MessageBox.Show("Borrando un cuadrado...");
-								squares--;
+							case "que sean":
+								string secondAdjetive = e.Result.Words[6].Text.ToLower();
+								shapeToSearch = setAdjetives(shapeToSearch, secondAdjetive);
 								break;
-							case "circulo":
-								MessageBox.Show("Borrando un circulo...");
-								circles--;
+							default:
 								break;
 						}
 						break;
 				}
 			}
 			showShapesText.Text = getShapesText();
+		}
+
+		private Shape setLocation (Shape originalShape, string locationString)
+        {
+			switch (locationString)
+			{
+				case "arriba":
+					originalShape.location_y = LocationY.Top;
+					break;
+				case "abajo":
+					originalShape.location_y = LocationY.Bottom;
+					break;
+				case "derecha":
+					originalShape.location_x = LocationX.Right;
+					break;
+				case "izquierda":
+					originalShape.location_x = LocationX.Left;
+					break;
+				default:
+					break;
+			}
+			return originalShape;
+		}
+
+		private Shape setAdjetives(Shape originalShape, string adjetive)
+		{
+			switch (adjetive)
+			{
+				case "azules":
+					originalShape.color = Color.Blue;
+					break;
+				case "negros":
+					originalShape.color = Color.Black;
+					break;
+				case "rojos":
+					originalShape.color = Color.Red;
+					break;
+				case "morados":
+					originalShape.color = Color.Purple;
+					break;
+				case "amarillos":
+					originalShape.color = Color.Yellow;
+					break;
+				case "verdes":
+					originalShape.color = Color.Green;
+					break;
+				case "naranjas":
+					originalShape.color = Color.Orange;
+					break;
+				case "rosas":
+					originalShape.color = Color.Pink;
+					break;
+				case "grandes":
+					originalShape.size = Size.Big;
+					break;
+				case "medianos":
+					originalShape.size = Size.Medium;
+					break;
+				case "pequeños":
+					originalShape.size = Size.Small;
+					break;
+				default:
+					break;
+			}
+			return originalShape;
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
