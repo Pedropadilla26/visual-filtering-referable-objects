@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<grammar version="1.0" xml:lang="es-ES"  
+         xmlns="http://www.w3.org/2001/06/grammar"  
+         tag-format="semantics/1.0" root="Main">  
+
+  <!-- DeleteReferableShapes.xml:   
+    Defines an SRGS grammar for deleting referable shapes. This grammar includes  
+    colors, sizes, and locations rules that lists the different properties that
+    a geometric object can have. -->  
+
+  <rule id="Main">  
+    <one-of>  
+      <item>  
+        Borra los <ruleref uri="#Shapes"/>  
+      </item>  
+      <item>  
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Properties"/>  
+      </item>  
+      <item>  
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Properties"/> que estén <ruleref uri="#Locations"/>
+      </item>  
+      <item>  
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Size"/> que sean <ruleref uri="#Colors"/>
+      </item>  
+      <item>  
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Size"/>
+      </item>  
+      <item>  
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Size"/> y que estén <ruleref uri="#Locations"/>
+      </item>  
+    </one-of>  
+  </rule>  
+
+  <rule id="Shapes" scope="public">  
+    <one-of>  
+      <item> Cuadrados </item>  
+      <item> Círculos </item>  
+      <item> Triángulos </item>  
+    </one-of>  
+  </rule>  
+
+   <rule id="Properties" scope="public">  
+    <one-of>  
+      <item> <ruleref uri="#Colors"/> </item>  
+      <item> <ruleref uri="#Size"/> </item>    
+    </one-of>  
+  </rule>  
+
+  <rule id="Colors" scope="public">  
+    <one-of>  
+      <item> Negros </item>  
+      <item> Rojos </item>  
+      <item> Azules </item>  
+      <item> Morados </item>  
+      <item> Amarillos </item>  
+      <item> Verdes </item>  
+      <item> Naranjas </item>  
+      <item> Rosas </item> 
+    </one-of>  
+  </rule>  
+  
+  <rule id="Locations" scope="public">  
+    <one-of>  
+      <item> <ruleref uri="#LocationAxisX"/> </item>  
+      <item> <ruleref uri="#LocationAxisY"/> </item>    
+    </one-of>  
+  </rule>  
+
+  <rule id="LocationAxisY" scope="public">  
+    <one-of>  
+      <item> Arriba </item>  
+      <item> Abajo </item>  
+      <item> Arriba a la <ruleref uri="#LocationAxisX"/> </item>  
+      <item> Abajo a la <ruleref uri="#LocationAxisX"/> </item>    
+    </one-of>  
+  </rule>  
+  
+  <rule id="LocationAxisX" scope="public">  
+    <one-of>  
+      <item> Derecha </item>  
+      <item> Izquierda </item>  
+    </one-of>  
+  </rule>  
+
+  <rule id="Size" scope="public">  
+    <one-of>  
+        <item> Grandes </item>  
+        <item> Medianos </item>  
+        <item> Pequeños </item>  
+    </one-of>  
+  </rule>  
+</grammar>
