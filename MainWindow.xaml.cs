@@ -104,8 +104,6 @@ namespace Visual_filtering_referable_objects
 				myPolygon.Stroke = System.Windows.Media.Brushes.Black;
 				myPolygon.Fill = shape.color;
 				myPolygon.StrokeThickness = 2;
-				myPolygon.HorizontalAlignment = HorizontalAlignment.Left;
-				myPolygon.VerticalAlignment = VerticalAlignment.Center;
 				myPolygon.Points = shape.points;
 				Canvas_.Children.Add(myPolygon);
 			}
@@ -119,23 +117,27 @@ namespace Visual_filtering_referable_objects
 			{
 				Canvas_.Children.Remove(polygon);
 			}
+			var ellipses = Canvas_.Children.OfType<Ellipse>().ToList();
+			foreach (var ellipse in ellipses)
+			{
+				Canvas_.Children.Remove(ellipse);
+			}
 		}
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
 			Button_Click_1(null, null);
-			string location = "";
 			int quadrantToSearch1 = -1;
 			int quadrantToSearch2 = -1;
-			ShapeType shapeToSearch;
-			SolidColorBrush color;
-			Size size;
-			string startCommand = "";
+			ShapeType shapeToSearch = ShapeType.None;
+			SolidColorBrush color = System.Windows.Media.Brushes.White;
+			Size size = Size.None;
+
 			bool isValidStart = false;
 
 			if (e.Result.Words.Count>2)
 			{
-				startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
+				string startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
 				string shapeString = e.Result.Words[2].Text.ToLower();
 				string wholeText = "";
 				for (int i = 0; i < e.Result.Words.Count; i++)
@@ -258,8 +260,51 @@ namespace Visual_filtering_referable_objects
 						break;
 				}
 			}
-			showShapesText.Text = getShapesText();
-			PaintShapes();
+			if (isValidStart)
+            {
+				showShapesText.Text = getShapesText();
+				foreach (Shape shape in this.shapes)
+				{
+					if (matchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
+					{
+						this.shapes.Remove(shape);
+					}
+				}
+			}
+				
+		}
+
+		private Boolean matchesShape(Shape shape, ShapeType shapeToSearch, SolidColorBrush color, Size size, int quadrantToSearch1, int quadrantToSearch2)
+        {
+			Boolean matchesShape = false;
+			Boolean matchesColor = false;
+			Boolean matchesSize = false;
+			Boolean matchesQuadrant = false;
+
+			if (shapeToSearch == shape.shape)
+			{
+				matchesShape = true;
+			}
+            if (color == shape.color || color == System.Windows.Media.Brushes.White)
+            {
+                matchesColor = true;
+            }
+			if (size == shape.size || size == Size.None)
+			{
+				matchesSize = true;
+			}
+			if (quadrantToSearch1 == shape.quadrant || quadrantToSearch1 == -1 || quadrantToSearch2 == shape.quadrant)
+			{
+				matchesQuadrant = true;
+			}
+
+			return matchesShape && matchesColor && matchesSize && matchesQuadrant;
+        }
+
+		private Boolean isInQuadrant (int shapeQuadrant, int quadrantToSearch1, int quadrantToSearch2)
+        {
+			return quadrantToSearch2 == -1 ? (shapeQuadrant == quadrantToSearch1) : (shapeQuadrant == quadrantToSearch2 || shapeQuadrant == quadrantToSearch1);
+
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

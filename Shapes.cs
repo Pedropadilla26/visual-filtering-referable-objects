@@ -11,6 +11,7 @@ namespace Visual_filtering_referable_objects
 
     public enum ShapeType
     {
+        None,
         Triangle,
         Square,
         Circle
@@ -30,6 +31,7 @@ namespace Visual_filtering_referable_objects
    */
     public enum Size
     {
+        None,
         Big,
         Medium,
         Small,
