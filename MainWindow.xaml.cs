@@ -30,6 +30,7 @@ namespace Visual_filtering_referable_objects
         private int circles = 4;
 
 		List<Shape> shapes = new List<Shape>();
+		List<Shape> initialShapes = new List<Shape>();
 
 		public MainWindow()
         {
@@ -62,6 +63,7 @@ namespace Visual_filtering_referable_objects
 
 			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, 1, myPointCollection);
 			shapes.Add(shape);
+			List<Shape> initialShapes = new List<Shape>(shapes);
 			PaintShapes();
 		}
 
@@ -151,7 +153,7 @@ namespace Visual_filtering_referable_objects
 					case "borra los":
 						switch (shapeString)
 						{
-							case "triangulos":
+							case "triángulos":
 								shapeToSearch = ShapeType.Triangle;
 								isValidStart = true;
 								break;
@@ -168,7 +170,7 @@ namespace Visual_filtering_referable_objects
 						}
                         if (isValidStart)
                         {
-							for (int i = 3; i < e.Result.Words.Count - 1; i++)
+							for (int i = 3; i < e.Result.Words.Count; i++)
 							{
 								string word = e.Result.Words[i].Text;
 								switch (word)
@@ -263,13 +265,21 @@ namespace Visual_filtering_referable_objects
 			if (isValidStart)
             {
 				showShapesText.Text = getShapesText();
-				foreach (Shape shape in this.shapes)
+				List<Shape> shapesCopy = new List<Shape>(this.shapes);
+				Boolean anyMatch = false;
+				foreach (Shape shape in shapesCopy)
 				{
 					if (matchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
 					{
 						this.shapes.Remove(shape);
+						anyMatch = true;
 					}
 				}
+				if (!anyMatch)
+                {
+					MessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
+				}
+				PaintShapes();
 			}
 				
 		}

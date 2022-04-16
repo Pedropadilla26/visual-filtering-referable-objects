@@ -39,7 +39,6 @@
         <TextBlock x:Name="showShapesText" HorizontalAlignment="Left" Height="115" Margin="146,472,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="328" Padding="10,10,10,10" Grid.Column="3" Background="#FFEDFCFC"/>
         <Canvas Grid.Column="3">
             <Canvas x:Name="Canvas_" Height="400" Width="600" Canvas.Left="35" Canvas.Top="27" Background="White" Panel.ZIndex="100">
-                <Polygon Points="50,0 100,100, 0,100" Stroke="Black" Fill="Black" />
                 <Rectangle Stroke="Black" Fill="Black" />
             </Canvas>
             <Rectangle Height="402" Canvas.Left="34" Stroke="Black" Canvas.Top="26" Width="602" HorizontalAlignment="Center" VerticalAlignment="Center"/>
