@@ -29,41 +29,43 @@ namespace Visual_filtering_referable_objects
         private int squares = 3;
         private int circles = 4;
 
-        public MainWindow()
+		List<Shape> shapes = new List<Shape>();
+
+		public MainWindow()
         {
             InitializeComponent();
-			speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
+            speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
 
-			GrammarBuilder pluralGrammar = new GrammarBuilder("borra los");
-			Choices shapesChoices = new Choices("triangulos", "cuadrados", "circulos");
-			Choices colorsChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
-			pluralGrammar.Append(shapesChoices);
-			pluralGrammar.Append(colorsChoices, 0, 1);
+            GrammarBuilder pluralGrammar = new GrammarBuilder("borra los");
+            Choices shapesChoices = new Choices("triangulos", "cuadrados", "circulos");
+            Choices colorsChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
+            pluralGrammar.Append(shapesChoices);
+            pluralGrammar.Append(colorsChoices, 0, 1);
 
-			Grammar referableObjectsGrammar = CreateGrammarFromFile();
+            Grammar referableObjectsGrammar = CreateGrammarFromFile();
 
-			//speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
-			speechRecognizer.LoadGrammar(referableObjectsGrammar);
-			Trace.WriteLine(referableObjectsGrammar.ToString());
+            //speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
+            speechRecognizer.LoadGrammar(referableObjectsGrammar);
+            Trace.WriteLine(referableObjectsGrammar.ToString());
 
-			speechRecognizer.SetInputToDefaultAudioDevice();
-			btnDisable.IsEnabled = false;
-			showShapesText.Text = getShapesText();
+            speechRecognizer.SetInputToDefaultAudioDevice();
+            btnDisable.IsEnabled = false;
+            showShapesText.Text = getShapesText();
 
+			System.Windows.Point Point1 = new System.Windows.Point(150, 100);
+			System.Windows.Point Point2 = new System.Windows.Point(200, 160);
+			System.Windows.Point Point3 = new System.Windows.Point(100, 100);
+			PointCollection myPointCollection = new PointCollection();
+			myPointCollection.Add(Point1);
+			myPointCollection.Add(Point2);
+			myPointCollection.Add(Point3);
 
-			// Add a Rectangle Element
-			
-			Rectangle myRect = new System.Windows.Shapes.Rectangle();
-			myRect.Stroke = System.Windows.Media.Brushes.Black;
-			myRect.Fill = System.Windows.Media.Brushes.SkyBlue;
-			myRect.HorizontalAlignment = HorizontalAlignment.Left;
-			myRect.VerticalAlignment = VerticalAlignment.Center;
-			myRect.Height = 50;
-			myRect.Width = 50;
-			Canvas_.Children.Add(myRect);
+			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, 1, myPointCollection);
+			shapes.Add(shape);
+			PaintShapes();
 		}
 
-		private static Grammar CreateGrammarFromFile()
+        private static Grammar CreateGrammarFromFile()
 		{
 			Grammar shapesGrammar = new Grammar(@"..\..\grammars\Grammar.xml");
 			shapesGrammar.Name = "SRGS File Grammar";
@@ -88,6 +90,36 @@ namespace Visual_filtering_referable_objects
 			btnDisable.IsEnabled = false;
 			btnEnable.IsEnabled = true;
 		}
+		private void PaintShapes()
+		{
+			ClearCanvas();
+			Console.WriteLine("Painting canvas...");
+			foreach (Shape shape in this.shapes)
+			{
+				Console.WriteLine("Painting a shape");
+				Console.WriteLine(shape.color);
+				Console.WriteLine(shape.points);
+
+				Polygon myPolygon = new Polygon();
+				myPolygon.Stroke = System.Windows.Media.Brushes.Black;
+				myPolygon.Fill = shape.color;
+				myPolygon.StrokeThickness = 2;
+				myPolygon.HorizontalAlignment = HorizontalAlignment.Left;
+				myPolygon.VerticalAlignment = VerticalAlignment.Center;
+				myPolygon.Points = shape.points;
+				Canvas_.Children.Add(myPolygon);
+			}
+		}
+
+		private void ClearCanvas()
+		{
+			Console.WriteLine("Clearing canvas...");
+			var polygons = Canvas_.Children.OfType<Polygon>().ToList();
+			foreach (var polygon in polygons)
+			{
+				Canvas_.Children.Remove(polygon);
+			}
+		}
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
@@ -96,7 +128,7 @@ namespace Visual_filtering_referable_objects
 			int quadrantToSearch1 = -1;
 			int quadrantToSearch2 = -1;
 			ShapeType shapeToSearch;
-			Color color;
+			SolidColorBrush color;
 			Size size;
 			string startCommand = "";
 			bool isValidStart = false;
@@ -140,28 +172,28 @@ namespace Visual_filtering_referable_objects
 								switch (word)
 								{
 									case "azules":
-										color = Color.Blue;
+										color = System.Windows.Media.Brushes.Blue;
 										break;
 									case "negros":
-										color = Color.Black;
+										color = System.Windows.Media.Brushes.Black;
 										break;
 									case "rojos":
-										color = Color.Red;
+										color = System.Windows.Media.Brushes.Red;
 										break;
 									case "morados":
-										color = Color.Purple;
+										color = System.Windows.Media.Brushes.Purple;
 										break;
 									case "amarillos":
-										color = Color.Yellow;
+										color = System.Windows.Media.Brushes.Yellow;
 										break;
 									case "verdes":
-										color = Color.Green;
+										color = System.Windows.Media.Brushes.Green;
 										break;
 									case "naranjas":
-										color = Color.Orange;
+										color = System.Windows.Media.Brushes.Orange;
 										break;
 									case "rosas":
-										color = Color.Pink;
+										color = System.Windows.Media.Brushes.Pink;
 										break;
 
 									case "estén":
@@ -227,6 +259,7 @@ namespace Visual_filtering_referable_objects
 				}
 			}
 			showShapesText.Text = getShapesText();
+			PaintShapes();
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

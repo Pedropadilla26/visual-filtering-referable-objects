@@ -17,6 +17,9 @@
         Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Properties"/>  
       </item>  
       <item>  
+        Borra los <ruleref uri="#Shapes"/> que estén <ruleref uri="#Locations"/>
+      </item>  
+      <item>  
         Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Properties"/> que estén <ruleref uri="#Locations"/>
       </item>  
       <item>  
@@ -63,6 +66,7 @@
     <one-of>  
       <item> <ruleref uri="#LocationAxisX"/> </item>  
       <item> <ruleref uri="#LocationAxisY"/> </item>    
+      <item> En el centro </item>    
     </one-of>  
   </rule>  
 
