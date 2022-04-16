@@ -49,7 +49,7 @@ namespace Visual_filtering_referable_objects
         public Color color { get; set; }
         public Size size { get; set; }
        // public LocationY location_y { get; set; }
-     //   public LocationX location_x { get; set; }
+       //   public LocationX location_x { get; set; }
 
         public int quadrant {get; set; }
 
