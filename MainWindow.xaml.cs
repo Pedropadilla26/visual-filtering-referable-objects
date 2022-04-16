@@ -63,6 +63,19 @@ namespace Visual_filtering_referable_objects
 
 			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, 1, myPointCollection);
 			this.shapes.Add(shape);
+
+			System.Windows.Point Point4 = new System.Windows.Point(30, 350);
+			System.Windows.Point Point5 = new System.Windows.Point(30, 250);
+			System.Windows.Point Point6 = new System.Windows.Point(150, 250);
+			System.Windows.Point Point7 = new System.Windows.Point(150, 350);
+			PointCollection myPointCollection2 = new PointCollection();
+			myPointCollection2.Add(Point4);
+			myPointCollection2.Add(Point5);
+			myPointCollection2.Add(Point6);
+			myPointCollection2.Add(Point7);
+
+			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, 4, myPointCollection2);
+			this.shapes.Add(shape2);
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
 		}
