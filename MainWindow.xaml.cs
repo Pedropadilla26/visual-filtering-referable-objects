@@ -51,7 +51,7 @@ namespace Visual_filtering_referable_objects
 
             speechRecognizer.SetInputToDefaultAudioDevice();
             btnDisable.IsEnabled = false;
-            showShapesText.Text = getShapesText();
+            //showShapesText.Text = getShapesText();
 
 			System.Windows.Point Point1 = new System.Windows.Point(150, 100);
 			System.Windows.Point Point2 = new System.Windows.Point(200, 160);
@@ -62,8 +62,8 @@ namespace Visual_filtering_referable_objects
 			myPointCollection.Add(Point3);
 
 			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, 1, myPointCollection);
-			shapes.Add(shape);
-			List<Shape> initialShapes = new List<Shape>(shapes);
+			this.shapes.Add(shape);
+			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
 		}
 
@@ -91,6 +91,15 @@ namespace Visual_filtering_referable_objects
             speechRecognizer.RecognizeAsyncStop();
 			btnDisable.IsEnabled = false;
 			btnEnable.IsEnabled = true;
+		}
+
+		private void Button_Click_Reset(object sender, RoutedEventArgs e)
+		{
+			speechRecognizer.RecognizeAsyncStop();
+			btnDisable.IsEnabled = false;
+			btnEnable.IsEnabled = true;
+			this.shapes = new List<Shape>(this.initialShapes);
+			PaintShapes();
 		}
 		private void PaintShapes()
 		{
@@ -202,7 +211,7 @@ namespace Visual_filtering_referable_objects
 
 									case "estén":
 										string firstPositionWord = e.Result.Words[i+1].Text;
-										string secondPositionWord = e.Result.Words[i+2].Text + " " + e.Result.Words[i + 3].Text + " " + e.Result.Words[i + 4].Text;
+										string secondPositionWord = e.Result.Words.Count >= i+4 ? e.Result.Words[i+2].Text + " " + e.Result.Words[i + 3].Text + " " + e.Result.Words[i + 4].Text : "";
 										switch (firstPositionWord)
                                         {
 											case "arriba":
@@ -264,7 +273,7 @@ namespace Visual_filtering_referable_objects
 			}
 			if (isValidStart)
             {
-				showShapesText.Text = getShapesText();
+				//showShapesText.Text = getShapesText();
 				List<Shape> shapesCopy = new List<Shape>(this.shapes);
 				Boolean anyMatch = false;
 				foreach (Shape shape in shapesCopy)
