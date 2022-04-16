@@ -181,7 +181,7 @@ namespace Visual_filtering_referable_objects
                         {
 							for (int i = 3; i < e.Result.Words.Count; i++)
 							{
-								string word = e.Result.Words[i].Text;
+								string word = e.Result.Words[i].Text.ToLower();
 								switch (word)
 								{
 									case "azules":
@@ -210,8 +210,8 @@ namespace Visual_filtering_referable_objects
 										break;
 
 									case "estén":
-										string firstPositionWord = e.Result.Words[i+1].Text;
-										string secondPositionWord = e.Result.Words.Count >= i+4 ? e.Result.Words[i+2].Text + " " + e.Result.Words[i + 3].Text + " " + e.Result.Words[i + 4].Text : "";
+										string firstPositionWord = e.Result.Words[i+1].Text.ToLower();
+										string secondPositionWord = e.Result.Words.Count > i+4 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() + " " + e.Result.Words[i + 4].Text.ToLower() : "";
 										switch (firstPositionWord)
                                         {
 											case "arriba":
@@ -245,7 +245,7 @@ namespace Visual_filtering_referable_objects
 												}
 												break;
 											case "en":
-												string centerWord = e.Result.Words[i+2].Text + " " + e.Result.Words[i + 3].Text;
+												string centerWord = e.Result.Words.Count > i + 3 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() : "";
 												if (centerWord == "el centro")
 													quadrantToSearch1 = 3;
 												break;
