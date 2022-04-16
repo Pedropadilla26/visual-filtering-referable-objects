@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Speech.Recognition;
 using System.Globalization;
 using System.Diagnostics;
+using System.Windows.Shapes;
 
 namespace Visual_filtering_referable_objects
 {
@@ -48,6 +49,18 @@ namespace Visual_filtering_referable_objects
 			speechRecognizer.SetInputToDefaultAudioDevice();
 			btnDisable.IsEnabled = false;
 			showShapesText.Text = getShapesText();
+
+
+			// Add a Rectangle Element
+			
+			Rectangle myRect = new System.Windows.Shapes.Rectangle();
+			myRect.Stroke = System.Windows.Media.Brushes.Black;
+			myRect.Fill = System.Windows.Media.Brushes.SkyBlue;
+			myRect.HorizontalAlignment = HorizontalAlignment.Left;
+			myRect.VerticalAlignment = VerticalAlignment.Center;
+			myRect.Height = 50;
+			myRect.Width = 50;
+			Canvas_.Children.Add(myRect);
 		}
 
 		private static Grammar CreateGrammarFromFile()
@@ -78,39 +91,55 @@ namespace Visual_filtering_referable_objects
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			btnDisable.IsEnabled = false;
-			btnEnable.IsEnabled = true;
+			Button_Click_1(null, null);
 			Shape shapeToSearch = new Shape();
+			string location = "";
+			string shape = "";
+			string color = "";
+			string size = "";
+			string startCommand = "";
+			bool isValidStart = false;
 
 			if (e.Result.Words.Count>2)
 			{
-				string command = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
-				string shape = e.Result.Words[2].Text.ToLower();
+				startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
+				shape = e.Result.Words[2].Text.ToLower();
 				string adjetive = e.Result.Words.Count > 3 ? e.Result.Words[3].Text.ToLower() : null;
-				string secondCommand = e.Result.Words.Count > 4 ? e.Result.Words[4].Text.ToLower() + " " + (e.Result.Words.Count > 4 ? e.Result.Words[5].Text.ToLower() : "") : null;
-				string whole = "";
+                string secondCommand = e.Result.Words.Count > 4 ? e.Result.Words[4].Text.ToLower() + " " + (e.Result.Words.Count > 4 ? e.Result.Words[5].Text.ToLower() : "") : null;
+				string wholeText = "";
 				for (int i = 0; i < e.Result.Words.Count; i++)
                 {
-					whole = whole + ' ' + e.Result.Words[i].Text;
+					wholeText = wholeText + ' ' + e.Result.Words[i].Text;
                 }
-				MessageBox.Show("Has hablado! Has dicho esto: " + whole);
+				MessageBox.Show("Has hablado! Has dicho esto: " + wholeText);
 
-				switch (command)
+				switch (startCommand)
 				{
 					case "borra los":
 						switch (shape)
 						{
 							case "triangulos":
 								shapeToSearch.shape = ShapeType.Triangle;
+								isValidStart = true;
 								break;
 							case "cuadrados":
 								shapeToSearch.shape = ShapeType.Square;
+								isValidStart = true;
 								break;
 							case "circulos":
 								shapeToSearch.shape = ShapeType.Circle;
+								isValidStart = true;
 								break;
 							default:
 								break;
+						}
+                        if (isValidStart)
+                        {
+							for (int i = 3; i < e.Result.Words.Count - 1; i++)
+							{
+								string word = e.Result.Words[i].Text;
+							}
+
 						}
 						shapeToSearch = setAdjetives(shapeToSearch, adjetive);
 						switch (secondCommand)

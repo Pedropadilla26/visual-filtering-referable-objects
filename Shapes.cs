@@ -48,21 +48,27 @@ namespace Visual_filtering_referable_objects
         public ShapeType shape { get; set; }
         public Color color { get; set; }
         public Size size { get; set; }
-        public LocationY location_y { get; set; }
-        public LocationX location_x { get; set; }
+       // public LocationY location_y { get; set; }
+     //   public LocationX location_x { get; set; }
+
+        public int quadrant {get; set; }
+
+        public int x { get; set; }
+        public int y { get; set; }
 
         public Shape()
         {
 
         }
 
-        public Shape(ShapeType shape, Color color, Size size, LocationY location_y, LocationX location_x)
+        public Shape(ShapeType shape, Color color, Size size, int quadrant)
         {
             this.shape = shape;
             this.color = color;
             this.size = size;
-            this.location_y = location_y;
-            this.location_x = location_x;
+            //this.location_y = location_y;
+            //this.location_x = location_x;
+            this.quadrant = quadrant;
         }
 
         // Other properties, methods, events...
