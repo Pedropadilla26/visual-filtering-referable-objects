@@ -76,6 +76,17 @@ namespace Visual_filtering_referable_objects
 
 			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, 4, myPointCollection2);
 			this.shapes.Add(shape2);
+
+
+			System.Windows.Point Point8 = new System.Windows.Point(500, 500);
+			PointCollection myPointCollection3 = new PointCollection();
+			myPointCollection2.Add(Point8);
+
+			Shape shape3 = new Circle(System.Windows.Media.Brushes.Red, Size.Big, 4, myPointCollection3, 5);
+			this.shapes.Add(shape3);
+
+
+
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
 		}
@@ -118,19 +129,72 @@ namespace Visual_filtering_referable_objects
 		{
 			ClearCanvas();
 			Console.WriteLine("Painting canvas...");
-			foreach (Shape shape in this.shapes)
+			foreach (var shape in this.shapes)
 			{
-				Console.WriteLine("Painting a shape");
-				Console.WriteLine(shape.color);
-				Console.WriteLine(shape.points);
+				if (shape.GeometricShape == ShapeType.Circle)
+                {
+					var circle = shape;
+					Console.WriteLine("Painting a circle");
+					Console.WriteLine(circle.Color);
+					Console.WriteLine(circle.Points);
 
-				Polygon myPolygon = new Polygon();
-				myPolygon.Stroke = System.Windows.Media.Brushes.Black;
-				myPolygon.Fill = shape.color;
-				myPolygon.StrokeThickness = 2;
-				myPolygon.Points = shape.points;
-				Canvas_.Children.Add(myPolygon);
+					Ellipse myEllipse = new Ellipse
+					{
+						Width = circle.Radius,
+						Height = circle.Radius,
+						Stroke = circle.Color,
+						StrokeThickness = 2
+					};
+
+
+					Canvas_.Children.Add(myEllipse);
+
+					myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
+					myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
+
+
+				}
+                else
+                {
+				Console.WriteLine("Painting a shape");
+				Console.WriteLine(shape.Color);
+				Console.WriteLine(shape.Points);
+
+                Polygon myPolygon = new Polygon
+                {
+                    Stroke = System.Windows.Media.Brushes.Black,
+                    Fill = shape.Color,
+                    StrokeThickness = 2,
+                    Points = shape.Points
+                };
+                Canvas_.Children.Add(myPolygon);
+                }
+
 			}
+
+			/*
+			 foreach (Circle circle in this.shapes)
+			{
+				Console.WriteLine("Painting a circle");
+				Console.WriteLine(circle.Color);
+				Console.WriteLine(circle.Points);
+
+                Ellipse myEllipse = new Ellipse
+                {
+                    Width = circle.Radius,
+                    Height = circle.Radius,
+                    Stroke = circle.Color,
+                    StrokeThickness = 2
+                };
+
+
+                Canvas_.Children.Add(myEllipse);
+
+				myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
+				myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
+
+			}
+			*/
 		}
 
 		private void ClearCanvas()
@@ -313,19 +377,19 @@ namespace Visual_filtering_referable_objects
 			Boolean matchesSize = false;
 			Boolean matchesQuadrant = false;
 
-			if (shapeToSearch == shape.shape)
+			if (shapeToSearch == shape.GeometricShape)
 			{
 				matchesShape = true;
 			}
-            if (color == shape.color || color == System.Windows.Media.Brushes.White)
+            if (color == shape.Color || color == System.Windows.Media.Brushes.White)
             {
                 matchesColor = true;
             }
-			if (size == shape.size || size == Size.None)
+			if (size == shape.Size || size == Size.None)
 			{
 				matchesSize = true;
 			}
-			if (quadrantToSearch1 == shape.quadrant || quadrantToSearch1 == -1 || quadrantToSearch2 == shape.quadrant)
+			if (quadrantToSearch1 == shape.Quadrant || quadrantToSearch1 == -1 || quadrantToSearch2 == shape.Quadrant)
 			{
 				matchesQuadrant = true;
 			}
