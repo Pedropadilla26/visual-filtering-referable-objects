@@ -74,15 +74,15 @@ namespace Visual_filtering_referable_objects
 			myPointCollection2.Add(Point6);
 			myPointCollection2.Add(Point7);
 
-			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, 4, myPointCollection2);
+			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, 5, myPointCollection2);
 			this.shapes.Add(shape2);
 
 
-			System.Windows.Point Point8 = new System.Windows.Point(500, 500);
+			System.Windows.Point Point8 = new System.Windows.Point(500, 300);
 			PointCollection myPointCollection3 = new PointCollection();
-			myPointCollection2.Add(Point8);
+			myPointCollection3.Add(Point8);
 
-			Shape shape3 = new Circle(System.Windows.Media.Brushes.Red, Size.Big, 4, myPointCollection3, 5);
+			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Size.Small, 4, myPointCollection3, 50);
 			this.shapes.Add(shape3);
 
 
@@ -133,7 +133,7 @@ namespace Visual_filtering_referable_objects
 			{
 				if (shape.GeometricShape == ShapeType.Circle)
                 {
-					var circle = shape;
+					var circle = (Circle)shape;
 					Console.WriteLine("Painting a circle");
 					Console.WriteLine(circle.Color);
 					Console.WriteLine(circle.Points);
@@ -142,8 +142,9 @@ namespace Visual_filtering_referable_objects
 					{
 						Width = circle.Radius,
 						Height = circle.Radius,
-						Stroke = circle.Color,
-						StrokeThickness = 2
+						Stroke = System.Windows.Media.Brushes.Black,
+						StrokeThickness = 2,
+						Fill = circle.Color
 					};
 
 
@@ -156,45 +157,21 @@ namespace Visual_filtering_referable_objects
 				}
                 else
                 {
-				Console.WriteLine("Painting a shape");
-				Console.WriteLine(shape.Color);
-				Console.WriteLine(shape.Points);
+					Console.WriteLine("Painting a shape");
+					Console.WriteLine(shape.Color);
+					Console.WriteLine(shape.Points);
 
-                Polygon myPolygon = new Polygon
-                {
-                    Stroke = System.Windows.Media.Brushes.Black,
-                    Fill = shape.Color,
-                    StrokeThickness = 2,
-                    Points = shape.Points
-                };
-                Canvas_.Children.Add(myPolygon);
+					Polygon myPolygon = new Polygon
+					{
+						Stroke = System.Windows.Media.Brushes.Black,
+						Fill = shape.Color,
+						StrokeThickness = 2,
+						Points = shape.Points
+					};
+					Canvas_.Children.Add(myPolygon);
                 }
 
 			}
-
-			/*
-			 foreach (Circle circle in this.shapes)
-			{
-				Console.WriteLine("Painting a circle");
-				Console.WriteLine(circle.Color);
-				Console.WriteLine(circle.Points);
-
-                Ellipse myEllipse = new Ellipse
-                {
-                    Width = circle.Radius,
-                    Height = circle.Radius,
-                    Stroke = circle.Color,
-                    StrokeThickness = 2
-                };
-
-
-                Canvas_.Children.Add(myEllipse);
-
-				myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
-				myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
-
-			}
-			*/
 		}
 
 		private void ClearCanvas()
@@ -247,7 +224,7 @@ namespace Visual_filtering_referable_objects
 								shapeToSearch = ShapeType.Square;
 								isValidStart = true;
 								break;
-							case "circulos":
+							case "círculos":
 								shapeToSearch = ShapeType.Circle;
 								isValidStart = true;
 								break;
