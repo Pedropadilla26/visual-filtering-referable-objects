@@ -1,4 +1,7 @@
-﻿using System;
+﻿/// 
+/// Creado por Pedro Padilla Reyes para el trabajo fin de grado en Ingeniería Informática por la UGR.
+/// 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
