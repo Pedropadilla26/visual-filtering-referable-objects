@@ -17,18 +17,6 @@ namespace Visual_filtering_referable_objects
         Circle
     }
 
-   /* public enum Color
-    {
-        Black,
-        Blue,
-        Red,
-        Purple,
-        Yellow,
-        Green,
-        Orange,
-        Pink
-    }
-   */
     public enum Size
     {
         None,
@@ -36,45 +24,34 @@ namespace Visual_filtering_referable_objects
         Medium,
         Small,
     }
-    public enum LocationY
-    {
-        Top,
-        Bottom,
-    }
-    public enum LocationX
-    {
-        Right,
-        Left
-    }
 
+    public enum Quadrants
+    {
+        None,
+        Top_left,
+        Top_right,
+        Center,
+        Bottom_left,
+        Bottom_right,
+    }
 
     public class Shape
     {
         public ShapeType GeometricShape { get; set; }
         public SolidColorBrush Color { get; set; }
         public Size Size { get; set; }
-       // public LocationY location_y { get; set; }
-       //   public LocationX location_x { get; set; }
-
-        public int Quadrant {get; set; }
-
-        //public int x { get; set; }
-        //public int y { get; set; }
+ 
+        public Quadrants Quadrant {get; set; }
 
         public PointCollection Points { get; set; }
 
-        public Shape(ShapeType shape, SolidColorBrush color, Size size, int quadrant, PointCollection points)
+        public Shape(ShapeType shape, SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points)
         {
             this.GeometricShape = shape;
             this.Color = color;
             this.Size = size;
-            //this.location_y = location_y;
-            //this.location_x = location_x;
             this.Quadrant = quadrant;
-
             this.Points = points;
         }
-
-        // Other properties, methods, events...
     }
 }

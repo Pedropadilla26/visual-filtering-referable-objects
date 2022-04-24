@@ -25,10 +25,6 @@ namespace Visual_filtering_referable_objects
 	{
 		private SpeechRecognitionEngine speechRecognizer = new SpeechRecognitionEngine(new CultureInfo("es-ES"));
 
-		private int triangles = 4;
-        private int squares = 3;
-        private int circles = 4;
-
 		List<Shape> shapes = new List<Shape>();
 		List<Shape> initialShapes = new List<Shape>();
 
@@ -37,22 +33,27 @@ namespace Visual_filtering_referable_objects
             InitializeComponent();
             speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
 
+			/*
+			 * Initial version of the grammar
             GrammarBuilder pluralGrammar = new GrammarBuilder("borra los");
             Choices shapesChoices = new Choices("triangulos", "cuadrados", "circulos");
             Choices colorsChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
             pluralGrammar.Append(shapesChoices);
             pluralGrammar.Append(colorsChoices, 0, 1);
 
-            Grammar referableObjectsGrammar = CreateGrammarFromFile();
+            speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
+			*/
 
-            //speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
-            speechRecognizer.LoadGrammar(referableObjectsGrammar);
+			Grammar referableObjectsGrammar = CreateGrammarFromFile();
+			speechRecognizer.LoadGrammar(referableObjectsGrammar);
             Trace.WriteLine(referableObjectsGrammar.ToString());
 
             speechRecognizer.SetInputToDefaultAudioDevice();
             btnDisable.IsEnabled = false;
-            //showShapesText.Text = getShapesText();
 
+			// DEFAULT SHAPES (FOR NOW)
+
+			// TRIANGLE
 			System.Windows.Point Point1 = new System.Windows.Point(150, 100);
 			System.Windows.Point Point2 = new System.Windows.Point(200, 160);
 			System.Windows.Point Point3 = new System.Windows.Point(100, 100);
@@ -60,10 +61,10 @@ namespace Visual_filtering_referable_objects
 			myPointCollection.Add(Point1);
 			myPointCollection.Add(Point2);
 			myPointCollection.Add(Point3);
-
-			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, 1, myPointCollection);
+			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, Quadrants.Top_left, myPointCollection);
 			this.shapes.Add(shape);
 
+			//SQUARE
 			System.Windows.Point Point4 = new System.Windows.Point(30, 350);
 			System.Windows.Point Point5 = new System.Windows.Point(30, 250);
 			System.Windows.Point Point6 = new System.Windows.Point(150, 250);
@@ -73,35 +74,27 @@ namespace Visual_filtering_referable_objects
 			myPointCollection2.Add(Point5);
 			myPointCollection2.Add(Point6);
 			myPointCollection2.Add(Point7);
-
-			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, 5, myPointCollection2);
+			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, Quadrants.Bottom_left, myPointCollection2);
 			this.shapes.Add(shape2);
 
-
+			//CIRCLE
 			System.Windows.Point Point8 = new System.Windows.Point(500, 300);
 			PointCollection myPointCollection3 = new PointCollection();
 			myPointCollection3.Add(Point8);
-
-			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Size.Small, 4, myPointCollection3, 50);
+			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Size.Small, Quadrants.Bottom_right, myPointCollection3, 50);
 			this.shapes.Add(shape3);
-
-
 
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
 		}
 
-        private static Grammar CreateGrammarFromFile()
+        private static Grammar CreateGrammarFromFile(String file = @"..\..\grammars\Grammar.xml")
 		{
-			Grammar shapesGrammar = new Grammar(@"..\..\grammars\Grammar.xml");
+
+			Grammar shapesGrammar = new Grammar(file);
 			shapesGrammar.Name = "SRGS File Grammar";
 			return shapesGrammar;
 		}
-
-		private string getShapesText()
-        {
-			return "Formas geométricas: \n\n" + "Triangulos: " + triangles.ToString() + "\nCuadrados: " + squares.ToString() + "\nCirculos: " + circles.ToString();
-        }
 
 		private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -192,8 +185,8 @@ namespace Visual_filtering_referable_objects
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
 			Button_Click_1(null, null);
-			int quadrantToSearch1 = -1;
-			int quadrantToSearch2 = -1;
+			Quadrants quadrantToSearch1 = Quadrants.None;
+			Quadrants quadrantToSearch2 = Quadrants.None;
 			ShapeType shapeToSearch = ShapeType.None;
 			SolidColorBrush color = System.Windows.Media.Brushes.White;
 			Size size = Size.None;
@@ -272,14 +265,14 @@ namespace Visual_filtering_referable_objects
 												switch (secondPositionWord)
                                                 {
 													case "a la izquierda":
-														quadrantToSearch1 = 1;
+														quadrantToSearch1 = Quadrants.Top_left;
 														break;
 													case "a la derecha":
-														quadrantToSearch1 = 2;
+														quadrantToSearch1 = Quadrants.Top_right;
 														break;
 													default:
-														quadrantToSearch1 = 1;
-														quadrantToSearch2 = 2;
+														quadrantToSearch1 = Quadrants.Top_left;
+														quadrantToSearch2 = Quadrants.Top_right;
 														break;
 												}
 												break;
@@ -287,21 +280,21 @@ namespace Visual_filtering_referable_objects
 												switch (secondPositionWord)
 												{
 													case "a la izquierda":
-														quadrantToSearch1 = 4;
+														quadrantToSearch1 = Quadrants.Bottom_left;
 														break;
 													case "a la derecha":
-														quadrantToSearch1 = 5;
+														quadrantToSearch1 = Quadrants.Bottom_right;
 														break;
 													default:
-														quadrantToSearch1 = 4;
-														quadrantToSearch2 = 5;
+														quadrantToSearch1 = Quadrants.Bottom_left;
+														quadrantToSearch2 = Quadrants.Bottom_right;
 														break;
 												}
 												break;
 											case "en":
 												string centerWord = e.Result.Words.Count > i + 3 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() : "";
 												if (centerWord == "el centro")
-													quadrantToSearch1 = 3;
+													quadrantToSearch1 = Quadrants.Center;
 												break;
 										}
 
@@ -327,12 +320,11 @@ namespace Visual_filtering_referable_objects
 			}
 			if (isValidStart)
             {
-				//showShapesText.Text = getShapesText();
 				List<Shape> shapesCopy = new List<Shape>(this.shapes);
 				Boolean anyMatch = false;
 				foreach (Shape shape in shapesCopy)
 				{
-					if (matchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
+					if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
 					{
 						this.shapes.Remove(shape);
 						anyMatch = true;
@@ -347,7 +339,13 @@ namespace Visual_filtering_referable_objects
 				
 		}
 
-		private Boolean matchesShape(Shape shape, ShapeType shapeToSearch, SolidColorBrush color, Size size, int quadrantToSearch1, int quadrantToSearch2)
+		private Boolean MatchesShape(
+			Shape shape, 
+			ShapeType shapeToSearch, 
+			SolidColorBrush color, 
+			Size size, 
+			Quadrants quadrantToSearch1,
+			Quadrants quadrantToSearch2)
         {
 			Boolean matchesShape = false;
 			Boolean matchesColor = false;
@@ -366,19 +364,13 @@ namespace Visual_filtering_referable_objects
 			{
 				matchesSize = true;
 			}
-			if (quadrantToSearch1 == shape.Quadrant || quadrantToSearch1 == -1 || quadrantToSearch2 == shape.Quadrant)
+			if (quadrantToSearch1 == shape.Quadrant || quadrantToSearch1 == Quadrants.None || quadrantToSearch2 == shape.Quadrant)
 			{
 				matchesQuadrant = true;
 			}
 
 			return matchesShape && matchesColor && matchesSize && matchesQuadrant;
         }
-
-		private Boolean isInQuadrant (int shapeQuadrant, int quadrantToSearch1, int quadrantToSearch2)
-        {
-			return quadrantToSearch2 == -1 ? (shapeQuadrant == quadrantToSearch1) : (shapeQuadrant == quadrantToSearch2 || shapeQuadrant == quadrantToSearch1);
-
-		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

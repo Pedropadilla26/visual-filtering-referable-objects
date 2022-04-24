@@ -13,7 +13,7 @@ namespace Visual_filtering_referable_objects
 
 		public int Radius { get; set; }
 
-		public Circle(SolidColorBrush color, Size size, int quadrant, PointCollection points, int radius)
+		public Circle(SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points, int radius)
 			: base(ShapeType.Circle, color, size, quadrant, points)
 		{
 			this.Radius = radius;
