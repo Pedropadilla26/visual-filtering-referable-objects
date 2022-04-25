@@ -43,10 +43,10 @@ namespace Visual_filtering_referable_objects
         public ShapeType GeometricShape { get; set; }
         public SolidColorBrush Color { get; set; }
         public Size Size { get; set; }
- 
         public Quadrants Quadrant {get; set; }
-
         public PointCollection Points { get; set; }
+
+        public double Area { get; set; }
 
         public Shape(ShapeType shape, SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points)
         {
@@ -55,6 +55,20 @@ namespace Visual_filtering_referable_objects
             this.Size = size;
             this.Quadrant = quadrant;
             this.Points = points;
+
+            switch (this.GeometricShape)
+            {
+                case ShapeType.Triangle:
+                    this.Area = (this.Points[2].X - this.Points[1].X) * (this.Points[1].Y - this.Points[0].Y) / 2;
+                    break;
+                case ShapeType.Square:
+                    this.Area = (this.Points[2].X - this.Points[1].X) * (this.Points[1].Y - this.Points[0].Y);
+                    break;
+                default:
+                    this.Area = -1;
+                    break;
+            }
         }
+
     }
 }

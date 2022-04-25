@@ -19,7 +19,8 @@ namespace Visual_filtering_referable_objects
 		public Circle(SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points, int radius)
 			: base(ShapeType.Circle, color, size, quadrant, points)
 		{
-			this.Radius = radius;
-		}
-	}
+            this.Radius = radius;
+            this.Area = Math.PI * Math.Pow(this.Radius, 2);
+        }
+    }
 }
