@@ -36,17 +36,6 @@ namespace Visual_filtering_referable_objects
             InitializeComponent();
             speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
 
-			/*
-			 * Initial version of the grammar
-            GrammarBuilder pluralGrammar = new GrammarBuilder("borra los");
-            Choices shapesChoices = new Choices("triangulos", "cuadrados", "circulos");
-            Choices colorsChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
-            pluralGrammar.Append(shapesChoices);
-            pluralGrammar.Append(colorsChoices, 0, 1);
-
-            speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
-			*/
-
 			Grammar referableObjectsGrammar = CreateGrammarFromFile();
 			speechRecognizer.LoadGrammar(referableObjectsGrammar);
             Trace.WriteLine(referableObjectsGrammar.ToString());
@@ -64,8 +53,8 @@ namespace Visual_filtering_referable_objects
 			myPointCollection.Add(Point1);
 			myPointCollection.Add(Point2);
 			myPointCollection.Add(Point3);
-			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, Quadrants.Top_left, myPointCollection);
-			this.shapes.Add(shape);
+			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Quadrants.Top_left, myPointCollection);
+			AddShape(shape);
 
 			//SQUARE
 			System.Windows.Point Point4 = new System.Windows.Point(30, 350);
@@ -77,18 +66,28 @@ namespace Visual_filtering_referable_objects
 			myPointCollection2.Add(Point5);
 			myPointCollection2.Add(Point6);
 			myPointCollection2.Add(Point7);
-			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, Quadrants.Bottom_left, myPointCollection2);
-			this.shapes.Add(shape2);
+			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Quadrants.Bottom_left, myPointCollection2);
+			AddShape(shape2);
 
 			//CIRCLE
 			System.Windows.Point Point8 = new System.Windows.Point(500, 300);
 			PointCollection myPointCollection3 = new PointCollection();
 			myPointCollection3.Add(Point8);
-			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Size.Small, Quadrants.Bottom_right, myPointCollection3, 50);
-			this.shapes.Add(shape3);
+			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Quadrants.Bottom_right, myPointCollection3, 50);
+			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
+		}
+
+		private void AddShape (Shape shape)
+        {
+			this.shapes.Add(shape);
+			this.shapes.Sort(delegate (Shape x, Shape y)
+			{
+				return (x.Area > y.Area ? 1 : -1);
+			});
+
 		}
 
         private static Grammar CreateGrammarFromFile(String file = @"..\..\grammars\Grammar.xml")
@@ -325,11 +324,15 @@ namespace Visual_filtering_referable_objects
             {
 				List<Shape> shapesCopy = new List<Shape>(this.shapes);
 				Boolean anyMatch = false;
-				foreach (Shape shape in shapesCopy)
+
+				for (int i = 0; i < shapesCopy.Count(); i++)
 				{
+					Shape shape = shapesCopy[i];
+					shape.Size = CalculateSizeFromIterator(i);
+
 					if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
 					{
-						this.shapes.Remove(shape);
+						this.shapes.Remove(shapesCopy[i]);
 						anyMatch = true;
 					}
 				}
@@ -384,5 +387,21 @@ namespace Visual_filtering_referable_objects
         {
 
         }
+
+		private Size CalculateSizeFromIterator (int i)
+        {
+			if (i <= this.shapes.Count() / 3)
+			{
+				return Size.Big;
+			}
+			else if (i <= this.shapes.Count() * 2 / 3)
+			{
+				return Size.Medium;
+			}
+			else
+			{
+				return Size.Small;
+			}
+		}
     }
 }

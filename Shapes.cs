@@ -48,11 +48,10 @@ namespace Visual_filtering_referable_objects
 
         public double Area { get; set; }
 
-        public Shape(ShapeType shape, SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points)
+        public Shape(ShapeType shape, SolidColorBrush color, Quadrants quadrant, PointCollection points)
         {
             this.GeometricShape = shape;
             this.Color = color;
-            this.Size = size;
             this.Quadrant = quadrant;
             this.Points = points;
 
