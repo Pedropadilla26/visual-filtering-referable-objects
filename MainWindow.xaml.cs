@@ -73,13 +73,16 @@ namespace Visual_filtering_referable_objects
 			System.Windows.Point Point8 = new System.Windows.Point(500, 300);
 			PointCollection myPointCollection3 = new PointCollection();
 			myPointCollection3.Add(Point8);
-			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Quadrants.Bottom_right, myPointCollection3, 50);
+			Shape shape3 = new Circle(GetColorFromString("Green"), Quadrants.Bottom_right, myPointCollection3, 50);
 			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
 		}
-
+		private SolidColorBrush GetColorFromString (string color)
+        {
+			return (SolidColorBrush)new BrushConverter().ConvertFromString(color);
+		}
 		private void AddShape (Shape shape)
         {
 			this.shapes.Add(shape);
