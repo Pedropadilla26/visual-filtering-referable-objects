@@ -38,6 +38,19 @@ namespace Visual_filtering_referable_objects
         Bottom_right,
     }
 
+    public enum ColorsEnum
+    {
+        "None",
+        Blue: "Blue",
+        Black,
+        Red,
+        Purple,
+        Yellow,
+        Green,
+        Orange,
+        Pink
+    }
+
     public class Shape
     {
         public ShapeType GeometricShape { get; set; }

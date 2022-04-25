@@ -30,7 +30,12 @@ namespace Visual_filtering_referable_objects
 
 		List<Shape> shapes = new List<Shape>();
 		List<Shape> initialShapes = new List<Shape>();
-
+		static Random _R = new Random();
+		static T RandomEnumValue<T>()
+		{
+			var v = Enum.GetValues(typeof(T));
+			return (T)v.GetValue(_R.Next(v.Length - 1)+1);
+		}
 		public MainWindow()
         {
             InitializeComponent();
@@ -78,6 +83,40 @@ namespace Visual_filtering_referable_objects
 
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
+		}
+		private void CreateAndAddShapeFromString (string shapeInfo)
+        {
+
+        }
+
+		private void GenerateRandomShapes(int howMany)
+		{
+			for (int i = 0; i < howMany; i++)
+            {
+				ShapeType randomShape = RandomEnumValue<ShapeType>();
+				int howManyPoints = randomShape == ShapeType.Circle ? 1 : randomShape == ShapeType.Triangle ? 3 : 4;
+				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(360) + 20, _R.Next(560) + 20);
+				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
+				int shapeLength = _R.Next(45) + 5;
+
+				PointCollection myPointCollection = new PointCollection();
+				myPointCollection.Add(firstPoint);
+				for (int j = 1; j < howManyPoints; j++)
+                {
+
+                }
+
+				if (randomShape == ShapeType.Circle)
+                {
+					AddShape(new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), Quadrants.Bottom_left, myPointCollection, shapeLength));
+
+
+				}
+				else
+                {
+					AddShape(new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), Quadrants.Bottom_left, myPointCollection));
+				}
+			}
 		}
 		private SolidColorBrush GetColorFromString (string color)
         {
