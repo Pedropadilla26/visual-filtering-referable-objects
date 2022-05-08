@@ -40,8 +40,8 @@ namespace Visual_filtering_referable_objects
 
     public enum ColorsEnum
     {
-        "None",
-        Blue: "Blue",
+        None,
+        Blue,
         Black,
         Red,
         Purple,

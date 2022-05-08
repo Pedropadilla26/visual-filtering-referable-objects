@@ -54,6 +54,13 @@
                     </Style>
                 </Button.Resources>
             </Button>
+            <Button x:Name="btnGenerateRandomCanvas" Content="Generar un lienzo &#xD;&#xA;nuevo aleatorio" Height="43" Width="100" Background="#FFFFDF9A" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="11" FontWeight="Bold" Canvas.Left="-95" Canvas.Top="240" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Button.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="7"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </Canvas>
     </Grid>
 </Window>
