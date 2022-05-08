@@ -64,9 +64,9 @@ namespace Visual_filtering_referable_objects
 			// DEFAULT SHAPES (FOR NOW)
 
 			// TRIANGLE
-			System.Windows.Point Point1 = new System.Windows.Point(150, 100);
-			System.Windows.Point Point2 = new System.Windows.Point(200, 160);
-			System.Windows.Point Point3 = new System.Windows.Point(100, 100);
+			System.Windows.Point Point1 = new System.Windows.Point(150, 130);
+			System.Windows.Point Point2 = new System.Windows.Point(200, 130);
+			System.Windows.Point Point3 = new System.Windows.Point(175, 75);
 			PointCollection myPointCollection = new PointCollection();
 			myPointCollection.Add(Point1);
 			myPointCollection.Add(Point2);
@@ -91,7 +91,7 @@ namespace Visual_filtering_referable_objects
 			System.Windows.Point Point8 = new System.Windows.Point(500, 300);
 			PointCollection myPointCollection3 = new PointCollection();
 			myPointCollection3.Add(Point8);
-			Shape shape3 = new Circle(GetColorFromString("Green"), Quadrants.Bottom_right, myPointCollection3, 50);
+			Shape shape3 = new Circle(GetColorFromString("Green"), Quadrants.Bottom_right, myPointCollection3, 25);
 			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
@@ -153,6 +153,7 @@ namespace Visual_filtering_referable_objects
 
 				if (randomShape == ShapeType.Circle)
                 {
+					if (shapeLength > 15) shapeLength -= 10; // Circles are too big
 					AddShape(new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
 
 
@@ -172,7 +173,6 @@ namespace Visual_filtering_referable_objects
 					}
 					AddShape(new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection));
 				}
-				Console.WriteLine(myPointCollection);
 			}
 		}
 		private SolidColorBrush GetColorFromString (string color)
@@ -184,7 +184,7 @@ namespace Visual_filtering_referable_objects
 			this.shapes.Add(shape);
 			this.shapes.Sort(delegate (Shape x, Shape y)
 			{
-				return (x.Area > y.Area ? 1 : -1);
+				return (x.Area < y.Area ? 1 : -1);
 			});
 
 		}
@@ -225,6 +225,11 @@ namespace Visual_filtering_referable_objects
 			this.shapes = new List<Shape>();
 			GenerateRandomShapes(5);
 			PaintShapes();
+			Console.WriteLine("List of ordered shapes");
+			foreach (var shape in this.shapes)
+            {
+				Console.WriteLine(shape.GeometricShape.ToString() + ", " + shape.Size + ", " + shape.Area.ToString());
+            }
 		}
 
 		private void PaintShapes()
@@ -243,8 +248,8 @@ namespace Visual_filtering_referable_objects
 
 						Ellipse myEllipse = new Ellipse
 						{
-							Width = circle.Radius,
-							Height = circle.Radius,
+							Width = circle.Radius * 2,
+							Height = circle.Radius * 2,
 								Stroke = System.Windows.Media.Brushes.Black,
 								StrokeThickness = 2,
 								Fill = circle.Color

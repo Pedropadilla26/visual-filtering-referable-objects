@@ -71,10 +71,10 @@ namespace Visual_filtering_referable_objects
             switch (this.GeometricShape)
             {
                 case ShapeType.Triangle:
-                    this.Area = (this.Points[2].X - this.Points[1].X) * (this.Points[1].Y - this.Points[0].Y) / 2;
+                    this.Area = (points[1].X - points[0].X) * (points[1].Y - points[2].Y) / 2;
                     break;
                 case ShapeType.Square:
-                    this.Area = (this.Points[2].X - this.Points[1].X) * (this.Points[1].Y - this.Points[0].Y);
+                    this.Area = (points[1].X - points[0].X) * (points[1].Y - points[3].Y);
                     break;
                 default:
                     this.Area = -1;
