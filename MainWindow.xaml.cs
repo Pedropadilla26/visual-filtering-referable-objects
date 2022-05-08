@@ -44,6 +44,8 @@ namespace Visual_filtering_referable_objects
 		public MainWindow()
         {
             InitializeComponent();
+
+			// Set grammar and speech recognizer
             speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
 
 			Grammar referableObjectsGrammar = CreateGrammarFromFile();
@@ -51,6 +53,8 @@ namespace Visual_filtering_referable_objects
             Trace.WriteLine(referableObjectsGrammar.ToString());
 
             speechRecognizer.SetInputToDefaultAudioDevice();
+
+			// Default speech recognizer state
             btnDisable.IsEnabled = false;
 
 			// Set canvas variables
@@ -123,6 +127,16 @@ namespace Visual_filtering_referable_objects
 		{
 			return point.X > canvasMaxX / 2 && point.X < canvasMaxX && point.Y > canvasMaxY / 2 && point.Y < canvasMaxY && !IsInCenterQuadrant(point);
 
+		}
+
+		private Quadrants GetQuadrantFromPoint(Point point)
+        {
+			if (IsInCenterQuadrant(point)) return Quadrants.Center;
+			else if (IsInTopLeftQuadrant(point)) return Quadrants.Top_left;
+			else if (IsInTopRightQuadrant(point)) return Quadrants.Top_right;
+			else if (IsInBottomLeftQuadrant(point)) return Quadrants.Bottom_left;
+			else if (IsInBottomRightQuadrant(point)) return Quadrants.Bottom_right;
+			else return Quadrants.None;
 		}
 
 		private void GenerateRandomShapes(int howMany)
