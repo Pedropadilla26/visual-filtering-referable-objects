@@ -151,10 +151,6 @@ namespace Visual_filtering_referable_objects
 
 				PointCollection myPointCollection = new PointCollection();
 				myPointCollection.Add(firstPoint);
-				for (int j = 1; j < howManyPoints; j++)
-                {
-
-                }
 
 				if (randomShape == ShapeType.Circle)
                 {
@@ -164,6 +160,17 @@ namespace Visual_filtering_referable_objects
 				}
 				else
                 {
+					if (randomShape == ShapeType.Triangle)
+                    {
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y));
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength / 2, firstPoint.Y + shapeLength));
+					}
+					else if (randomShape == ShapeType.Square)
+                    {
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y));
+						myPointCollection.Add(new Point(firstPoint.X, firstPoint.Y + shapeLength));
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y + shapeLength));
+					}
 					AddShape(new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), Quadrants.Bottom_left, myPointCollection));
 				}
 			}
