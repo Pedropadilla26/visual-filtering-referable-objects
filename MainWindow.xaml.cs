@@ -107,6 +107,23 @@ namespace Visual_filtering_referable_objects
 
 			return point.X > min_quadrant_x && point.X < max_quadrant_x && point.Y > min_quadrant_y && point.Y < max_quadrant_y;
 		}
+		private Boolean IsInTopLeftQuadrant(Point point)
+		{
+			return point.X > 0 && point.X <= canvasMaxX / 2 && point.Y > 0 && point.Y <= canvasMaxY / 2 && !IsInCenterQuadrant(point);
+		}
+		private Boolean IsInTopRightQuadrant(Point point)
+		{
+			return point.X > canvasMaxX / 2 && point.X < canvasMaxX && point.Y > 0 && point.Y <= canvasMaxY / 2 && !IsInCenterQuadrant(point);
+		}
+		private Boolean IsInBottomLeftQuadrant(Point point)
+		{
+			return point.X > 0 && point.X <= canvasMaxX / 2 && point.Y > canvasMaxY / 2 && point.Y < canvasMaxY && !IsInCenterQuadrant(point);
+		}
+		private Boolean IsInBottomRightQuadrant(Point point)
+		{
+			return point.X > canvasMaxX / 2 && point.X < canvasMaxX && point.Y > canvasMaxY / 2 && point.Y < canvasMaxY && !IsInCenterQuadrant(point);
+
+		}
 
 		private void GenerateRandomShapes(int howMany)
 		{
