@@ -31,6 +31,11 @@ namespace Visual_filtering_referable_objects
 		List<Shape> shapes = new List<Shape>();
 		List<Shape> initialShapes = new List<Shape>();
 		static Random _R = new Random();
+		double canvasMinX = 0;
+		double canvasMinY = 0;
+		double canvasMaxX = 0;
+		double canvasMaxY = 0;
+
 		static T RandomEnumValue<T>()
 		{
 			var v = Enum.GetValues(typeof(T));
@@ -47,6 +52,10 @@ namespace Visual_filtering_referable_objects
 
             speechRecognizer.SetInputToDefaultAudioDevice();
             btnDisable.IsEnabled = false;
+
+			// Set canvas variables
+			this.canvasMaxX = Canvas_.Width;
+			this.canvasMaxY = Canvas_.Height;
 
 			// DEFAULT SHAPES (FOR NOW)
 
@@ -88,6 +97,16 @@ namespace Visual_filtering_referable_objects
         {
 
         }
+
+		private Boolean IsInCenterQuadrant(Point point)
+        {
+			double min_quadrant_x = this.canvasMaxX / 3;
+			double max_quadrant_x = this.canvasMaxX * 2 / 3;
+			double min_quadrant_y = this.canvasMaxY / 3;
+			double max_quadrant_y = this.canvasMaxY * 2 / 3;
+
+			return point.X > min_quadrant_x && point.X < max_quadrant_x && point.Y > min_quadrant_y && point.Y < max_quadrant_y;
+		}
 
 		private void GenerateRandomShapes(int howMany)
 		{
