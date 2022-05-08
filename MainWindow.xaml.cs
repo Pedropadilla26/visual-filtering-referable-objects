@@ -1,4 +1,7 @@
-﻿using System;
+﻿/// 
+/// Creado por Pedro Padilla Reyes para el trabajo fin de grado en Ingeniería Informática por la UGR.
+/// 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,42 +30,49 @@ namespace Visual_filtering_referable_objects
 
 		List<Shape> shapes = new List<Shape>();
 		List<Shape> initialShapes = new List<Shape>();
+		static Random _R = new Random();
+		double canvasMinX = 0;
+		double canvasMinY = 0;
+		double canvasMaxX = 0;
+		double canvasMaxY = 0;
 
+		static T RandomEnumValue<T>()
+		{
+			var v = Enum.GetValues(typeof(T));
+			return (T)v.GetValue(_R.Next(v.Length - 1)+1);
+		}
 		public MainWindow()
         {
             InitializeComponent();
+
+			// Set grammar and speech recognizer
             speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
-
-			/*
-			 * Initial version of the grammar
-            GrammarBuilder pluralGrammar = new GrammarBuilder("borra los");
-            Choices shapesChoices = new Choices("triangulos", "cuadrados", "circulos");
-            Choices colorsChoices = new Choices("rojos", "azules", "amarillos", "verdes", "negros");
-            pluralGrammar.Append(shapesChoices);
-            pluralGrammar.Append(colorsChoices, 0, 1);
-
-            speechRecognizer.LoadGrammar(new Grammar(pluralGrammar));
-			*/
 
 			Grammar referableObjectsGrammar = CreateGrammarFromFile();
 			speechRecognizer.LoadGrammar(referableObjectsGrammar);
             Trace.WriteLine(referableObjectsGrammar.ToString());
 
             speechRecognizer.SetInputToDefaultAudioDevice();
+
+			// Default speech recognizer state
             btnDisable.IsEnabled = false;
+
+			// Set canvas variables
+			this.canvasMaxX = Canvas_.Width;
+			this.canvasMaxY = Canvas_.Height;
 
 			// DEFAULT SHAPES (FOR NOW)
 
 			// TRIANGLE
-			System.Windows.Point Point1 = new System.Windows.Point(150, 100);
-			System.Windows.Point Point2 = new System.Windows.Point(200, 160);
-			System.Windows.Point Point3 = new System.Windows.Point(100, 100);
+			System.Windows.Point Point1 = new System.Windows.Point(150, 130);
+			System.Windows.Point Point2 = new System.Windows.Point(200, 130);
+			System.Windows.Point Point3 = new System.Windows.Point(175, 75);
 			PointCollection myPointCollection = new PointCollection();
 			myPointCollection.Add(Point1);
 			myPointCollection.Add(Point2);
 			myPointCollection.Add(Point3);
-			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Size.Medium, Quadrants.Top_left, myPointCollection);
-			this.shapes.Add(shape);
+			Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Quadrants.Top_left, myPointCollection);
+			AddShape(shape);
 
 			//SQUARE
 			System.Windows.Point Point4 = new System.Windows.Point(30, 350);
@@ -74,18 +84,109 @@ namespace Visual_filtering_referable_objects
 			myPointCollection2.Add(Point5);
 			myPointCollection2.Add(Point6);
 			myPointCollection2.Add(Point7);
-			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Size.Big, Quadrants.Bottom_left, myPointCollection2);
-			this.shapes.Add(shape2);
+			Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Quadrants.Bottom_left, myPointCollection2);
+			AddShape(shape2);
 
 			//CIRCLE
 			System.Windows.Point Point8 = new System.Windows.Point(500, 300);
 			PointCollection myPointCollection3 = new PointCollection();
 			myPointCollection3.Add(Point8);
-			Shape shape3 = new Circle(System.Windows.Media.Brushes.Green, Size.Small, Quadrants.Bottom_right, myPointCollection3, 50);
-			this.shapes.Add(shape3);
+			Shape shape3 = new Circle(GetColorFromString("Green"), Quadrants.Bottom_right, myPointCollection3, 25);
+			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
 			PaintShapes();
+		}
+		private void CreateAndAddShapeFromString (string shapeInfo)
+        {
+
+        }
+
+		private Boolean IsInCenterQuadrant(Point point)
+        {
+			double min_quadrant_x = this.canvasMaxX / 3;
+			double max_quadrant_x = this.canvasMaxX * 2 / 3;
+			double min_quadrant_y = this.canvasMaxY / 3;
+			double max_quadrant_y = this.canvasMaxY * 2 / 3;
+
+			return point.X > min_quadrant_x && point.X < max_quadrant_x && point.Y > min_quadrant_y && point.Y < max_quadrant_y;
+		}
+		private Boolean IsInTopLeftQuadrant(Point point)
+		{
+			return point.X > 0 && point.X <= canvasMaxX / 2 && point.Y > 0 && point.Y <= canvasMaxY / 2 && !IsInCenterQuadrant(point);
+		}
+		private Boolean IsInTopRightQuadrant(Point point)
+		{
+			return point.X > canvasMaxX / 2 && point.X < canvasMaxX && point.Y > 0 && point.Y <= canvasMaxY / 2 && !IsInCenterQuadrant(point);
+		}
+		private Boolean IsInBottomLeftQuadrant(Point point)
+		{
+			return point.X > 0 && point.X <= canvasMaxX / 2 && point.Y > canvasMaxY / 2 && point.Y < canvasMaxY && !IsInCenterQuadrant(point);
+		}
+		private Boolean IsInBottomRightQuadrant(Point point)
+		{
+			return point.X > canvasMaxX / 2 && point.X < canvasMaxX && point.Y > canvasMaxY / 2 && point.Y < canvasMaxY && !IsInCenterQuadrant(point);
+
+		}
+
+		private Quadrants GetQuadrantFromPoint(Point point)
+        {
+			if (IsInCenterQuadrant(point)) return Quadrants.Center;
+			else if (IsInTopLeftQuadrant(point)) return Quadrants.Top_left;
+			else if (IsInTopRightQuadrant(point)) return Quadrants.Top_right;
+			else if (IsInBottomLeftQuadrant(point)) return Quadrants.Bottom_left;
+			else if (IsInBottomRightQuadrant(point)) return Quadrants.Bottom_right;
+			else return Quadrants.None;
+		}
+
+		private void GenerateRandomShapes(int howMany)
+		{
+			for (int i = 0; i < howMany; i++)
+            {
+				ShapeType randomShape = RandomEnumValue<ShapeType>();
+				int shapeLength = _R.Next(65) + 10;
+				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(540-70) + shapeLength, _R.Next(340- 70) + shapeLength);
+				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
+
+				PointCollection myPointCollection = new PointCollection();
+				myPointCollection.Add(firstPoint);
+
+				if (randomShape == ShapeType.Circle)
+                {
+					if (shapeLength > 15) shapeLength -= 10; // Circles are too big
+					AddShape(new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
+
+
+				}
+				else
+                {
+					if (randomShape == ShapeType.Triangle)
+                    {
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y));
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength / 2, firstPoint.Y - shapeLength));
+					}
+					else if (randomShape == ShapeType.Square)
+                    {
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y));
+						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y - shapeLength));
+						myPointCollection.Add(new Point(firstPoint.X, firstPoint.Y - shapeLength));
+					}
+					AddShape(new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection));
+				}
+			}
+		}
+		private SolidColorBrush GetColorFromString (string color)
+        {
+			return (SolidColorBrush)new BrushConverter().ConvertFromString(color);
+		}
+		private void AddShape (Shape shape)
+        {
+			this.shapes.Add(shape);
+			this.shapes.Sort(delegate (Shape x, Shape y)
+			{
+				return (x.Area < y.Area ? 1 : -1);
+			});
+
 		}
 
         private static Grammar CreateGrammarFromFile(String file = @"..\..\grammars\Grammar.xml")
@@ -118,52 +219,67 @@ namespace Visual_filtering_referable_objects
 			this.shapes = new List<Shape>(this.initialShapes);
 			PaintShapes();
 		}
+
+		private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
+		{
+			this.shapes = new List<Shape>();
+			GenerateRandomShapes(5);
+			PaintShapes();
+			Console.WriteLine("List of ordered shapes");
+			foreach (var shape in this.shapes)
+            {
+				Console.WriteLine(shape.GeometricShape.ToString() + ", " + shape.Size + ", " + shape.Area.ToString());
+            }
+		}
+
 		private void PaintShapes()
 		{
-			ClearCanvas();
-			Console.WriteLine("Painting canvas...");
-			foreach (var shape in this.shapes)
-			{
-				if (shape.GeometricShape == ShapeType.Circle)
-                {
-					var circle = (Circle)shape;
-					Console.WriteLine("Painting a circle");
-					Console.WriteLine(circle.Color);
-					Console.WriteLine(circle.Points);
-
-					Ellipse myEllipse = new Ellipse
+			if (this.shapes.Count > 0) {
+				ClearCanvas();
+				Console.WriteLine("Painting canvas...");
+				foreach (var shape in this.shapes)
+				{
+					if (shape.GeometricShape == ShapeType.Circle)
 					{
-						Width = circle.Radius,
-						Height = circle.Radius,
-						Stroke = System.Windows.Media.Brushes.Black,
-						StrokeThickness = 2,
-						Fill = circle.Color
-					};
+						var circle = (Circle)shape;
+						Console.WriteLine("Painting a circle");
+						Console.WriteLine(circle.Color);
+						Console.WriteLine(circle.Points);
+
+						Ellipse myEllipse = new Ellipse
+						{
+							Width = circle.Radius * 2,
+							Height = circle.Radius * 2,
+								Stroke = System.Windows.Media.Brushes.Black,
+								StrokeThickness = 2,
+								Fill = circle.Color
+							};
 
 
-					Canvas_.Children.Add(myEllipse);
+						Canvas_.Children.Add(myEllipse);
 
-					myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
-					myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
+						myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
+						myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
 
+
+					}
+					else
+					{
+						Console.WriteLine("Painting a shape");
+						Console.WriteLine(shape.Color);
+						Console.WriteLine(shape.Points);
+
+						Polygon myPolygon = new Polygon
+						{
+							Stroke = System.Windows.Media.Brushes.Black,
+							Fill = shape.Color,
+							StrokeThickness = 2,
+							Points = shape.Points
+						};
+						Canvas_.Children.Add(myPolygon);
+					}
 
 				}
-                else
-                {
-					Console.WriteLine("Painting a shape");
-					Console.WriteLine(shape.Color);
-					Console.WriteLine(shape.Points);
-
-					Polygon myPolygon = new Polygon
-					{
-						Stroke = System.Windows.Media.Brushes.Black,
-						Fill = shape.Color,
-						StrokeThickness = 2,
-						Points = shape.Points
-					};
-					Canvas_.Children.Add(myPolygon);
-                }
-
 			}
 		}
 
@@ -322,11 +438,15 @@ namespace Visual_filtering_referable_objects
             {
 				List<Shape> shapesCopy = new List<Shape>(this.shapes);
 				Boolean anyMatch = false;
-				foreach (Shape shape in shapesCopy)
+
+				for (int i = 0; i < shapesCopy.Count(); i++)
 				{
+					Shape shape = shapesCopy[i];
+					shape.Size = CalculateSizeFromIterator(i);
+
 					if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
 					{
-						this.shapes.Remove(shape);
+						this.shapes.Remove(shapesCopy[i]);
 						anyMatch = true;
 					}
 				}
@@ -377,9 +497,20 @@ namespace Visual_filtering_referable_objects
             speechRecognizer.Dispose();
         }
 
-        private void RichTextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+		private Size CalculateSizeFromIterator (int i)
         {
-
-        }
+			if (i <= this.shapes.Count() / 3)
+			{
+				return Size.Big;
+			}
+			else if (i <= this.shapes.Count() * 2 / 3)
+			{
+				return Size.Medium;
+			}
+			else
+			{
+				return Size.Small;
+			}
+		}
     }
 }

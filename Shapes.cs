@@ -1,4 +1,7 @@
-﻿using System;
+﻿/// 
+/// Creado por Pedro Padilla Reyes para el trabajo fin de grado en Ingeniería Informática por la UGR.
+/// 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,23 +38,49 @@ namespace Visual_filtering_referable_objects
         Bottom_right,
     }
 
+    public enum ColorsEnum
+    {
+        None,
+        Blue,
+        Black,
+        Red,
+        Purple,
+        Yellow,
+        Green,
+        Orange,
+        Pink
+    }
+
     public class Shape
     {
         public ShapeType GeometricShape { get; set; }
         public SolidColorBrush Color { get; set; }
         public Size Size { get; set; }
- 
         public Quadrants Quadrant {get; set; }
-
         public PointCollection Points { get; set; }
 
-        public Shape(ShapeType shape, SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points)
+        public double Area { get; set; }
+
+        public Shape(ShapeType shape, SolidColorBrush color, Quadrants quadrant, PointCollection points)
         {
             this.GeometricShape = shape;
             this.Color = color;
-            this.Size = size;
             this.Quadrant = quadrant;
             this.Points = points;
+
+            switch (this.GeometricShape)
+            {
+                case ShapeType.Triangle:
+                    this.Area = (points[1].X - points[0].X) * (points[1].Y - points[2].Y) / 2;
+                    break;
+                case ShapeType.Square:
+                    this.Area = (points[1].X - points[0].X) * (points[1].Y - points[3].Y);
+                    break;
+                default:
+                    this.Area = -1;
+                    break;
+            }
         }
+
     }
 }

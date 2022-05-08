@@ -1,4 +1,7 @@
-﻿using System;
+﻿/// 
+/// Creado por Pedro Padilla Reyes para el trabajo fin de grado en Ingeniería Informática por la UGR.
+/// 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +16,11 @@ namespace Visual_filtering_referable_objects
 
 		public int Radius { get; set; }
 
-		public Circle(SolidColorBrush color, Size size, Quadrants quadrant, PointCollection points, int radius)
-			: base(ShapeType.Circle, color, size, quadrant, points)
+		public Circle(SolidColorBrush color, Quadrants quadrant, PointCollection points, int radius)
+			: base(ShapeType.Circle, color, quadrant, points)
 		{
-			this.Radius = radius;
-		}
-	}
+            this.Radius = radius;
+            this.Area = Math.PI * Math.Pow(this.Radius, 2);
+        }
+    }
 }
