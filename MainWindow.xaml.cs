@@ -104,36 +104,39 @@ namespace Visual_filtering_referable_objects
         }
 		private Geometry GetGeometry(Shape shape)
 		{
+			/*
 			RectangleGeometry rectangleGeometry = new RectangleGeometry();
 			PointCollection points = new PointCollection(shape.Points);
 			double centerX = points[0].X + (points[1].X - points[0].X) / 2;
 			double centerY = points[2].Y + (points[1].Y - points[2].Y) / 2;
 			double length = (points[1].X - points[0].X);
 			rectangleGeometry.Rect = new Rect(centerX, centerY, length, length);
-			return rectangleGeometry;
+			*/
+			PointCollection points = new PointCollection(shape.Points);
+			double centerX = points[0].X + (points[1].X - points[0].X) / 2;
+			double centerY = points[2].Y + (points[1].Y - points[2].Y) / 2;
+			double circleRadius = (points[1].X - points[0].X) / 2 + 5;
+			return new EllipseGeometry(new Point(centerX, centerY), circleRadius, circleRadius);
 		}
 
-		private Geometry GetGeometryCircle (Shape shape)
+		private Geometry GetGeometryCircle (Circle shape)
         {
-			EllipseGeometry ellipseGeometry = new EllipseGeometry();
-			ellipseGeometry.Center = shape.Points[0];
-			ellipseGeometry.RadiusX = shape.Radius;
-			ellipseGeometry.RadiusY = shape.Radius;
-			return ellipseGeometry;
+			return new EllipseGeometry(shape.Points[0], shape.Radius + 5, shape.Radius + 5);
 		}
 
 		private Boolean ShapesOverlap (Shape shape1, Shape shape2)
         {
-			Geometry geometry1 = shape1.GeometricShape == ShapeType.Circle ? GetGeometryCircle(shape1) : GetGeometry(shape1);
-			Geometry geometry2 = shape2.GeometricShape == ShapeType.Circle ? GetGeometryCircle(shape2) : GetGeometry(shape2);
+			Geometry geometry1 = shape1.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape1) : GetGeometry(shape1);
+			Geometry geometry2 = shape2.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape2) : GetGeometry(shape2);
+			System.Windows.Media.IntersectionDetail intersection = geometry1.FillContainsWithDetail(geometry2);
 
-			if (geometry1.FillContainsWithDetail (geometry2) != System.Windows.Media.IntersectionDetail.Empty)
+			if (intersection != System.Windows.Media.IntersectionDetail.Empty && intersection != System.Windows.Media.IntersectionDetail.NotCalculated)
             {
-				return false;
+				return true;
             }
             else
             {
-				return true;
+				return false;
             }
 		}
 
@@ -193,8 +196,6 @@ namespace Visual_filtering_referable_objects
 					// Circles are too big
 					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3);
 					shapeToAdd = (new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
-
-
 				}
 				else
                 {
@@ -214,15 +215,11 @@ namespace Visual_filtering_referable_objects
 
 				Boolean overlaps = false;
 
-				if (this.shapes.Count() > 1)
+				for (int j = 0; j < this.shapes.Count() && !overlaps; j++)
 				{
-					for (int j = 0; j < this.shapes.Count(); j++)
+					if (ShapesOverlap(shapeToAdd, this.shapes[j]))
 					{
-
-						if (ShapesOverlap(shapeToAdd, this.shapes[j]))
-						{
-							overlaps = true;
-						}
+						overlaps = true;
 					}
 				}
 
