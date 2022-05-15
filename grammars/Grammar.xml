@@ -23,14 +23,20 @@
         Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Properties"/> que estén <ruleref uri="#Locations"/>
       </item>  
       <item>  
-        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Size"/> que sean <ruleref uri="#Colors"/>
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Sizes"/> que sean <ruleref uri="#Colors"/>
       </item>  
       <item>  
-        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Size"/>
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Sizes"/>
       </item>  
       <item>  
-        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Size"/> y que estén <ruleref uri="#Locations"/>
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Sizes"/> y que estén <ruleref uri="#Locations"/>
       </item>  
+      <item>  
+        Borra el <ruleref uri="#Shape"/> más <ruleref uri="#Size"/>
+      </item>  
+      <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> más <ruleref uri="#Size"/>
+      </item> 
     </one-of>  
   </rule>  
 
@@ -41,6 +47,15 @@
       <item> Triángulos </item>  
     </one-of>  
   </rule>  
+
+    <rule id="Shape" scope="public">  
+    <one-of>  
+      <item> Cuadrado </item>  
+      <item> Círculo </item>  
+      <item> Triángulo </item>  
+    </one-of>  
+  </rule>  
+
 
    <rule id="Properties" scope="public">  
     <one-of>  
@@ -59,6 +74,19 @@
       <item> Verdes </item>  
       <item> Naranjas </item>  
       <item> Rosas </item> 
+    </one-of>  
+  </rule>  
+
+  <rule id="Color" scope="public">  
+    <one-of>  
+      <item> Negro </item>  
+      <item> Rojo </item>  
+      <item> Azule </item>  
+      <item> Morado </item>  
+      <item> Amarillo </item>  
+      <item> Verde </item>  
+      <item> Naranja </item>  
+      <item> Rosa </item> 
     </one-of>  
   </rule>  
   
@@ -86,11 +114,18 @@
     </one-of>  
   </rule>  
 
-  <rule id="Size" scope="public">  
+  <rule id="Sizes" scope="public">  
     <one-of>  
         <item> Grandes </item>  
         <item> Medianos </item>  
         <item> Pequeños </item>  
+    </one-of>  
+  </rule>  
+
+   <rule id="Size" scope="public">  
+    <one-of>  
+        <item> Grande </item>  
+        <item> Pequeño </item>  
     </one-of>  
   </rule>  
 </grammar>

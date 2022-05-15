@@ -51,6 +51,13 @@ namespace Visual_filtering_referable_objects
         Pink
     }
 
+    public enum SearchType
+    {
+        None,
+        Single,
+        Multiple
+    }
+
     public class Shape
     {
         public ShapeType GeometricShape { get; set; }

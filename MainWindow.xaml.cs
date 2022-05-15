@@ -145,7 +145,7 @@ namespace Visual_filtering_referable_objects
             {
 				ShapeType randomShape = RandomEnumValue<ShapeType>();
 				int shapeLength = _R.Next(65) + 10;
-				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(540-70) + shapeLength, _R.Next(340- 70) + shapeLength);
+				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(440) + 70, _R.Next(240) + 70);
 				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
 
 				PointCollection myPointCollection = new PointCollection();
@@ -153,7 +153,8 @@ namespace Visual_filtering_referable_objects
 
 				if (randomShape == ShapeType.Circle)
                 {
-					if (shapeLength > 15) shapeLength -= 10; // Circles are too big
+					// Circles are too big
+					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3); 
 					AddShape(new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
 
 
@@ -309,20 +310,21 @@ namespace Visual_filtering_referable_objects
 
 			bool isValidStart = false;
 
-			if (e.Result.Words.Count>2)
+			if (e.Result.Words.Count > 2)
 			{
 				string startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
 				string shapeString = e.Result.Words[2].Text.ToLower();
+				SearchType searchType = startCommand == "borra los" ? SearchType.Multiple : startCommand == "borra el" ? SearchType.Single : SearchType.None;
 				string wholeText = "";
 				for (int i = 0; i < e.Result.Words.Count; i++)
-                {
+				{
 					wholeText = wholeText + ' ' + e.Result.Words[i].Text;
-                }
+				}
 				MessageBox.Show("Has hablado! Has dicho esto: " + wholeText);
 
-				switch (startCommand)
+				switch (searchType)
 				{
-					case "borra los":
+					case SearchType.Multiple:
 						switch (shapeString)
 						{
 							case "triángulos":
@@ -340,8 +342,8 @@ namespace Visual_filtering_referable_objects
 							default:
 								break;
 						}
-                        if (isValidStart)
-                        {
+						if (isValidStart)
+						{
 							for (int i = 3; i < e.Result.Words.Count; i++)
 							{
 								string word = e.Result.Words[i].Text.ToLower();
@@ -373,13 +375,13 @@ namespace Visual_filtering_referable_objects
 										break;
 
 									case "estén":
-										string firstPositionWord = e.Result.Words[i+1].Text.ToLower();
-										string secondPositionWord = e.Result.Words.Count > i+4 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() + " " + e.Result.Words[i + 4].Text.ToLower() : "";
+										string firstPositionWord = e.Result.Words[i + 1].Text.ToLower();
+										string secondPositionWord = e.Result.Words.Count > i + 4 ? e.Result.Words[i + 2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() + " " + e.Result.Words[i + 4].Text.ToLower() : "";
 										switch (firstPositionWord)
-                                        {
+										{
 											case "arriba":
 												switch (secondPositionWord)
-                                                {
+												{
 													case "a la izquierda":
 														quadrantToSearch1 = Quadrants.Top_left;
 														break;
@@ -408,13 +410,13 @@ namespace Visual_filtering_referable_objects
 												}
 												break;
 											case "en":
-												string centerWord = e.Result.Words.Count > i + 3 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() : "";
+												string centerWord = e.Result.Words.Count > i + 3 ? e.Result.Words[i + 2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() : "";
 												if (centerWord == "el centro")
 													quadrantToSearch1 = Quadrants.Center;
 												break;
 										}
 
-									break;
+										break;
 
 									case "grandes":
 										size = Size.Big;
@@ -432,29 +434,123 @@ namespace Visual_filtering_referable_objects
 
 						}
 						break;
+					case SearchType.Single:
+						switch (shapeString)
+						{
+							case "triángulo":
+								shapeToSearch = ShapeType.Triangle;
+								isValidStart = true;
+								break;
+							case "cuadrado":
+								shapeToSearch = ShapeType.Square;
+								isValidStart = true;
+								break;
+							case "círculo":
+								shapeToSearch = ShapeType.Circle;
+								isValidStart = true;
+								break;
+							default:
+								break;
+						}
+						if (isValidStart)
+						{
+							string word = e.Result.Words[3].Text.ToLower();
+							switch (word)
+							{
+								case "azul":
+									color = System.Windows.Media.Brushes.Blue;
+									break;
+								case "negro":
+									color = System.Windows.Media.Brushes.Black;
+									break;
+								case "rojo":
+									color = System.Windows.Media.Brushes.Red;
+									break;
+								case "morado":
+									color = System.Windows.Media.Brushes.Purple;
+									break;
+								case "amarillo":
+									color = System.Windows.Media.Brushes.Yellow;
+									break;
+								case "verde":
+									color = System.Windows.Media.Brushes.Green;
+									break;
+								case "naranja":
+									color = System.Windows.Media.Brushes.Orange;
+									break;
+								case "rosa":
+									color = System.Windows.Media.Brushes.Pink;
+									break;
+							}
+							if (word == "más" || e.Result.Words[4].Text.ToLower() == "más")
+							{
+								string sizeWord = word == "más" ? e.Result.Words[4].Text.ToLower() : e.Result.Words[5].Text.ToLower();
+								switch (sizeWord)
+								{
+									case "grande":
+										size = Size.Big;
+										break;
+									case "mediano":
+										size = Size.Medium;
+										break;
+									case "pequeño":
+										size = Size.Small;
+										break;
+									default:
+										break;
+								}
+							}
+						}
+						break;
 				}
-			}
-			if (isValidStart)
-            {
-				List<Shape> shapesCopy = new List<Shape>(this.shapes);
-				Boolean anyMatch = false;
-
-				for (int i = 0; i < shapesCopy.Count(); i++)
+				if (isValidStart)
 				{
-					Shape shape = shapesCopy[i];
-					shape.Size = CalculateSizeFromIterator(i);
+					Boolean anyMatch = false;
 
-					if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
-					{
-						this.shapes.Remove(shapesCopy[i]);
-						anyMatch = true;
+					if (searchType == SearchType.Multiple)
+                    {
+						List<Shape> shapesCopy = new List<Shape>(this.shapes);
+						for (int i = 0; i < shapesCopy.Count(); i++)
+						{
+							Shape shape = shapesCopy[i];
+
+							if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
+							{
+								this.shapes.Remove(shapesCopy[i]);
+								anyMatch = true;
+							}
+						}
 					}
+					else if (searchType == SearchType.Single)
+                    {
+						List<Shape> geometricShapesList = new List<Shape>();
+						for (int i = 0; i < shapes.Count(); i++)
+						{
+							Shape shape = shapes[i];
+							if (shapeToSearch == shape.GeometricShape)
+                            {
+								geometricShapesList.Add(shape);
+                            }
+						}
+
+						for (int i = 0; i < geometricShapesList.Count(); i++)
+						{
+							Shape shape = geometricShapesList[i];
+							if ((color == shape.Color || color == System.Windows.Media.Brushes.White) && IsBiggestOrSmallestShape(geometricShapesList, size, i))
+							{
+								this.shapes.Remove(geometricShapesList[i]);
+								anyMatch = true;
+								break;
+							}
+						}
+					}
+
+					if (!anyMatch)
+					{
+						MessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
+					}
+					PaintShapes();
 				}
-				if (!anyMatch)
-                {
-					MessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
-				}
-				PaintShapes();
 			}
 				
 		}
@@ -512,5 +608,27 @@ namespace Visual_filtering_referable_objects
 				return Size.Small;
 			}
 		}
-    }
+
+		private Boolean IsBiggestOrSmallestShape(List<Shape> list, Size size, int i)
+		{
+			if (list.Count() == 1) {
+				return true;
+			}
+			if (size == Size.Big)
+            {
+				if (i == 0)
+                {
+					return true;
+                }
+            }
+			else if (size == Size.Small)
+            {
+				if (i == list.Count() - 1)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 }
