@@ -68,6 +68,8 @@ namespace Visual_filtering_referable_objects
 
         public double Area { get; set; }
 
+        public double Radius { get; set; }
+
         public Shape(ShapeType shape, SolidColorBrush color, Quadrants quadrant, PointCollection points)
         {
             this.GeometricShape = shape;

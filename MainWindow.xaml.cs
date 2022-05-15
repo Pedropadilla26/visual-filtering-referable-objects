@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.Windows.Shapes;
 
+
 namespace Visual_filtering_referable_objects
 {
 	/// <summary>
@@ -101,6 +102,40 @@ namespace Visual_filtering_referable_objects
         {
 
         }
+		private Geometry GetGeometry(Shape shape)
+		{
+			RectangleGeometry rectangleGeometry = new RectangleGeometry();
+			PointCollection points = new PointCollection(shape.Points);
+			double centerX = points[0].X + (points[1].X - points[0].X) / 2;
+			double centerY = points[2].Y + (points[1].Y - points[2].Y) / 2;
+			double length = (points[1].X - points[0].X);
+			rectangleGeometry.Rect = new Rect(centerX, centerY, length, length);
+			return rectangleGeometry;
+		}
+
+		private Geometry GetGeometryCircle (Shape shape)
+        {
+			EllipseGeometry ellipseGeometry = new EllipseGeometry();
+			ellipseGeometry.Center = shape.Points[0];
+			ellipseGeometry.RadiusX = shape.Radius;
+			ellipseGeometry.RadiusY = shape.Radius;
+			return ellipseGeometry;
+		}
+
+		private Boolean ShapesOverlap (Shape shape1, Shape shape2)
+        {
+			Geometry geometry1 = shape1.GeometricShape == ShapeType.Circle ? GetGeometryCircle(shape1) : GetGeometry(shape1);
+			Geometry geometry2 = shape2.GeometricShape == ShapeType.Circle ? GetGeometryCircle(shape2) : GetGeometry(shape2);
+
+			if (geometry1.FillContainsWithDetail (geometry2) != System.Windows.Media.IntersectionDetail.Empty)
+            {
+				return false;
+            }
+            else
+            {
+				return true;
+            }
+		}
 
 		private Boolean IsInCenterQuadrant(Point point)
         {
@@ -141,12 +176,14 @@ namespace Visual_filtering_referable_objects
 
 		private void GenerateRandomShapes(int howMany)
 		{
-			for (int i = 0; i < howMany; i++)
+			int i = 0;
+			while (i < howMany)
             {
 				ShapeType randomShape = RandomEnumValue<ShapeType>();
 				int shapeLength = _R.Next(65) + 10;
 				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(440) + 70, _R.Next(240) + 70);
 				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
+				Shape shapeToAdd;
 
 				PointCollection myPointCollection = new PointCollection();
 				myPointCollection.Add(firstPoint);
@@ -154,8 +191,8 @@ namespace Visual_filtering_referable_objects
 				if (randomShape == ShapeType.Circle)
                 {
 					// Circles are too big
-					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3); 
-					AddShape(new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
+					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3);
+					shapeToAdd = (new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
 
 
 				}
@@ -172,7 +209,27 @@ namespace Visual_filtering_referable_objects
 						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y - shapeLength));
 						myPointCollection.Add(new Point(firstPoint.X, firstPoint.Y - shapeLength));
 					}
-					AddShape(new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection));
+					shapeToAdd = (new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection));
+				}
+
+				Boolean overlaps = false;
+
+				if (this.shapes.Count() > 1)
+				{
+					for (int j = 0; j < this.shapes.Count(); j++)
+					{
+
+						if (ShapesOverlap(shapeToAdd, this.shapes[j]))
+						{
+							overlaps = true;
+						}
+					}
+				}
+
+				if (!overlaps)
+                {
+					i++;
+					AddShape(shapeToAdd);
 				}
 			}
 		}
