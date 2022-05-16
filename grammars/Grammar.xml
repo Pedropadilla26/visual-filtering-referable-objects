@@ -60,7 +60,7 @@
    <rule id="Properties" scope="public">  
     <one-of>  
       <item> <ruleref uri="#Colors"/> </item>  
-      <item> <ruleref uri="#Size"/> </item>    
+      <item> <ruleref uri="#Sizes"/> </item>    
     </one-of>  
   </rule>  
 

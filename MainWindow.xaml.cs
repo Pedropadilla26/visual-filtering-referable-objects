@@ -63,7 +63,13 @@ namespace Visual_filtering_referable_objects
 			this.canvasMaxY = Canvas_.Height;
 
 			// DEFAULT SHAPES (FOR NOW)
+			AddDefaultShapes();
 
+			PaintShapes();
+		}
+
+		private void AddDefaultShapes()
+        {
 			// TRIANGLE
 			System.Windows.Point Point1 = new System.Windows.Point(150, 130);
 			System.Windows.Point Point2 = new System.Windows.Point(200, 130);
@@ -96,68 +102,30 @@ namespace Visual_filtering_referable_objects
 			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
-			PaintShapes();
-		}
-		private void CreateAndAddShapeFromString (string shapeInfo)
-        {
-
-        }
-		private RectangleGeometry GetGeometry(Shape shape)
-		{
-			/*
-			RectangleGeometry rectangleGeometry = new RectangleGeometry();
-			PointCollection points = new PointCollection(shape.Points);
-			double centerX = points[0].X + (points[1].X - points[0].X) / 2;
-			double centerY = points[2].Y + (points[1].Y - points[2].Y) / 2;
-			double length = (points[1].X - points[0].X);
-			rectangleGeometry.Rect = new Rect(centerX, centerY, length, length);
-			*/
-			PointCollection points = new PointCollection(shape.Points);
-			double centerX = points[0].X + (points[1].X - points[0].X) / 2;
-			double centerY = points[2].Y + (points[1].Y - points[2].Y) / 2;
-			double semiLength = points[1].X - points[0].X;
-			double circleRadius = Math.Sqrt(Math.Pow(semiLength, 2) + Math.Pow(semiLength, 2)) + semiLength / 4;
-			Point bottom_right = new Point(points[1].X + 2, points[1].Y + 2);
-			Point top_left = new Point(points[0].X - 2, points[2].Y - 2);
-			//return new EllipseGeometry(new Point(centerX, centerY), circleRadius, circleRadius);
-			return new RectangleGeometry(new Rect(top_left, bottom_right));
-		}
-
-		private RectangleGeometry GetGeometryCircle (Circle shape)
-        {
-			Point center = shape.Points[0];
-			Point top_left = new Point(center.X - shape.Radius, center.Y - shape.Radius);
-			Point bottom_right = new Point(center.X + shape.Radius, center.Y + shape.Radius);
-			//return new EllipseGeometry(shape.Points[0], (double)shape.Radius + shape.Radius / 4, (double)shape.Radius + shape.Radius / 4);
-			return new RectangleGeometry(new Rect(top_left, bottom_right));
 		}
 
 		private Boolean ShapesOverlap (Shape shape1, Shape shape2, Boolean paintsPath = false)
         {
-			RectangleGeometry geometry1 = shape1.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape1) : GetGeometry(shape1);
-			RectangleGeometry geometry2 = shape2.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape2) : GetGeometry(shape2);
-			System.Windows.Media.IntersectionDetail intersection = geometry1.FillContainsWithDetail(geometry2, 0.00001, ToleranceType.Absolute);
+			RectangleGeometry boundingGeometry1 = shape1.GetBoundingBox();
+			RectangleGeometry boundingGeometry2 = shape2.GetBoundingBox();
+			System.Windows.Media.IntersectionDetail intersection = boundingGeometry1.FillContainsWithDetail(boundingGeometry2);
 
-			if (intersection == System.Windows.Media.IntersectionDetail.FullyContains || 
-				intersection == System.Windows.Media.IntersectionDetail.FullyInside || 
-				intersection == System.Windows.Media.IntersectionDetail.Intersects ||
-				intersection == System.Windows.Media.IntersectionDetail.NotCalculated)
+			if (intersection != System.Windows.Media.IntersectionDetail.Empty)
             {
 				return true;
             }
-            else
-            {
-				if (paintsPath)
-				{
-					Path myPath = new Path();
-					myPath.Fill = Brushes.LemonChiffon;
-					myPath.Stroke = Brushes.Black;
-					myPath.StrokeThickness = 1;
-					myPath.Data = geometry1;
-					Canvas_.Children.Add(myPath);
-				}
-				return false;
-            }
+
+			if (paintsPath)
+			{
+				Path myPath = new Path();
+				myPath.Fill = Brushes.LemonChiffon;
+				myPath.Stroke = Brushes.Black;
+				myPath.StrokeThickness = 1;
+				myPath.Data = boundingGeometry1;
+				Canvas_.Children.Add(myPath);
+			}
+			return false;
+            
 		}
 
 		private Boolean IsInCenterQuadrant(Point point)
@@ -197,31 +165,39 @@ namespace Visual_filtering_referable_objects
 			else return Quadrants.None;
 		}
 
-		private void GenerateRandomShapes(int howMany)
-		{
+		private void clearPathPaints()
+        {
 			var paths = Canvas_.Children.OfType<Path>().ToList();
 			foreach (var path in paths)
 			{
 				Canvas_.Children.Remove(path);
 			}
+		}
+
+		private void GenerateRandomShapes(int howMany)
+		{
+			clearPathPaints();
+
 			int i = 0;
 			while (i < howMany)
             {
+				// Generate data of a shape randomly, including the first point and 'length' of the shape
+				Shape shapeToAdd;
 				ShapeType randomShape = RandomEnumValue<ShapeType>();
 				int shapeLength = _R.Next(65) + 10;
-				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(450) + 70, _R.Next(260) + 70);
-				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
-				Shape shapeToAdd;
-
 				PointCollection myPointCollection = new PointCollection();
+				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(450) + 70, _R.Next(260) + 70);
 				myPointCollection.Add(firstPoint);
+				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
+				SolidColorBrush colorGenerated = GetColorFromString(RandomEnumValue<ColorsEnum>().ToString());
 
+				// If the random shape is a circle, reduce size and add it with length as radius
 				if (randomShape == ShapeType.Circle)
                 {
-					// Circles are too big
-					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3);
-					shapeToAdd = (new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
+					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3); // Circles are too big
+					shapeToAdd = (new Circle(colorGenerated, generatedQuadrant, myPointCollection, shapeLength));
 				}
+				// If the random shape is a triangle or circle, generate lefting points using the first one and length and then add it
 				else
                 {
 					if (randomShape == ShapeType.Triangle)
@@ -235,14 +211,16 @@ namespace Visual_filtering_referable_objects
 						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y - shapeLength));
 						myPointCollection.Add(new Point(firstPoint.X, firstPoint.Y - shapeLength));
 					}
-					shapeToAdd = (new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection));
+					shapeToAdd = (new Shape(randomShape, colorGenerated, generatedQuadrant, myPointCollection));
 				}
+
+				// Check if the shape overlaps any other shape, if it does don't add it to the list of shapes 
 
 				Boolean overlaps = false;
 
-				for (int j = 0; j < this.shapes.Count() && !overlaps; j++)
+				foreach (Shape shape in this.shapes)
 				{
-					if (ShapesOverlap(shapeToAdd, this.shapes[j]))
+					if (ShapesOverlap(shapeToAdd, shape))
 					{
 						overlaps = true;
 					}
@@ -254,14 +232,19 @@ namespace Visual_filtering_referable_objects
 					AddShape(shapeToAdd);
 				}
 			}
+			// Copy the generated list of shapes so it's used as a backup when 'reset' button is called
+			this.initialShapes = new List<Shape>(this.shapes);
 		}
+
 		private SolidColorBrush GetColorFromString (string color)
         {
 			return (SolidColorBrush)new BrushConverter().ConvertFromString(color);
 		}
+
 		private void AddShape (Shape shape)
         {
 			this.shapes.Add(shape);
+			// The list of shapes is always sorted from biggest to smallest
 			this.shapes.Sort(delegate (Shape x, Shape y)
 			{
 				return (x.Area < y.Area ? 1 : -1);
@@ -592,6 +575,7 @@ namespace Visual_filtering_referable_objects
 						for (int i = 0; i < shapesCopy.Count(); i++)
 						{
 							Shape shape = shapesCopy[i];
+							shape.Size = CalculateSizeFromIterator(shapesCopy, i);
 
 							if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
 							{
@@ -602,15 +586,7 @@ namespace Visual_filtering_referable_objects
 					}
 					else if (searchType == SearchType.Single)
                     {
-						List<Shape> geometricShapesList = new List<Shape>();
-						for (int i = 0; i < shapes.Count(); i++)
-						{
-							Shape shape = shapes[i];
-							if (shapeToSearch == shape.GeometricShape)
-                            {
-								geometricShapesList.Add(shape);
-                            }
-						}
+						List<Shape> geometricShapesList = GetSortedShapesOfType(shapeToSearch);
 
 						for (int i = 0; i < geometricShapesList.Count(); i++)
 						{
@@ -672,13 +648,13 @@ namespace Visual_filtering_referable_objects
             speechRecognizer.Dispose();
         }
 
-		private Size CalculateSizeFromIterator (int i)
+		private Size CalculateSizeFromIterator (List<Shape> list, int i)
         {
-			if (i <= this.shapes.Count() / 3)
+			if (i <= list.Count() / 3)
 			{
 				return Size.Big;
 			}
-			else if (i <= this.shapes.Count() * 2 / 3)
+			else if (i <= list.Count() * 2 / 3)
 			{
 				return Size.Medium;
 			}
@@ -708,6 +684,19 @@ namespace Visual_filtering_referable_objects
 				}
 			}
 			return false;
+		}
+
+		private List<Shape> GetSortedShapesOfType (ShapeType shapeType)
+        {
+			List<Shape> geometricShapesList = new List<Shape>();
+			foreach (var shape in this.shapes)
+			{
+				if (shapeType == shape.GeometricShape)
+				{
+					geometricShapesList.Add(shape);
+				}
+			}
+			return geometricShapesList;
 		}
 	}
 }
