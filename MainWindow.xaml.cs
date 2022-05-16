@@ -102,7 +102,7 @@ namespace Visual_filtering_referable_objects
         {
 
         }
-		private Geometry GetGeometry(Shape shape)
+		private RectangleGeometry GetGeometry(Shape shape)
 		{
 			/*
 			RectangleGeometry rectangleGeometry = new RectangleGeometry();
@@ -115,27 +115,47 @@ namespace Visual_filtering_referable_objects
 			PointCollection points = new PointCollection(shape.Points);
 			double centerX = points[0].X + (points[1].X - points[0].X) / 2;
 			double centerY = points[2].Y + (points[1].Y - points[2].Y) / 2;
-			double circleRadius = (points[1].X - points[0].X) / 2 + 5;
-			return new EllipseGeometry(new Point(centerX, centerY), circleRadius, circleRadius);
+			double semiLength = points[1].X - points[0].X;
+			double circleRadius = Math.Sqrt(Math.Pow(semiLength, 2) + Math.Pow(semiLength, 2)) + semiLength / 4;
+			Point bottom_right = new Point(points[1].X + 2, points[1].Y + 2);
+			Point top_left = new Point(points[0].X - 2, points[2].Y - 2);
+			//return new EllipseGeometry(new Point(centerX, centerY), circleRadius, circleRadius);
+			return new RectangleGeometry(new Rect(top_left, bottom_right));
 		}
 
-		private Geometry GetGeometryCircle (Circle shape)
+		private RectangleGeometry GetGeometryCircle (Circle shape)
         {
-			return new EllipseGeometry(shape.Points[0], shape.Radius + 5, shape.Radius + 5);
+			Point center = shape.Points[0];
+			Point top_left = new Point(center.X - shape.Radius, center.Y - shape.Radius);
+			Point bottom_right = new Point(center.X + shape.Radius, center.Y + shape.Radius);
+			//return new EllipseGeometry(shape.Points[0], (double)shape.Radius + shape.Radius / 4, (double)shape.Radius + shape.Radius / 4);
+			return new RectangleGeometry(new Rect(top_left, bottom_right));
 		}
 
-		private Boolean ShapesOverlap (Shape shape1, Shape shape2)
+		private Boolean ShapesOverlap (Shape shape1, Shape shape2, Boolean paintsPath = false)
         {
-			Geometry geometry1 = shape1.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape1) : GetGeometry(shape1);
-			Geometry geometry2 = shape2.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape2) : GetGeometry(shape2);
-			System.Windows.Media.IntersectionDetail intersection = geometry1.FillContainsWithDetail(geometry2);
+			RectangleGeometry geometry1 = shape1.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape1) : GetGeometry(shape1);
+			RectangleGeometry geometry2 = shape2.GeometricShape == ShapeType.Circle ? GetGeometryCircle((Circle) shape2) : GetGeometry(shape2);
+			System.Windows.Media.IntersectionDetail intersection = geometry1.FillContainsWithDetail(geometry2, 0.00001, ToleranceType.Absolute);
 
-			if (intersection != System.Windows.Media.IntersectionDetail.Empty && intersection != System.Windows.Media.IntersectionDetail.NotCalculated)
+			if (intersection == System.Windows.Media.IntersectionDetail.FullyContains || 
+				intersection == System.Windows.Media.IntersectionDetail.FullyInside || 
+				intersection == System.Windows.Media.IntersectionDetail.Intersects ||
+				intersection == System.Windows.Media.IntersectionDetail.NotCalculated)
             {
 				return true;
             }
             else
             {
+				if (paintsPath)
+				{
+					Path myPath = new Path();
+					myPath.Fill = Brushes.LemonChiffon;
+					myPath.Stroke = Brushes.Black;
+					myPath.StrokeThickness = 1;
+					myPath.Data = geometry1;
+					Canvas_.Children.Add(myPath);
+				}
 				return false;
             }
 		}
@@ -179,12 +199,17 @@ namespace Visual_filtering_referable_objects
 
 		private void GenerateRandomShapes(int howMany)
 		{
+			var paths = Canvas_.Children.OfType<Path>().ToList();
+			foreach (var path in paths)
+			{
+				Canvas_.Children.Remove(path);
+			}
 			int i = 0;
 			while (i < howMany)
             {
 				ShapeType randomShape = RandomEnumValue<ShapeType>();
 				int shapeLength = _R.Next(65) + 10;
-				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(440) + 70, _R.Next(240) + 70);
+				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(450) + 70, _R.Next(260) + 70);
 				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
 				Shape shapeToAdd;
 
@@ -313,9 +338,8 @@ namespace Visual_filtering_referable_objects
 
 						Canvas_.Children.Add(myEllipse);
 
-						myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
-						myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
-
+						myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X - circle.Radius);
+						myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y - circle.Radius);
 
 					}
 					else
@@ -351,6 +375,7 @@ namespace Visual_filtering_referable_objects
 			{
 				Canvas_.Children.Remove(ellipse);
 			}
+		
 		}
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
