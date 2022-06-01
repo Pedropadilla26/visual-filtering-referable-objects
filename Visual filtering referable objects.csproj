@@ -72,7 +72,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Circle.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Shapes.cs" />
+    <Compile Include="SpeechEraserProcessor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

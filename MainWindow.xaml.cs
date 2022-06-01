@@ -392,6 +392,8 @@ namespace Visual_filtering_referable_objects
 				case "genera":
 					Button_Click_Generate_Random_Canvas(null, null);
 					break;
+				case "interpreta":
+					break;
 				default:
 					break;
 
