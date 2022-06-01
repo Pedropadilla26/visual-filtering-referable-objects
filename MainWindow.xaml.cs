@@ -36,6 +36,7 @@ namespace Visual_filtering_referable_objects
 		double canvasMinY = 0;
 		double canvasMaxX = 0;
 		double canvasMaxY = 0;
+		Boolean isListening = false;
 
 		static T RandomEnumValue<T>()
 		{
@@ -102,6 +103,8 @@ namespace Visual_filtering_referable_objects
 			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
+
+			speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
 		}
 
 		private Boolean ShapesOverlap (Shape shape1, Shape shape2, Boolean paintsPath = false)
@@ -262,23 +265,20 @@ namespace Visual_filtering_referable_objects
 
 		private void Button_Click(object sender, RoutedEventArgs e)
         {
-            speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+			isListening = true;
 			btnDisable.IsEnabled = true;
 			btnEnable.IsEnabled = false;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            speechRecognizer.RecognizeAsyncStop();
+			isListening = false;
 			btnDisable.IsEnabled = false;
 			btnEnable.IsEnabled = true;
 		}
 
 		private void Button_Click_Reset(object sender, RoutedEventArgs e)
 		{
-			speechRecognizer.RecognizeAsyncStop();
-			btnDisable.IsEnabled = false;
-			btnEnable.IsEnabled = true;
 			this.shapes = new List<Shape>(this.initialShapes);
 			PaintShapes();
 		}
@@ -363,16 +363,41 @@ namespace Visual_filtering_referable_objects
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			Button_Click_1(null, null);
 			Quadrants quadrantToSearch1 = Quadrants.None;
 			Quadrants quadrantToSearch2 = Quadrants.None;
 			ShapeType shapeToSearch = ShapeType.None;
 			SolidColorBrush color = System.Windows.Media.Brushes.White;
 			Size size = Size.None;
+			string firstWord = e.Result.Words[0].Text.ToLower();
 
 			bool isValidStart = false;
 
-			if (e.Result.Words.Count > 2)
+			switch (firstWord)
+            {
+				case "escúchame":
+					Button_Click(null, null);
+					break;
+				case "empieza":
+					Button_Click(null, null);
+					break;
+				case "para":
+					Button_Click_1(null, null);
+					break;
+				case "deja":
+					Button_Click_1(null, null);
+					break;
+				case "reinicia":
+					Button_Click_Reset(null, null);
+					break;
+				case "genera":
+					Button_Click_Generate_Random_Canvas(null, null);
+					break;
+				default:
+					break;
+
+			}
+
+			if (e.Result.Words.Count > 2 && isListening)
 			{
 				string startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
 				string shapeString = e.Result.Words[2].Text.ToLower();
@@ -382,7 +407,6 @@ namespace Visual_filtering_referable_objects
 				{
 					wholeText = wholeText + ' ' + e.Result.Words[i].Text;
 				}
-				MessageBox.Show("Has hablado! Has dicho esto: " + wholeText);
 
 				switch (searchType)
 				{
@@ -406,6 +430,9 @@ namespace Visual_filtering_referable_objects
 						}
 						if (isValidStart)
 						{
+							Button_Click_1(null, null);
+							MessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
+
 							for (int i = 3; i < e.Result.Words.Count; i++)
 							{
 								string word = e.Result.Words[i].Text.ToLower();

@@ -37,6 +37,32 @@
       <item>  
         Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> más <ruleref uri="#Size"/>
       </item> 
+      <item>
+        <ruleref uri="#Accesibilidad"/>
+      </item>
+    </one-of>  
+  </rule>  
+
+  <rule id="Accesibilidad" scope="public">  
+    <one-of>  
+      <item>  
+        Escúchame  
+      </item> 
+      <item>  
+        Empieza a escucharme
+      </item> 
+      <item>  
+        Deja de escucharme  
+      </item> 
+      <item>
+        Para de escucharme
+      </item>
+      <item>
+        Reinicia el lienzo
+      </item>
+      <item>
+        Genera un nuevo lienzo
+      </item>
     </one-of>  
   </rule>  
 
