@@ -37,6 +37,7 @@ namespace Visual_filtering_referable_objects
 		double canvasMaxX = 0;
 		double canvasMaxY = 0;
 		Boolean isListening = false;
+		SpeechEraserProcessor speechEraser = new SpeechEraserProcessor();
 
 		static T RandomEnumValue<T>()
 		{
@@ -103,7 +104,6 @@ namespace Visual_filtering_referable_objects
 			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
-
 			speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
 		}
 
@@ -363,15 +363,7 @@ namespace Visual_filtering_referable_objects
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			Quadrants quadrantToSearch1 = Quadrants.None;
-			Quadrants quadrantToSearch2 = Quadrants.None;
-			ShapeType shapeToSearch = ShapeType.None;
-			SolidColorBrush color = System.Windows.Media.Brushes.White;
-			Size size = Size.None;
 			string firstWord = e.Result.Words[0].Text.ToLower();
-
-			bool isValidStart = false;
-
 			switch (firstWord)
             {
 				case "escúchame":
@@ -394,338 +386,22 @@ namespace Visual_filtering_referable_objects
 					break;
 				case "interpreta":
 					break;
+				case "borra":
+					if (e.Result.Words.Count > 2 && isListening)
+					{
+						this.shapes = this.speechEraser.EraseShapes(this.shapes, e.Result.Words);
+						PaintShapes();
+					}
+					break;
 				default:
 					break;
-
-			}
-
-			if (e.Result.Words.Count > 2 && isListening)
-			{
-				string startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
-				string shapeString = e.Result.Words[2].Text.ToLower();
-				SearchType searchType = startCommand == "borra los" ? SearchType.Multiple : startCommand == "borra el" ? SearchType.Single : SearchType.None;
-				string wholeText = "";
-				for (int i = 0; i < e.Result.Words.Count; i++)
-				{
-					wholeText = wholeText + ' ' + e.Result.Words[i].Text;
-				}
-
-				switch (searchType)
-				{
-					case SearchType.Multiple:
-						switch (shapeString)
-						{
-							case "triángulos":
-								shapeToSearch = ShapeType.Triangle;
-								isValidStart = true;
-								break;
-							case "cuadrados":
-								shapeToSearch = ShapeType.Square;
-								isValidStart = true;
-								break;
-							case "círculos":
-								shapeToSearch = ShapeType.Circle;
-								isValidStart = true;
-								break;
-							default:
-								break;
-						}
-						if (isValidStart)
-						{
-							Button_Click_1(null, null);
-							MessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
-
-							for (int i = 3; i < e.Result.Words.Count; i++)
-							{
-								string word = e.Result.Words[i].Text.ToLower();
-								switch (word)
-								{
-									case "azules":
-										color = System.Windows.Media.Brushes.Blue;
-										break;
-									case "negros":
-										color = System.Windows.Media.Brushes.Black;
-										break;
-									case "rojos":
-										color = System.Windows.Media.Brushes.Red;
-										break;
-									case "morados":
-										color = System.Windows.Media.Brushes.Purple;
-										break;
-									case "amarillos":
-										color = System.Windows.Media.Brushes.Yellow;
-										break;
-									case "verdes":
-										color = System.Windows.Media.Brushes.Green;
-										break;
-									case "naranjas":
-										color = System.Windows.Media.Brushes.Orange;
-										break;
-									case "rosas":
-										color = System.Windows.Media.Brushes.Pink;
-										break;
-
-									case "estén":
-										string firstPositionWord = e.Result.Words[i + 1].Text.ToLower();
-										string secondPositionWord = e.Result.Words.Count > i + 4 ? e.Result.Words[i + 2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() + " " + e.Result.Words[i + 4].Text.ToLower() : "";
-										switch (firstPositionWord)
-										{
-											case "arriba":
-												switch (secondPositionWord)
-												{
-													case "a la izquierda":
-														quadrantToSearch1 = Quadrants.Top_left;
-														break;
-													case "a la derecha":
-														quadrantToSearch1 = Quadrants.Top_right;
-														break;
-													default:
-														quadrantToSearch1 = Quadrants.Top_left;
-														quadrantToSearch2 = Quadrants.Top_right;
-														break;
-												}
-												break;
-											case "abajo":
-												switch (secondPositionWord)
-												{
-													case "a la izquierda":
-														quadrantToSearch1 = Quadrants.Bottom_left;
-														break;
-													case "a la derecha":
-														quadrantToSearch1 = Quadrants.Bottom_right;
-														break;
-													default:
-														quadrantToSearch1 = Quadrants.Bottom_left;
-														quadrantToSearch2 = Quadrants.Bottom_right;
-														break;
-												}
-												break;
-											case "en":
-												string centerWord = e.Result.Words.Count > i + 3 ? e.Result.Words[i + 2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() : "";
-												if (centerWord == "el centro")
-													quadrantToSearch1 = Quadrants.Center;
-												break;
-										}
-
-										break;
-
-									case "grandes":
-										size = Size.Big;
-										break;
-									case "medianos":
-										size = Size.Medium;
-										break;
-									case "pequeños":
-										size = Size.Small;
-										break;
-									default:
-										break;
-								}
-							}
-
-						}
-						break;
-					case SearchType.Single:
-						switch (shapeString)
-						{
-							case "triángulo":
-								shapeToSearch = ShapeType.Triangle;
-								isValidStart = true;
-								break;
-							case "cuadrado":
-								shapeToSearch = ShapeType.Square;
-								isValidStart = true;
-								break;
-							case "círculo":
-								shapeToSearch = ShapeType.Circle;
-								isValidStart = true;
-								break;
-							default:
-								break;
-						}
-						if (isValidStart)
-						{
-							string word = e.Result.Words[3].Text.ToLower();
-							switch (word)
-							{
-								case "azul":
-									color = System.Windows.Media.Brushes.Blue;
-									break;
-								case "negro":
-									color = System.Windows.Media.Brushes.Black;
-									break;
-								case "rojo":
-									color = System.Windows.Media.Brushes.Red;
-									break;
-								case "morado":
-									color = System.Windows.Media.Brushes.Purple;
-									break;
-								case "amarillo":
-									color = System.Windows.Media.Brushes.Yellow;
-									break;
-								case "verde":
-									color = System.Windows.Media.Brushes.Green;
-									break;
-								case "naranja":
-									color = System.Windows.Media.Brushes.Orange;
-									break;
-								case "rosa":
-									color = System.Windows.Media.Brushes.Pink;
-									break;
-							}
-							if (word == "más" || e.Result.Words[4].Text.ToLower() == "más")
-							{
-								string sizeWord = word == "más" ? e.Result.Words[4].Text.ToLower() : e.Result.Words[5].Text.ToLower();
-								switch (sizeWord)
-								{
-									case "grande":
-										size = Size.Big;
-										break;
-									case "mediano":
-										size = Size.Medium;
-										break;
-									case "pequeño":
-										size = Size.Small;
-										break;
-									default:
-										break;
-								}
-							}
-						}
-						break;
-				}
-				if (isValidStart)
-				{
-					Boolean anyMatch = false;
-
-					if (searchType == SearchType.Multiple)
-                    {
-						List<Shape> shapesCopy = new List<Shape>(this.shapes);
-						for (int i = 0; i < shapesCopy.Count(); i++)
-						{
-							Shape shape = shapesCopy[i];
-							shape.Size = CalculateSizeFromIterator(shapesCopy, i);
-
-							if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
-							{
-								this.shapes.Remove(shapesCopy[i]);
-								anyMatch = true;
-							}
-						}
-					}
-					else if (searchType == SearchType.Single)
-                    {
-						List<Shape> geometricShapesList = GetSortedShapesOfType(shapeToSearch);
-
-						for (int i = 0; i < geometricShapesList.Count(); i++)
-						{
-							Shape shape = geometricShapesList[i];
-							if ((color == shape.Color || color == System.Windows.Media.Brushes.White) && IsBiggestOrSmallestShape(geometricShapesList, size, i))
-							{
-								this.shapes.Remove(geometricShapesList[i]);
-								anyMatch = true;
-								break;
-							}
-						}
-					}
-
-					if (!anyMatch)
-					{
-						MessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
-					}
-					PaintShapes();
-				}
 			}
 				
 		}
-
-		private Boolean MatchesShape(
-			Shape shape, 
-			ShapeType shapeToSearch, 
-			SolidColorBrush color, 
-			Size size, 
-			Quadrants quadrantToSearch1,
-			Quadrants quadrantToSearch2)
-        {
-			Boolean matchesShape = false;
-			Boolean matchesColor = false;
-			Boolean matchesSize = false;
-			Boolean matchesQuadrant = false;
-
-			if (shapeToSearch == shape.GeometricShape)
-			{
-				matchesShape = true;
-			}
-            if (color == shape.Color || color == System.Windows.Media.Brushes.White)
-            {
-                matchesColor = true;
-            }
-			if (size == shape.Size || size == Size.None)
-			{
-				matchesSize = true;
-			}
-			if (quadrantToSearch1 == shape.Quadrant || quadrantToSearch1 == Quadrants.None || quadrantToSearch2 == shape.Quadrant)
-			{
-				matchesQuadrant = true;
-			}
-
-			return matchesShape && matchesColor && matchesSize && matchesQuadrant;
-        }
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             speechRecognizer.Dispose();
         }
-
-		private Size CalculateSizeFromIterator (List<Shape> list, int i)
-        {
-			if (i <= list.Count() / 3)
-			{
-				return Size.Big;
-			}
-			else if (i <= list.Count() * 2 / 3)
-			{
-				return Size.Medium;
-			}
-			else
-			{
-				return Size.Small;
-			}
-		}
-
-		private Boolean IsBiggestOrSmallestShape(List<Shape> list, Size size, int i)
-		{
-			if (list.Count() == 1) {
-				return true;
-			}
-			if (size == Size.Big)
-            {
-				if (i == 0)
-                {
-					return true;
-                }
-            }
-			else if (size == Size.Small)
-            {
-				if (i == list.Count() - 1)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private List<Shape> GetSortedShapesOfType (ShapeType shapeType)
-        {
-			List<Shape> geometricShapesList = new List<Shape>();
-			foreach (var shape in this.shapes)
-			{
-				if (shapeType == shape.GeometricShape)
-				{
-					geometricShapesList.Add(shape);
-				}
-			}
-			return geometricShapesList;
-		}
 	}
 }
