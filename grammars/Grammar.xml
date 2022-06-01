@@ -137,8 +137,7 @@
 
   <rule id="LocationsExtremeCases" scope="public">  
     <one-of>  
-      <item> más a la Derecha </item>  
-      <item> más a la Izquierda </item>   
+      <item> más <ruleref uri="#LocationAxisX"/> </item>  
       <item> más Arriba </item>  
       <item> más Abajo </item> 
     </one-of>  
@@ -148,15 +147,15 @@
     <one-of>  
       <item> Arriba </item>  
       <item> Abajo </item>   
-      <item> Arriba a la <ruleref uri="#LocationAxisX"/> </item>  
-      <item> Abajo a la <ruleref uri="#LocationAxisX"/> </item>    
+      <item> Arriba <ruleref uri="#LocationAxisX"/> </item>  
+      <item> Abajo <ruleref uri="#LocationAxisX"/> </item>    
     </one-of>  
   </rule>  
   
   <rule id="LocationAxisX" scope="public">  
     <one-of>  
-      <item> Derecha </item>  
-      <item> Izquierda </item>  
+      <item> a la Derecha </item>  
+      <item> a la Izquierda </item>  
     </one-of>  
   </rule>  
 

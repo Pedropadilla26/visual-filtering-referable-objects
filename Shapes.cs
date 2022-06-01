@@ -59,6 +59,15 @@ namespace Visual_filtering_referable_objects
         Multiple
     }
 
+    public enum Positions
+    {
+        None,
+        Right,
+        Left,
+        Top,
+        Bottom,
+    }
+
     public abstract class AbstractShape
     {
         public ShapeType ShapeType { get; set; }

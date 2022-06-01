@@ -37,7 +37,8 @@ namespace Visual_filtering_referable_objects
 			ShapeType shapeToSearch = ShapeType.None;
 			SolidColorBrush color = System.Windows.Media.Brushes.White;
 			Size size = Size.None;
-			string firstWord = words[0].Text.ToLower();
+			string localPositionInterpreter = "";
+			Positions positionToSearch = Positions.None;
 
 			bool isValidStart = false;
 			string startCommand = words[0].Text.ToLower() + " " + words[1].Text.ToLower();
@@ -105,10 +106,11 @@ namespace Visual_filtering_referable_objects
 
 								case "estén":
 									string firstPositionWord = words[i + 1].Text.ToLower();
-									string secondPositionWord = words.Count > i + 4 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() + " " + words[i + 4].Text.ToLower() : "";
+									string secondPositionWord = "";
 									switch (firstPositionWord)
 									{
 										case "arriba":
+											secondPositionWord = words.Count > i + 4 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() + " " + words[i + 4].Text.ToLower() : "";
 											switch (secondPositionWord)
 											{
 												case "a la izquierda":
@@ -124,6 +126,7 @@ namespace Visual_filtering_referable_objects
 											}
 											break;
 										case "abajo":
+											secondPositionWord = words.Count > i + 4 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() + " " + words[i + 4].Text.ToLower() : "";
 											switch (secondPositionWord)
 											{
 												case "a la izquierda":
@@ -138,10 +141,70 @@ namespace Visual_filtering_referable_objects
 													break;
 											}
 											break;
+										case "a":
+											secondPositionWord = words.Count > i + 3 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() : "";
+											if (positionInterpreter == "")
+											{
+												this.AskAboutInterpreter();
+											}
+											if (positionInterpreter == "absolutas")
+											{
+												switch (secondPositionWord)
+												{
+													case "la izquierda":
+														quadrantToSearch1 = Quadrants.Bottom_left;
+														quadrantToSearch2 = Quadrants.Top_left;
+														break;
+													case "la derecha":
+														quadrantToSearch1 = Quadrants.Bottom_right;
+														quadrantToSearch1 = Quadrants.Top_right;
+														break;
+													default:
+														break;
+												}
+											}
+											else if (positionInterpreter == "relativas")
+                                            {
+												switch (secondPositionWord)
+												{
+													case "la izquierda":
+														positionToSearch = Positions.Left;
+														break;
+													case "la derecha":
+														positionToSearch = Positions.Right;
+														break;
+													case "arriba":
+														positionToSearch = Positions.Top;
+														break;
+													case "abajo":
+														positionToSearch = Positions.Bottom;
+														break;
+												}
+											}
+											break;
 										case "en":
 											string centerWord = words.Count > i + 3 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() : "";
 											if (centerWord == "el centro")
 												quadrantToSearch1 = Quadrants.Center;
+											break;
+										case "más":
+											secondPositionWord = words.Count > i + 4 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() + " " + words[i + 4].Text.ToLower() : words[i + 2].Text.ToLower();
+											localPositionInterpreter = "relativas";
+                                            switch (secondPositionWord)
+                                            {
+												case "a la izquierda":
+													positionToSearch = Positions.Left;
+													break;
+												case "a la derecha":
+													positionToSearch = Positions.Right;
+													break;
+												case "arriba":
+													positionToSearch = Positions.Top;
+													break;
+												case "abajo":
+													positionToSearch = Positions.Bottom;
+													break;
+											}
 											break;
 									}
 
