@@ -385,6 +385,7 @@ namespace Visual_filtering_referable_objects
 					Button_Click_Generate_Random_Canvas(null, null);
 					break;
 				case "interpreta":
+					this.speechEraser.ChangePositionInterpreter(e.Result.Words);
 					break;
 				case "borra":
 					if (e.Result.Words.Count > 2 && isListening)

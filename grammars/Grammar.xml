@@ -63,8 +63,19 @@
       <item>
         Genera un nuevo lienzo
       </item>
+      <item>
+        Interpreta las posiciones como <ruleref uri="#InterpretacionesPosiciones"/>
+      </item>
     </one-of>  
   </rule>  
+
+  <rule id="InterpretacionesPosiciones" scope="public">  
+    <one-of>  
+      <item> Absolutas </item>  
+      <item> Relativas </item>  
+    </one-of>  
+  </rule>  
+
 
   <rule id="Shapes" scope="public">  
     <one-of>  

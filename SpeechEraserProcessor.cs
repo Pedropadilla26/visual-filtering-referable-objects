@@ -21,6 +21,15 @@ namespace Visual_filtering_referable_objects
 		{
 			this.positionInterpreter = interpreterOption;
 		}
+		public void ChangePositionInterpreter(ReadOnlyCollection<RecognizedWordUnit> words)
+        {
+			string newInterpretation = words[words.Count-1].Text.ToLower();
+			if (newInterpretation != this.positionInterpreter)
+			{
+				MessageBox.Show("Se va a cambiar la interpretación de posiciones a " + newInterpretation);
+				this.positionInterpreter = words[words.Count-1].Text.ToLower();
+			}
+		}
 		public List<Shape> EraseShapes(List<Shape> initialShapes, ReadOnlyCollection<RecognizedWordUnit> words)
 		{
 			Quadrants quadrantToSearch1 = Quadrants.None;
