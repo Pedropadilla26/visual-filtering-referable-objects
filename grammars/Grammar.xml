@@ -37,6 +37,12 @@
       <item>  
         Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> más <ruleref uri="#Size"/>
       </item> 
+       <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#LocationsExtremeCases"/>
+      </item> 
+       <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> <ruleref uri="#LocationsExtremeCases"/>
+      </item> 
       <item>
         <ruleref uri="#Accesibilidad"/>
       </item>
@@ -118,7 +124,7 @@
     <one-of>  
       <item> Negro </item>  
       <item> Rojo </item>  
-      <item> Azule </item>  
+      <item> Azul </item>  
       <item> Morado </item>  
       <item> Amarillo </item>  
       <item> Verde </item>  
@@ -129,6 +135,7 @@
   
   <rule id="Locations" scope="public">  
     <one-of>  
+       <item> <ruleref uri="#LocationsExtremeCases"/> </item>  
       <item> <ruleref uri="#LocationAxisX"/> </item>  
       <item> <ruleref uri="#LocationAxisY"/> </item>    
       <item> En el centro </item>    

@@ -18,7 +18,9 @@ using System.Speech.Recognition;
 using System.Globalization;
 using System.Diagnostics;
 using System.Windows.Shapes;
-
+using System.ComponentModel;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Visual_filtering_referable_objects
 {
@@ -379,13 +381,13 @@ namespace Visual_filtering_referable_objects
 					Button_Click_1(null, null);
 					break;
 				case "reinicia":
-					Button_Click_Reset(null, null);
+					if (isListening) Button_Click_Reset(null, null);
 					break;
 				case "genera":
-					Button_Click_Generate_Random_Canvas(null, null);
+					if (isListening) Button_Click_Generate_Random_Canvas(null, null);
 					break;
 				case "interpreta":
-					this.speechEraser.ChangePositionInterpreter(e.Result.Words);
+					if (isListening) this.speechEraser.ChangePositionInterpreter(e.Result.Words);
 					break;
 				case "borra":
 					if (e.Result.Words.Count > 2 && isListening)
@@ -399,6 +401,20 @@ namespace Visual_filtering_referable_objects
 			}
 				
 		}
+
+		private void closeAutomatically()
+		{
+			Thread.Sleep(7000);
+			SendKeys.SendWait("{Enter}");//or Esc
+		}
+
+
+		public void ShowMessageAutoClose(string message)
+		{
+			System.Windows.MessageBox.Show(message);
+			(new System.Threading.Thread(closeAutomatically)).Start();
+		}
+
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
