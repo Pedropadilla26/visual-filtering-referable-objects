@@ -74,6 +74,7 @@
     </ApplicationDefinition>
     <Compile Include="Circle.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="CustomMessageBox.cs" />
     <Compile Include="Shapes.cs" />
     <Compile Include="SpeechEraserProcessor.cs" />
     <Page Include="MainWindow.xaml">
@@ -107,6 +108,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

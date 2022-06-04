@@ -29,7 +29,7 @@ namespace Visual_filtering_referable_objects
 			if (newInterpretation != this.positionInterpreter)
 			{
 
-				ShowMessageAutoClose("Se va a cambiar la interpretación de posiciones a " + newInterpretation);
+				CustomMessageBox.Show("Se va a cambiar la interpretación de posiciones a " + newInterpretation);
 				this.positionInterpreter = words[words.Count-1].Text.ToLower();
 			}
 		}
@@ -74,7 +74,7 @@ namespace Visual_filtering_referable_objects
 					}
 					if (isValidStart)
 					{
-						AutoClosingMessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
+						CustomMessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
 
 						for (int i = 3; i < words.Count; i++)
 						{
@@ -147,9 +147,11 @@ namespace Visual_filtering_referable_objects
 											secondPositionWord = words.Count > i + 3 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() : "";
 											if (this.positionInterpreter == "")
 											{
-												ShowMessageAutoClose("Las posiciones que ha dicho son ambiguas, no sé si se refiere a los " + shapeString + " en esa posición con respecto a los otros o con respecto a todas las figuras.");
-												ShowMessageAutoClose("Por defecto, asumo que se refiere a todas las figuras, si no habría dicho los " + shapeString + " más a " + secondPositionWord);
-												ShowMessageAutoClose("Si quiere cambiar esto, use el comando de voz 'Interpreta las posiciones como absolutas/relativas");
+												string messageAboutPositionInterpreter = "Las posiciones que ha dicho son ambiguas, no sé si se refiere a los " + shapeString + " en esa posición con respecto a los otros o con respecto a todas las figuras." +
+													"\nPor defecto, asumo que se refiere a todas las figuras, si no habría dicho los " + shapeString + " más a " + secondPositionWord +
+													"\n\nSi quiere cambiar esto, use el comando de voz 'Interpreta las posiciones como absolutas/relativas";
+
+												CustomMessageBox.Show(messageAboutPositionInterpreter);
 												this.positionInterpreter = "absolutas";
 											}
 											if (this.positionInterpreter == "absolutas")
@@ -231,7 +233,7 @@ namespace Visual_filtering_referable_objects
 					}
 					break;
 				case SearchType.Single:
-					AutoClosingMessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
+					CustomMessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
 					switch (shapeString)
 					{
 						case "triángulo":
@@ -251,7 +253,8 @@ namespace Visual_filtering_referable_objects
 					}
 					if (isValidStart)
 					{
-						string word = words[3].Text.ToLower();
+						string word = words.Count() > 3 ? words[3].Text.ToLower() : "";
+						string wordFor = words.Count() > 4 ? words[4].Text.ToLower() : "";
 						switch (word)
 						{
 							case "azul":
@@ -279,7 +282,7 @@ namespace Visual_filtering_referable_objects
 								color = System.Windows.Media.Brushes.Pink;
 								break;
 						}
-						if (word == "más" || words[4].Text.ToLower() == "más")
+						if (word == "más" || wordFor == "más")
 						{
 							string sizeWord = word == "más" ? words[4].Text.ToLower() : words[5].Text.ToLower();
 							switch (sizeWord)
@@ -342,22 +345,30 @@ namespace Visual_filtering_referable_objects
 				else if (searchType == SearchType.Single)
 				{
 					List<Shape> geometricShapesList = GetSortedShapesOfType(shapeToSearch, initialShapes);
+					Boolean warnedAboutPlural = false;
 
 					for (int i = 0; i < geometricShapesList.Count(); i++)
 					{
 						Shape shape = geometricShapesList[i];
 						if ((color == shape.Color || color == System.Windows.Media.Brushes.White) && IsBiggestOrSmallestShape(geometricShapesList, size, i) && IsExtremePosition(geometricShapesList, positionToSearch, shape))
 						{
+							if (anyMatch && !warnedAboutPlural) {
+								string shapePropertiesMessage = "Hay más de un " + shapeString;
+								if (words.Count() > 3){
+									shapePropertiesMessage += " de color " + words[3].Text.ToLower();
+								}
+								CustomMessageBox.Show(shapePropertiesMessage + ", los voy a borrar todos, pero mejor hable en plural si hay varios.");
+								warnedAboutPlural = true;
+							}
 							initialShapes.Remove(geometricShapesList[i]);
 							anyMatch = true;
-							break;
 						}
 					}
 				}
 
 				if (!anyMatch)
 				{
-					ShowMessageAutoClose("No encuentro ninguna forma que coincida con la descripción");
+					CustomMessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
 				}
 			}
 			return initialShapes;
@@ -372,32 +383,28 @@ namespace Visual_filtering_referable_objects
 			Quadrants quadrantToSearch2,
 			Positions positionToSearch)
 		{
-			Boolean matchesShape = false;
-			Boolean matchesColor = false;
-			Boolean matchesSize = false;
-			Boolean matchesPositionOrQuadrant = false;
 
-			if (shapeToSearch == shape.GeometricShape)
+			if (shapeToSearch != shape.GeometricShape)
 			{
-				matchesShape = true;
+				return false;
 			}
-			if (color == shape.Color || color == System.Windows.Media.Brushes.White)
+			if (color != shape.Color && color != System.Windows.Media.Brushes.White)
 			{
-				matchesColor = true;
+				return false;
 			}
-			if (size == shape.Size || size == Size.None)
+			if (size != shape.Size && size != Size.None)
 			{
-				matchesSize = true;
+				return false;
 			}
 			if (positionToSearch != Positions.None) {
-				matchesPositionOrQuadrant = IsExtremePositionSoft(shapes, positionToSearch, shape, shapeToSearch);
+				if (!IsExtremePositionSoft(shapes, positionToSearch, shape, shapeToSearch)) return false;
 			}
-			else if (quadrantToSearch1 == shape.Quadrant || quadrantToSearch1 == Quadrants.None || quadrantToSearch2 == shape.Quadrant)
+			else if (quadrantToSearch1 != shape.Quadrant && quadrantToSearch1 != Quadrants.None && quadrantToSearch2 != shape.Quadrant)
 			{
-				matchesPositionOrQuadrant = true;
+				return false;
 			}
 
-			return matchesShape && matchesColor && matchesSize && matchesPositionOrQuadrant;
+			return true;
 		}
 
 		private Size CalculateSizeFromIterator(List<Shape> list, int i)
@@ -452,19 +459,6 @@ namespace Visual_filtering_referable_objects
 			return geometricShapesList;
 		}
 
-		private void closeAutomatically()
-		{
-			Thread.Sleep(6000);
-			SendKeys.SendWait("{Enter}");//or Esc
-		}
-
-
-		public void ShowMessageAutoClose(string message)
-		{
-			System.Windows.MessageBox.Show(message);
-			(new System.Threading.Thread(closeAutomatically)).Start();
-		}
-
 		public Boolean IsExtremePositionSoft(List<Shape> shapes, Positions positionToSearch, Shape shapeToSearch, ShapeType shapeType)
         {
 			Boolean result = false;
@@ -503,10 +497,10 @@ namespace Visual_filtering_referable_objects
 						return (x.Points[0].Y > y.Points[0].Y ? -1 : 1);
 					});
 					break;
+			
 			}
-			if (shapes.Count < 3)
+			if (geometricShapesList.Count() < 3)
             {
-				System.Windows.MessageBox.Show("Index: "+geometricShapesList.IndexOf(shapeToSearch));
 				if (geometricShapesList.IndexOf(shapeToSearch) == 0) result = true;
 			}
 			else if (geometricShapesList.IndexOf(shapeToSearch) < geometricShapesList.Count / 3) result = true;
@@ -540,13 +534,13 @@ namespace Visual_filtering_referable_objects
 							}
 							break;
 						case Positions.Top:
-							if (shape.Points[0].Y > shapeToSearch.Points[0].Y)
+							if (shape.Points[0].Y < shapeToSearch.Points[0].Y)
 							{
 								result = false;
 							}
 							break;
 						case Positions.Bottom:
-							if (shape.Points[0].Y < shapeToSearch.Points[0].Y)
+							if (shape.Points[0].Y > shapeToSearch.Points[0].Y)
 							{
 								result = false;
 							}
@@ -558,37 +552,4 @@ namespace Visual_filtering_referable_objects
 		}
 
 	}
-}
-
-public class AutoClosingMessageBox // from https://stackoverflow.com/questions/14522540/close-a-messagebox-after-several-seconds
-{
-	System.Threading.Timer _timeoutTimer;
-	string _caption;
-	AutoClosingMessageBox(string text, int timeout)
-	{
-		_timeoutTimer = new System.Threading.Timer(OnTimerElapsed,
-			null, timeout, System.Threading.Timeout.Infinite);
-		using (_timeoutTimer)
-			System.Windows.MessageBox.Show(text);
-	}
-	public static void Show(string text, int timeout)
-	{
-		new AutoClosingMessageBox(text, timeout);
-	}
-	public static void Show(string text)
-	{
-		System.Windows.MessageBox.Show(text);
-		}
-	void OnTimerElapsed(object state)
-	{
-		IntPtr mbWnd = FindWindow("#32770", _caption); // lpClassName is #32770 for MessageBox
-		if (mbWnd != IntPtr.Zero)
-			SendMessage(mbWnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-		_timeoutTimer.Dispose();
-	}
-	const int WM_CLOSE = 0x0010;
-	[System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
-	static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-	[System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-	static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 }

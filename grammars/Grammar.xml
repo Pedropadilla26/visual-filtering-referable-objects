@@ -31,12 +31,18 @@
       <item>  
         Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Sizes"/> y que estén <ruleref uri="#Locations"/>
       </item>  
+      <item>
+        Borra el <ruleref uri="#Shape"/>
+      </item>
       <item>  
         Borra el <ruleref uri="#Shape"/> más <ruleref uri="#Size"/>
       </item>  
       <item>  
         Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> más <ruleref uri="#Size"/>
       </item> 
+      <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/>
+      </item>
        <item>  
         Borra el <ruleref uri="#Shape"/> <ruleref uri="#LocationsExtremeCases"/>
       </item> 
