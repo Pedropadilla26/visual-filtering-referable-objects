@@ -21,14 +21,6 @@
       <FileName>CustomMessageBox.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Visual_filtering_referable_objects.MainWindow" BaseTypeListCollapsed="true">
-    <Position X="6.25" Y="2.25" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>QAgAKwCEAAgBBAAAABAEACEQDERBCEADIQCAgAMABAA=</HashCode>
-      <FileName>MainWindow.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.804" Collapsed="true" />
-  </Class>
   <Class Name="Visual_filtering_referable_objects.AbstractShape" Collapsed="true">
     <Position X="3.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
@@ -49,6 +41,14 @@
       <HashCode>EAAAAAEAAAAAAAAAAAIAAAAABAAAAABIAAAAAQAQAAE=</HashCode>
       <FileName>SpeechEraserProcessor.cs</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="2.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>QAgAKwCEAAgABAAAABAEACEQDERBCEADIQCAgAMABAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="1.804" Collapsed="true" />
   </Class>
   <Enum Name="Visual_filtering_referable_objects.ShapeType">
     <Position X="0.5" Y="0.5" Width="1.5" />

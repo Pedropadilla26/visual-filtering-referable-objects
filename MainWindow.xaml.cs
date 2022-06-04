@@ -38,7 +38,10 @@ namespace Visual_filtering_referable_objects
 		double canvasMinY = 0;
 		double canvasMaxX = 0;
 		double canvasMaxY = 0;
-		Boolean isListening = false;
+
+		// Default speech recognizer state
+		Boolean isListening = false;            
+
 		SpeechEraserProcessor speechEraser = new SpeechEraserProcessor();
 
 		static T RandomEnumValue<T>()
@@ -49,18 +52,16 @@ namespace Visual_filtering_referable_objects
 		public MainWindow()
         {
             InitializeComponent();
+			LastInstructionLabel.Visibility = Visibility.Hidden;
 
 			// Set grammar and speech recognizer
-            speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
+			speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
 
 			Grammar referableObjectsGrammar = CreateGrammarFromFile();
 			speechRecognizer.LoadGrammar(referableObjectsGrammar);
             Trace.WriteLine(referableObjectsGrammar.ToString());
 
             speechRecognizer.SetInputToDefaultAudioDevice();
-
-			// Default speech recognizer state
-            btnDisable.IsEnabled = false;
 
 			// Set canvas variables
 			this.canvasMaxX = Canvas_.Width;
@@ -267,16 +268,18 @@ namespace Visual_filtering_referable_objects
 
 		private void Button_Click(object sender, RoutedEventArgs e)
         {
-			isListening = true;
-			btnDisable.IsEnabled = true;
-			btnEnable.IsEnabled = false;
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-			isListening = false;
-			btnDisable.IsEnabled = false;
-			btnEnable.IsEnabled = true;
+			if (isListening)
+            {
+				isListening = false;
+				btnVoiceRecognizing.Content = "Activar reconocimiento de voz";
+				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(100, 212, 255, 191));
+			}
+			else
+            {
+				isListening = true;
+				btnVoiceRecognizing.Content = "Desactivar reconocimiento de voz";
+				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(100, 255, 190, 190));
+			}
 		}
 
 		private void Button_Click_Reset(object sender, RoutedEventArgs e)
@@ -365,6 +368,16 @@ namespace Visual_filtering_referable_objects
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
+			string wholeText = "";
+			for (int i = 0; i < e.Result.Words.Count; i++)
+			{
+				wholeText = wholeText + ' ' + e.Result.Words[i].Text.ToLower();
+			}
+			if (LastInstructionLabel.Visibility == Visibility.Hidden)
+            {
+				LastInstructionLabel.Visibility = Visibility.Visible;
+			}
+			LastInstruction.Text = wholeText;
 			string firstWord = e.Result.Words[0].Text.ToLower();
 			switch (firstWord)
             {
@@ -375,10 +388,10 @@ namespace Visual_filtering_referable_objects
 					Button_Click(null, null);
 					break;
 				case "para":
-					Button_Click_1(null, null);
+					Button_Click(null, null);
 					break;
 				case "deja":
-					Button_Click_1(null, null);
+					Button_Click(null, null);
 					break;
 				case "reinicia":
 					if (isListening) Button_Click_Reset(null, null);
