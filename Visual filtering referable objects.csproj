@@ -75,6 +75,9 @@
     <Compile Include="Circle.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CustomMessageBox.cs" />
+    <Compile Include="InstructionsGuide.xaml.cs">
+      <DependentUpon>InstructionsGuide.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -128,12 +131,18 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="InstructionsGuide.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="sun-solid.png" />
+    <Resource Include="moon-white-solid.png" />
     <Resource Include="circle-info-solid.png" />
     <Resource Include="microphone-slash-solid.png" />
     <Resource Include="microphone-solid.png" />

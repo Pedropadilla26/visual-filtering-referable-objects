@@ -48,7 +48,6 @@
       <HashCode>QAgAKwCEAAgABAAAABAEACEQDERBCEADIQCAgAMABAA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="1.804" Collapsed="true" />
   </Class>
   <Enum Name="Visual_filtering_referable_objects.ShapeType">
     <Position X="0.5" Y="0.5" Width="1.5" />

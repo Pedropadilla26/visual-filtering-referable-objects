@@ -40,9 +40,14 @@ namespace Visual_filtering_referable_objects
 		double canvasMaxY = 0;
 
 		// Default speech recognizer state
-		Boolean isListening = false;            
+		Boolean isListening = false;
+		Boolean nightMode = false;
 
 		SpeechEraserProcessor speechEraser = new SpeechEraserProcessor();
+
+		SolidColorBrush lightModeCanvasBackground = new SolidColorBrush(Color.FromArgb(100, 230, 230, 230));
+		SolidColorBrush lightModeWindowBackground = new SolidColorBrush(Colors.White);
+		SolidColorBrush darkModeWindowBackground = new SolidColorBrush(Color.FromArgb(100, 86, 86, 86));
 
 		static T RandomEnumValue<T>()
 		{
@@ -52,6 +57,7 @@ namespace Visual_filtering_referable_objects
 		public MainWindow()
         {
             InitializeComponent();
+			Canvas_.Background = lightModeCanvasBackground;
 			LastInstructionLabel.Visibility = Visibility.Hidden;
 
 			// Set grammar and speech recognizer
@@ -69,6 +75,7 @@ namespace Visual_filtering_referable_objects
 
 			// DEFAULT SHAPES (FOR NOW)
 			AddDefaultShapes();
+
 
 			PaintShapes();
 		}
@@ -271,14 +278,49 @@ namespace Visual_filtering_referable_objects
 			if (isListening)
             {
 				isListening = false;
-				btnVoiceRecognizing.Content = "Activar reconocimiento de voz";
-				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(100, 212, 255, 191));
+				voiceText.Text = "Activar reconocimiento de voz";
+				voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-solid.png"));
+				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 212, 255, 191));
 			}
 			else
             {
 				isListening = true;
-				btnVoiceRecognizing.Content = "Desactivar reconocimiento de voz";
-				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(100, 255, 190, 190));
+				voiceText.Text = "Desactivar reconocimiento de voz";
+				voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-slash-solid.png"));
+
+				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 255, 190, 190));
+			}
+		}
+
+		private void Button_Instructions_Guide(object sender, RoutedEventArgs e)
+        {
+			InstructionsGuide intructionsGuideWindow = new InstructionsGuide(nightMode);
+			intructionsGuideWindow.Show();
+		}
+
+		private void Button_Night_Mode(object sender, RoutedEventArgs e)
+        {
+			if (nightMode)
+            {
+				nightModeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/moon-white-solid.png"));
+				btnNightMode.Background = new SolidColorBrush(Color.FromArgb(255, 79, 79, 79));
+				nightModeText.Text = "Modo noche";
+				nightModeText.Foreground = new SolidColorBrush(Colors.White);
+				this.Background = lightModeWindowBackground;
+				Canvas_.Background = lightModeCanvasBackground;
+				CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+				this.nightMode = false;
+			}
+			else
+            {
+				btnNightMode.Background = new SolidColorBrush(Colors.LightGray);
+				nightModeText.Foreground = new SolidColorBrush(Colors.Black);
+				nightModeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/sun-solid.png"));
+				nightModeText.Text = "Modo día";
+				this.Background = darkModeWindowBackground;
+				Canvas_.Background = this.Background;
+				CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
+				this.nightMode = true;
 			}
 		}
 
@@ -433,5 +475,5 @@ namespace Visual_filtering_referable_objects
         {
             speechRecognizer.Dispose();
         }
-	}
+    }
 }
