@@ -134,6 +134,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="circle-info-solid.png" />
+    <Resource Include="microphone-slash-solid.png" />
+    <Resource Include="microphone-solid.png" />
+    <Resource Include="arrows-rotate-solid.png" />
+    <Content Include="circle-info-solid.svg" />
+    <Resource Include="clipboard-check-solid.png" />
+    <Resource Include="shuffle-solid.png" />
+    <Resource Include="list-solid.png" />
+    <Resource Include="solid.PNG" />
     <Resource Include="grammars\Grammar.xml" />
     <Content Include="imgs\microphone-slash-solid.svg" />
     <Content Include="imgs\microphone-solid.svg" />

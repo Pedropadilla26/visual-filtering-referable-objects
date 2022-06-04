@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Software de filtrado visual" Height="800" Width="1000">
+        Title="Software de filtrado visual" Height="800" Width="1000" Background="White">
     <Grid Margin="0,0,0,-6">
         <Grid.RowDefinitions>
             <RowDefinition Height="645*"/>
@@ -12,33 +12,32 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="80*"/>
-            <ColumnDefinition Width="69*"/>
-            <ColumnDefinition Width="122*"/>
-            <ColumnDefinition Width="350*"/>
-            <ColumnDefinition Width="67*"/>
-            <ColumnDefinition Width="57*"/>
-            <ColumnDefinition Width="125*"/>
-            <ColumnDefinition Width="7*"/>
-            <ColumnDefinition Width="92*"/>
         </Grid.ColumnDefinitions>
         <Canvas Grid.ColumnSpan="9" Margin="4,0,64,0" HorizontalAlignment="Center">
-            <Canvas x:Name="Canvas_" Height="400" Width="600" Canvas.Left="-251" Canvas.Top="89" Background="White" Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Rectangle Stroke="Black" Fill="Black" />
-            </Canvas>
-            <Rectangle Height="406" Canvas.Left="-253" Stroke="Black" Canvas.Top="85" Width="606" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Button x:Name="btnReset" Content="Reiniciar lienzo" HorizontalAlignment="Center" Height="41" VerticalAlignment="Bottom" Width="300" Background="#FFC7BEFF" Click="Button_Click_Reset" Grid.Column="3" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" Canvas.Left="-74" Canvas.Top="711">
+            <Button x:Name="btnReset" HorizontalAlignment="Center" Height="41" VerticalAlignment="Top" Width="184" Background="#FFC7BEFF" Click="Button_Click_Reset" Grid.Column="3" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" Canvas.Left="-56" Canvas.Top="592">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/arrows-rotate-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
+                        <TextBlock><Run Text="Reiniciar lienzo"/></TextBlock>
+                    </StackPanel>
+                </Button.Content>
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="7"/>
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button x:Name="btnGenerateRandomCanvas" Content="Generar un lienzo &#xD;&#xA;nuevo aleatorio" Height="65" Width="157" Background="#FFFFDF9A" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Canvas.Left="385" Canvas.Top="92" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+            <Button x:Name="btnGenerateRandomCanvas" Height="56" Width="287" Background="#FFCBDCFF" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Canvas.Left="-96" Canvas.Top="14" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/shuffle-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
+                        <TextBlock><Run Text="Generar un nuevo lienzo aleatorio"/></TextBlock>
+                    </StackPanel>
+                </Button.Content>
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="7"/>
+
                     </Style>
                 </Button.Resources>
                 <Button.RenderTransform>
@@ -50,9 +49,12 @@
                     </TransformGroup>
                 </Button.RenderTransform>
             </Button>
-            <Button x:Name="btnGenerateRandomCanvas_Copy" Height="43" Width="132" Background="#FFFFDF9A" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Canvas.Top="310" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="-390">
+            <Button x:Name="btnGenerateRandomCanvas_Copy" Height="43" Width="200" Background="#FFFFECC3" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Canvas.Top="20" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="-448" RenderTransformOrigin="0.847,-0.953">
                 <Button.Content>
-                    <Image Source="imgs/microphone-solid.svg" Width="20" Height="20"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/list-solid.png" Width="32" Height="22" RenderTransformOrigin="1,1" HorizontalAlignment="Left"/>
+                        <TextBlock><Run Text="Guía de instrucciones"/></TextBlock>
+                    </StackPanel>
                 </Button.Content>
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
@@ -60,11 +62,15 @@
 
                     </Style>
                 </Button.Resources>
-
             </Button>
             <TextBlock Canvas.Left="157" TextWrapping="Wrap" Canvas.Top="137"><Run Language="es-es"/></TextBlock>
-            <Label Content="Pista: Diga la instrucción&#xD;&#xA; 'escúchame'para que se active&#xD;&#xA; el reconocimiento de voz&#xD;&#xA;y 'deja/para de escucharme' &#xD;&#xA;para desactivarlo" Canvas.Top="288" HorizontalAlignment="Center" VerticalAlignment="Top" Width="170" Height="98" Canvas.Left="371" Background="#99C1D3DF" BorderBrush="#FF481313" RenderTransformOrigin="0.434,1.545" FontSize="11"/>
-            <Button x:Name="btnVoiceRecognizing" Content="Activar reconocimiento de voz" Height="60" Width="286" RenderTransformOrigin="0.5,0.5" Click="Button_Click" Background="#FFD4FFBF" AutomationProperties.Name="BtnActivate" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Canvas.Left="-278" Canvas.Top="634" VerticalAlignment="Top">
+            <Button x:Name="btnVoiceRecognizing" Height="60" Width="338" RenderTransformOrigin="0.5,0.5" Click="Button_Click" Background="#FFD4FFBF" AutomationProperties.Name="BtnActivate" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left" Canvas.Left="-110" Canvas.Top="666" VerticalAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/microphone-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1" HorizontalAlignment="Left"/>
+                        <TextBlock Width="248" FontSize="16"><Run Text="Activar reconocimiento de voz"/></TextBlock>
+                    </StackPanel>
+                </Button.Content>
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="7"/>
@@ -80,7 +86,23 @@
                 </Button.RenderTransform>
             </Button>
         </Canvas>
-        <TextBlock x:Name="LastInstruction" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="5" Grid.ColumnSpan="3" Margin="41,499,15,0"/>
-        <Label x:Name="LastInstructionLabel" Content="Última instrucción recibida: " RenderTransformOrigin="0.483,-0.114" HorizontalAlignment="Left" VerticalAlignment="Top" Width="165" FontWeight="Bold" Grid.Column="4" Grid.ColumnSpan="2" Margin="0,494,0,0"/>
+        <TextBlock x:Name="LastInstruction" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Margin="363,499,-307,0"/>
+        <Label x:Name="LastInstructionLabel" Content="Última instrucción recibida: " RenderTransformOrigin="0.483,-0.114" HorizontalAlignment="Left" VerticalAlignment="Top" Width="165" FontWeight="Bold" Margin="198,495,0,0"/>
+
+        <Border BorderThickness="2" 
+         BorderBrush="Black" Margin="0,89,0,217" Width="604" Height="405" HorizontalAlignment="Center" CornerRadius="5,5,5,5">
+            <Canvas x:Name="Canvas_" Height="400" Width="600" Background="White" Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="5" >
+                <Rectangle Stroke="Black" Fill="Black" />
+
+            </Canvas>
+        </Border>
+        <Image HorizontalAlignment="Left" Height="17" Margin="672,670,0,0" VerticalAlignment="Top" Width="17" Source="/circle-info-solid.png">
+            <Image.ToolTip>
+                <ToolTip Background="#FFF1FFFE" Width="300">
+                    <TextBlock TextWrapping="Wrap"> Puede decir la instrucción 'escúchame' para que se active el reconocimiento de voz y 'deja de escucharme' para desactivarlo.<LineBreak/><LineBreak/>Para más información, consulte la guía de instrucciones.</TextBlock>
+                </ToolTip>
+            </Image.ToolTip>
+        </Image>
+
     </Grid>
 </Window>
