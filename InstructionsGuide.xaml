@@ -13,7 +13,7 @@
             <RichTextBox x:Name="FirstParagraph" HorizontalAlignment="Stretch" Height="23" Margin="0,20,0,0" Width="692" TextChanged="RichTextBox_TextChanged"   Focusable="False" Cursor="Arrow">
                 <FlowDocument>
                     <Paragraph>
-                        <Bold>Habla</Bold> cuando el reconocimiento de audio esté activado para ejecutar instrucciones!
+                        ¡<Bold>Habla</Bold> cuando el reconocimiento de audio esté activado para que se ejecuten los comandos!
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
@@ -25,15 +25,15 @@
                         </Bold>
                         <LineBreak/>
                         <LineBreak/>
-                        <Run Text="Escúchame/Empieza a escucharme"/>
+                        <Run Text="- Escúchame/Empieza a escucharme"/>
                         <LineBreak/>
-                        <Run Text="Deja de escucharme/Para de escucharme"/>
+                        <Run Text="- Deja de escucharme/Para de escucharme"/>
                         <LineBreak/>
-                        <Run Text="Reinicia el lienzo"/>
+                        <Run Text="- Reinicia el lienzo"/>
                         <LineBreak/>
-                        <Run Text="Genera un nuevo lienzo"/>
+                        <Run Text="- Genera un nuevo lienzo"/>
                         <LineBreak/>
-                        <Run Text="Interpreta las posiciones como absolutas/relativas"/>
+                        <Run Text="- Interpreta las posiciones como absolutas/relativas"/>
                         <LineBreak/>
                     </Paragraph>
                 </FlowDocument>
@@ -46,15 +46,32 @@
                         </Bold>
                         <LineBreak/>
                         <LineBreak/>
-                        <Run Text="Borra los círculos/triángulos/cuadrados"/>
+                        <Bold>
+                            <Run Text="- Borra los círculos/triángulos/cuadrados"/>
+                            </Bold>
                         <LineBreak/>
-                        <Run Text="Deja de escucharme/Para de escucharme"/>
+                        <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
                         <LineBreak/>
-                        <Run Text="Reinicia el lienzo"/>
+                        <Run Text="- que sean rojos/azule/negros/otroColor"/>
                         <LineBreak/>
-                        <Run Text="Genera un nuevo lienzo"/>
+                        <Run Text="- (y) Que sean grandes/mediaños/pequeños"/>
                         <LineBreak/>
-                        <Run Text="Interpreta las posiciones como absolutas/relativas"/>
+                        <Run Text="- (y) Que estén arriba/abajo/a la derecha/a la izquierda/en el centro/arriba a la derecha/abajo a la izquierda/arriba a la izquierda/abajo a la derecha"/>
+                        <LineBreak/>
+                        <Run Text="- (y) Que estén más a la derecha/a la izquierda/arriba/abajo"/>
+                        <LineBreak/>
+                        <LineBreak/>
+                        <Bold>
+                            <Run Text="- Borra el círculo/triángulo/cuadrado"/>
+                        </Bold>
+                        <LineBreak/>
+                        <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
+                        <LineBreak/>
+                        <Run Text="- que sea rojo/azul/negro/otroColor"/>
+                        <LineBreak/>
+                        <Run Text="- (y) que sea el mas grande/pequeño"/>
+                        <LineBreak/>
+                        <Run Text="- (y) Que esté más a la derecha/a la izquierda/arriba/abajo"/>
                         <LineBreak/>
                     </Paragraph>
                 </FlowDocument>
