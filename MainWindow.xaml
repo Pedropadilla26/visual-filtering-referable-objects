@@ -4,63 +4,108 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Software de filtrado visual" Height="657" Width="800">
-    <Grid Margin="0,0,-183,-81">
+        Title="Software de filtrado visual" Height="800" Width="1000" Background="White">
+    <Grid Margin="0,0,0,-6">
         <Grid.RowDefinitions>
-            <RowDefinition Height="645*"/>
-            <RowDefinition Height="71*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="65*"/>
-            <ColumnDefinition Width="56*"/>
-            <ColumnDefinition Width="485*"/>
-            <ColumnDefinition Width="102*"/>
-            <ColumnDefinition Width="6*"/>
-            <ColumnDefinition Width="75*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnEnable" Content="Activar reconocimiento de voz" HorizontalAlignment="Left" Height="60" Margin="47,474,0,0" VerticalAlignment="Top" Width="286" RenderTransformOrigin="0.5,0.5" Click="Button_Click" Background="#FFD4FFBF" AutomationProperties.Name="BtnActivate" Grid.Column="2" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="3">
+        <Canvas Grid.ColumnSpan="9" Margin="4,0,64,0" HorizontalAlignment="Center">
+            <TextBlock Canvas.Left="157" TextWrapping="Wrap" Canvas.Top="137"><Run Language="es-es"/></TextBlock>
+        </Canvas>
+        <TextBlock x:Name="LastInstruction" Height="22" TextWrapping="Wrap" VerticalAlignment="Top" Margin="363,499,-307,0"/>
+        <Label x:Name="LastInstructionLabel" Content="Última instrucción recibida: " RenderTransformOrigin="0.483,-0.114" HorizontalAlignment="Left" VerticalAlignment="Top" Width="165" FontWeight="Bold" Margin="198,495,0,0"/>
+
+        <Border x:Name="CanvasBorder" BorderThickness="2" 
+         BorderBrush="Black" Margin="0,89,0,217" Width="604" Height="405" HorizontalAlignment="Center" CornerRadius="5,5,5,5">
+            <Canvas x:Name="Canvas_" Height="400" Width="600" Background="White" Panel.ZIndex="100" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="5" >
+                <Rectangle Stroke="Black" Fill="Black" />
+
+            </Canvas>
+        </Border>
+        <Button x:Name="btnInstructionsGuide" Height="43" Width="200" Background="#FFFFECC3" Click="Button_Instructions_Guide" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.847,-0.953" Margin="700,0,0,670">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+
+                </Style>
+            </Button.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/list-solid.png" Width="32" Height="22" RenderTransformOrigin="1,1" HorizontalAlignment="Left"/>
+                <TextBlock><Run Text="Guía de comandos"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="btnGenerateRandomCanvas" Height="56" Width="287" Background="#FFCBDCFF" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,670">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+
+                </Style>
+            </Button.Resources>
             <Button.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.458"/>
-                    <TranslateTransform/>
+                    <SkewTransform AngleX="-0.39"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-0.327"/>
                 </TransformGroup>
             </Button.RenderTransform>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/shuffle-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
+                <TextBlock><Run Text="Generar un nuevo lienzo aleatorio"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="btnReset" HorizontalAlignment="Stretch" Height="41" VerticalAlignment="Stretch" Width="166" Background="#FFC7BEFF" Click="Button_Click_Reset" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Margin="0,400,0,0">
             <Button.Resources>
-                <Style TargetType="Border">
+                <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="7"/>
                 </Style>
             </Button.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/arrows-rotate-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
+                <TextBlock><Run Text="Reiniciar lienzo"/></TextBlock>
+            </StackPanel>
         </Button>
-        <Button x:Name="btnDisable" Content="Desactivar reconocimiento de voz" HorizontalAlignment="Left" Height="57" Margin="286,477,0,0" VerticalAlignment="Top" Width="300" Background="#FFFFBEBE" Click="Button_Click_1" Grid.Column="4" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold">
+        <Button x:Name="btnNightMode" Height="41" Background="#FF4F4F4F" Click="Button_Night_Mode" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Margin="0,0,700,670" Width="150">
             <Button.Resources>
-                <Style TargetType="Border">
+                <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="7"/>
                 </Style>
             </Button.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="nightModeIcon" Source="/moon-white-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
+                <TextBlock x:Name="nightModeText" Foreground="White"><Run Text="Modo noche"/></TextBlock>
+            </StackPanel>
         </Button>
-        <Canvas Grid.Column="3" Grid.ColumnSpan="2" Margin="10,0,49,208">
-            <Canvas x:Name="Canvas_" Height="400" Width="600" Canvas.Left="12" Canvas.Top="40" Background="White" Panel.ZIndex="100" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Rectangle Stroke="Black" Fill="Black" />
-            </Canvas>
-            <Rectangle Height="403" Canvas.Left="10" Stroke="Black" Canvas.Top="38" Width="603" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <Button x:Name="btnReset" Content="Reiniciar" HorizontalAlignment="Center" Height="24" VerticalAlignment="Top" Width="300" Background="#FFC7BEFF" Click="Button_Click_Reset" Grid.Column="3" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" Canvas.Left="162" Canvas.Top="563">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="7"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-            <Button x:Name="btnGenerateRandomCanvas" Content="Generar un lienzo &#xD;&#xA;nuevo aleatorio" Height="43" Width="100" Background="#FFFFDF9A" Click="Button_Click_Generate_Random_Canvas" AutomationProperties.Name="btnDisable" FontSize="11" FontWeight="Bold" Canvas.Left="-95" Canvas.Top="240" HorizontalAlignment="Left" VerticalAlignment="Center">
+        <Grid>
+            <Button x:Name="btnVoiceRecognizing" Height="60" Width="338" RenderTransformOrigin="0.5,0.5" Click="Button_Click" Background="#FFD4FFBF" AutomationProperties.Name="BtnActivate" FontSize="14" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,600,0,0">
                 <Button.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="7"/>
                     </Style>
                 </Button.Resources>
+                <Button.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-0.458"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Button.RenderTransform>
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="voiceIcon" Source="/microphone-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="voiceText" Width="268" FontSize="16"><Run Text="Activar reconocimiento de voz"/></TextBlock>
+                </StackPanel>
             </Button>
-        </Canvas>
+            <Image HorizontalAlignment="Stretch" Height="17" Margin="300,580,0,0" VerticalAlignment="Stretch" Width="17" Source="/circle-info-solid.png">
+                <Image.ToolTip>
+                    <ToolTip Background="#FFF1FFFE" Width="300">
+                        <TextBlock TextWrapping="Wrap"> Puede decir la instrucción 'escúchame' para que se active el reconocimiento de voz y 'deja de escucharme' para desactivarlo.<LineBreak/><LineBreak/>Para más información, consulte la guía de comandos.</TextBlock>
+                    </ToolTip>
+                </Image.ToolTip>
+            </Image>
+        </Grid>
+
+
     </Grid>
 </Window>

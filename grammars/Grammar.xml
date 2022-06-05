@@ -23,16 +23,71 @@
         Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Properties"/> que estén <ruleref uri="#Locations"/>
       </item>  
       <item>  
-        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Size"/> que sean <ruleref uri="#Colors"/>
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Sizes"/> que sean <ruleref uri="#Colors"/>
       </item>  
       <item>  
-        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Size"/>
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Sizes"/>
       </item>  
       <item>  
-        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Size"/> y que estén <ruleref uri="#Locations"/>
+        Borra los <ruleref uri="#Shapes"/> <ruleref uri="#Colors"/> que sean <ruleref uri="#Sizes"/> y que estén <ruleref uri="#Locations"/>
       </item>  
+      <item>
+        Borra el <ruleref uri="#Shape"/>
+      </item>
+      <item>  
+        Borra el <ruleref uri="#Shape"/> más <ruleref uri="#Size"/>
+      </item>  
+      <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> más <ruleref uri="#Size"/>
+      </item> 
+      <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/>
+      </item>
+       <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#LocationsExtremeCases"/>
+      </item> 
+       <item>  
+        Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> <ruleref uri="#LocationsExtremeCases"/>
+      </item> 
+      <item>
+        <ruleref uri="#Accesibilidad"/>
+      </item>
     </one-of>  
   </rule>  
+
+  <rule id="Accesibilidad" scope="public">  
+    <one-of>  
+      <item>  
+        Escúchame  
+      </item> 
+      <item>  
+        Empieza a escucharme
+      </item> 
+      <item>  
+        Deja de escucharme  
+      </item> 
+      <item>
+        Para de escucharme
+      </item>
+      <item>
+        Reinicia el lienzo
+      </item>
+      <item>
+        Genera un nuevo lienzo
+      </item>
+      <item>
+        Interpreta las posiciones como <ruleref uri="#InterpretacionesPosiciones"/>
+      </item>
+    </one-of>  
+  </rule>  
+
+  <rule id="InterpretacionesPosiciones" scope="public">  
+    <one-of>  
+      <item> Absolutas </item>  
+      <item> Relativas </item>  
+    </one-of>  
+  </rule>  
+
 
   <rule id="Shapes" scope="public">  
     <one-of>  
@@ -42,10 +97,19 @@
     </one-of>  
   </rule>  
 
+    <rule id="Shape" scope="public">  
+    <one-of>  
+      <item> Cuadrado </item>  
+      <item> Círculo </item>  
+      <item> Triángulo </item>  
+    </one-of>  
+  </rule>  
+
+
    <rule id="Properties" scope="public">  
     <one-of>  
       <item> <ruleref uri="#Colors"/> </item>  
-      <item> <ruleref uri="#Size"/> </item>    
+      <item> <ruleref uri="#Sizes"/> </item>    
     </one-of>  
   </rule>  
 
@@ -61,36 +125,65 @@
       <item> Rosas </item> 
     </one-of>  
   </rule>  
+
+  <rule id="Color" scope="public">  
+    <one-of>  
+      <item> Negro </item>  
+      <item> Rojo </item>  
+      <item> Azul </item>  
+      <item> Morado </item>  
+      <item> Amarillo </item>  
+      <item> Verde </item>  
+      <item> Naranja </item>  
+      <item> Rosa </item> 
+    </one-of>  
+  </rule>  
   
   <rule id="Locations" scope="public">  
     <one-of>  
+       <item> <ruleref uri="#LocationsExtremeCases"/> </item>  
       <item> <ruleref uri="#LocationAxisX"/> </item>  
       <item> <ruleref uri="#LocationAxisY"/> </item>    
       <item> En el centro </item>    
     </one-of>  
   </rule>  
 
+  <rule id="LocationsExtremeCases" scope="public">  
+    <one-of>  
+      <item> más <ruleref uri="#LocationAxisX"/> </item>  
+      <item> más Arriba </item>  
+      <item> más Abajo </item> 
+    </one-of>  
+  </rule>  
+
   <rule id="LocationAxisY" scope="public">  
     <one-of>  
       <item> Arriba </item>  
-      <item> Abajo </item>  
-      <item> Arriba a la <ruleref uri="#LocationAxisX"/> </item>  
-      <item> Abajo a la <ruleref uri="#LocationAxisX"/> </item>    
+      <item> Abajo </item>   
+      <item> Arriba <ruleref uri="#LocationAxisX"/> </item>  
+      <item> Abajo <ruleref uri="#LocationAxisX"/> </item>    
     </one-of>  
   </rule>  
   
   <rule id="LocationAxisX" scope="public">  
     <one-of>  
-      <item> Derecha </item>  
-      <item> Izquierda </item>  
+      <item> a la Derecha </item>  
+      <item> a la Izquierda </item>  
     </one-of>  
   </rule>  
 
-  <rule id="Size" scope="public">  
+  <rule id="Sizes" scope="public">  
     <one-of>  
         <item> Grandes </item>  
         <item> Medianos </item>  
-        <item> Pequeños </item>  
+        <item> Pequeños </item> 
+    </one-of>  
+  </rule>  
+
+   <rule id="Size" scope="public">  
+    <one-of>  
+        <item> Grande </item>  
+        <item> Pequeño </item>  
     </one-of>  
   </rule>  
 </grammar>

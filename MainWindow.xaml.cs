@@ -18,6 +18,9 @@ using System.Speech.Recognition;
 using System.Globalization;
 using System.Diagnostics;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace Visual_filtering_referable_objects
 {
@@ -36,6 +39,16 @@ namespace Visual_filtering_referable_objects
 		double canvasMaxX = 0;
 		double canvasMaxY = 0;
 
+		// Default speech recognizer state
+		Boolean isListening = false;
+		Boolean nightMode = false;
+
+		SpeechEraserProcessor speechEraser = new SpeechEraserProcessor();
+
+		SolidColorBrush lightModeCanvasBackground = new SolidColorBrush(Color.FromArgb(100, 230, 230, 230));
+		SolidColorBrush lightModeWindowBackground = new SolidColorBrush(Colors.White);
+		SolidColorBrush darkModeWindowBackground = new SolidColorBrush(Color.FromArgb(100, 86, 86, 86));
+
 		static T RandomEnumValue<T>()
 		{
 			var v = Enum.GetValues(typeof(T));
@@ -44,9 +57,11 @@ namespace Visual_filtering_referable_objects
 		public MainWindow()
         {
             InitializeComponent();
+			Canvas_.Background = lightModeCanvasBackground;
+			LastInstructionLabel.Visibility = Visibility.Hidden;
 
 			// Set grammar and speech recognizer
-            speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
+			speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
 
 			Grammar referableObjectsGrammar = CreateGrammarFromFile();
 			speechRecognizer.LoadGrammar(referableObjectsGrammar);
@@ -54,15 +69,19 @@ namespace Visual_filtering_referable_objects
 
             speechRecognizer.SetInputToDefaultAudioDevice();
 
-			// Default speech recognizer state
-            btnDisable.IsEnabled = false;
-
 			// Set canvas variables
 			this.canvasMaxX = Canvas_.Width;
 			this.canvasMaxY = Canvas_.Height;
 
 			// DEFAULT SHAPES (FOR NOW)
+			AddDefaultShapes();
 
+
+			PaintShapes();
+		}
+
+		private void AddDefaultShapes()
+        {
 			// TRIANGLE
 			System.Windows.Point Point1 = new System.Windows.Point(150, 130);
 			System.Windows.Point Point2 = new System.Windows.Point(200, 130);
@@ -95,12 +114,32 @@ namespace Visual_filtering_referable_objects
 			AddShape(shape3);
 
 			this.initialShapes = new List<Shape>(this.shapes);
-			PaintShapes();
+			speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
 		}
-		private void CreateAndAddShapeFromString (string shapeInfo)
-        {
 
-        }
+		private Boolean ShapesOverlap (Shape shape1, Shape shape2, Boolean paintsPath = false)
+        {
+			RectangleGeometry boundingGeometry1 = shape1.GetBoundingBox();
+			RectangleGeometry boundingGeometry2 = shape2.GetBoundingBox();
+			System.Windows.Media.IntersectionDetail intersection = boundingGeometry1.FillContainsWithDetail(boundingGeometry2);
+
+			if (intersection != System.Windows.Media.IntersectionDetail.Empty)
+            {
+				return true;
+            }
+
+			if (paintsPath)
+			{
+				Path myPath = new Path();
+				myPath.Fill = Brushes.LemonChiffon;
+				myPath.Stroke = Brushes.Black;
+				myPath.StrokeThickness = 1;
+				myPath.Data = boundingGeometry1;
+				Canvas_.Children.Add(myPath);
+			}
+			return false;
+            
+		}
 
 		private Boolean IsInCenterQuadrant(Point point)
         {
@@ -139,25 +178,39 @@ namespace Visual_filtering_referable_objects
 			else return Quadrants.None;
 		}
 
+		private void clearPathPaints()
+        {
+			var paths = Canvas_.Children.OfType<Path>().ToList();
+			foreach (var path in paths)
+			{
+				Canvas_.Children.Remove(path);
+			}
+		}
+
 		private void GenerateRandomShapes(int howMany)
 		{
-			for (int i = 0; i < howMany; i++)
+			clearPathPaints();
+
+			int i = 0;
+			while (i < howMany)
             {
+				// Generate data of a shape randomly, including the first point and 'length' of the shape
+				Shape shapeToAdd;
 				ShapeType randomShape = RandomEnumValue<ShapeType>();
 				int shapeLength = _R.Next(65) + 10;
-				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(540-70) + shapeLength, _R.Next(340- 70) + shapeLength);
-				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
-
 				PointCollection myPointCollection = new PointCollection();
+				System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(450) + 70, _R.Next(260) + 70);
 				myPointCollection.Add(firstPoint);
+				Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
+				SolidColorBrush colorGenerated = GetColorFromString(RandomEnumValue<ColorsEnum>().ToString());
 
+				// If the random shape is a circle, reduce size and add it with length as radius
 				if (randomShape == ShapeType.Circle)
                 {
-					if (shapeLength > 15) shapeLength -= 10; // Circles are too big
-					AddShape(new Circle(GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection, shapeLength));
-
-
+					if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3); // Circles are too big
+					shapeToAdd = (new Circle(colorGenerated, generatedQuadrant, myPointCollection, shapeLength));
 				}
+				// If the random shape is a triangle or circle, generate lefting points using the first one and length and then add it
 				else
                 {
 					if (randomShape == ShapeType.Triangle)
@@ -171,17 +224,40 @@ namespace Visual_filtering_referable_objects
 						myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y - shapeLength));
 						myPointCollection.Add(new Point(firstPoint.X, firstPoint.Y - shapeLength));
 					}
-					AddShape(new Shape(randomShape, GetColorFromString(RandomEnumValue<ColorsEnum>().ToString()), generatedQuadrant, myPointCollection));
+					shapeToAdd = (new Shape(randomShape, colorGenerated, generatedQuadrant, myPointCollection));
+				}
+
+				// Check if the shape overlaps any other shape, if it does don't add it to the list of shapes 
+
+				Boolean overlaps = false;
+
+				foreach (Shape shape in this.shapes)
+				{
+					if (ShapesOverlap(shapeToAdd, shape))
+					{
+						overlaps = true;
+					}
+				}
+
+				if (!overlaps)
+                {
+					i++;
+					AddShape(shapeToAdd);
 				}
 			}
+			// Copy the generated list of shapes so it's used as a backup when 'reset' button is called
+			this.initialShapes = new List<Shape>(this.shapes);
 		}
+
 		private SolidColorBrush GetColorFromString (string color)
         {
 			return (SolidColorBrush)new BrushConverter().ConvertFromString(color);
 		}
+
 		private void AddShape (Shape shape)
         {
 			this.shapes.Add(shape);
+			// The list of shapes is always sorted from biggest to smallest
 			this.shapes.Sort(delegate (Shape x, Shape y)
 			{
 				return (x.Area < y.Area ? 1 : -1);
@@ -199,23 +275,57 @@ namespace Visual_filtering_referable_objects
 
 		private void Button_Click(object sender, RoutedEventArgs e)
         {
-            speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
-			btnDisable.IsEnabled = true;
-			btnEnable.IsEnabled = false;
-        }
+			if (isListening)
+            {
+				isListening = false;
+				voiceText.Text = "Activar reconocimiento de voz";
+				voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-solid.png"));
+				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 212, 255, 191));
+			}
+			else
+            {
+				isListening = true;
+				voiceText.Text = "Desactivar reconocimiento de voz";
+				voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-slash-solid.png"));
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 255, 190, 190));
+			}
+		}
+
+		private void Button_Instructions_Guide(object sender, RoutedEventArgs e)
         {
-            speechRecognizer.RecognizeAsyncStop();
-			btnDisable.IsEnabled = false;
-			btnEnable.IsEnabled = true;
+			InstructionsGuide intructionsGuideWindow = new InstructionsGuide(nightMode);
+			intructionsGuideWindow.Show();
+		}
+
+		private void Button_Night_Mode(object sender, RoutedEventArgs e)
+        {
+			if (nightMode)
+            {
+				nightModeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/moon-white-solid.png"));
+				btnNightMode.Background = new SolidColorBrush(Color.FromArgb(255, 79, 79, 79));
+				nightModeText.Text = "Modo noche";
+				nightModeText.Foreground = new SolidColorBrush(Colors.White);
+				this.Background = lightModeWindowBackground;
+				Canvas_.Background = lightModeCanvasBackground;
+				CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+				this.nightMode = false;
+			}
+			else
+            {
+				btnNightMode.Background = new SolidColorBrush(Colors.LightGray);
+				nightModeText.Foreground = new SolidColorBrush(Colors.Black);
+				nightModeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/sun-solid.png"));
+				nightModeText.Text = "Modo día";
+				this.Background = darkModeWindowBackground;
+				Canvas_.Background = this.Background;
+				CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
+				this.nightMode = true;
+			}
 		}
 
 		private void Button_Click_Reset(object sender, RoutedEventArgs e)
 		{
-			speechRecognizer.RecognizeAsyncStop();
-			btnDisable.IsEnabled = false;
-			btnEnable.IsEnabled = true;
 			this.shapes = new List<Shape>(this.initialShapes);
 			PaintShapes();
 		}
@@ -258,9 +368,8 @@ namespace Visual_filtering_referable_objects
 
 						Canvas_.Children.Add(myEllipse);
 
-						myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X);
-						myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y);
-
+						myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X - circle.Radius);
+						myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y - circle.Radius);
 
 					}
 					else
@@ -296,221 +405,75 @@ namespace Visual_filtering_referable_objects
 			{
 				Canvas_.Children.Remove(ellipse);
 			}
+		
 		}
 
 		private void speechRecognizer_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
 		{
-			Button_Click_1(null, null);
-			Quadrants quadrantToSearch1 = Quadrants.None;
-			Quadrants quadrantToSearch2 = Quadrants.None;
-			ShapeType shapeToSearch = ShapeType.None;
-			SolidColorBrush color = System.Windows.Media.Brushes.White;
-			Size size = Size.None;
-
-			bool isValidStart = false;
-
-			if (e.Result.Words.Count>2)
+			string wholeText = "";
+			for (int i = 0; i < e.Result.Words.Count; i++)
 			{
-				string startCommand = e.Result.Words[0].Text.ToLower() + " " + e.Result.Words[1].Text.ToLower();
-				string shapeString = e.Result.Words[2].Text.ToLower();
-				string wholeText = "";
-				for (int i = 0; i < e.Result.Words.Count; i++)
-                {
-					wholeText = wholeText + ' ' + e.Result.Words[i].Text;
-                }
-				MessageBox.Show("Has hablado! Has dicho esto: " + wholeText);
-
-				switch (startCommand)
-				{
-					case "borra los":
-						switch (shapeString)
-						{
-							case "triángulos":
-								shapeToSearch = ShapeType.Triangle;
-								isValidStart = true;
-								break;
-							case "cuadrados":
-								shapeToSearch = ShapeType.Square;
-								isValidStart = true;
-								break;
-							case "círculos":
-								shapeToSearch = ShapeType.Circle;
-								isValidStart = true;
-								break;
-							default:
-								break;
-						}
-                        if (isValidStart)
-                        {
-							for (int i = 3; i < e.Result.Words.Count; i++)
-							{
-								string word = e.Result.Words[i].Text.ToLower();
-								switch (word)
-								{
-									case "azules":
-										color = System.Windows.Media.Brushes.Blue;
-										break;
-									case "negros":
-										color = System.Windows.Media.Brushes.Black;
-										break;
-									case "rojos":
-										color = System.Windows.Media.Brushes.Red;
-										break;
-									case "morados":
-										color = System.Windows.Media.Brushes.Purple;
-										break;
-									case "amarillos":
-										color = System.Windows.Media.Brushes.Yellow;
-										break;
-									case "verdes":
-										color = System.Windows.Media.Brushes.Green;
-										break;
-									case "naranjas":
-										color = System.Windows.Media.Brushes.Orange;
-										break;
-									case "rosas":
-										color = System.Windows.Media.Brushes.Pink;
-										break;
-
-									case "estén":
-										string firstPositionWord = e.Result.Words[i+1].Text.ToLower();
-										string secondPositionWord = e.Result.Words.Count > i+4 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() + " " + e.Result.Words[i + 4].Text.ToLower() : "";
-										switch (firstPositionWord)
-                                        {
-											case "arriba":
-												switch (secondPositionWord)
-                                                {
-													case "a la izquierda":
-														quadrantToSearch1 = Quadrants.Top_left;
-														break;
-													case "a la derecha":
-														quadrantToSearch1 = Quadrants.Top_right;
-														break;
-													default:
-														quadrantToSearch1 = Quadrants.Top_left;
-														quadrantToSearch2 = Quadrants.Top_right;
-														break;
-												}
-												break;
-											case "abajo":
-												switch (secondPositionWord)
-												{
-													case "a la izquierda":
-														quadrantToSearch1 = Quadrants.Bottom_left;
-														break;
-													case "a la derecha":
-														quadrantToSearch1 = Quadrants.Bottom_right;
-														break;
-													default:
-														quadrantToSearch1 = Quadrants.Bottom_left;
-														quadrantToSearch2 = Quadrants.Bottom_right;
-														break;
-												}
-												break;
-											case "en":
-												string centerWord = e.Result.Words.Count > i + 3 ? e.Result.Words[i+2].Text.ToLower() + " " + e.Result.Words[i + 3].Text.ToLower() : "";
-												if (centerWord == "el centro")
-													quadrantToSearch1 = Quadrants.Center;
-												break;
-										}
-
-									break;
-
-									case "grandes":
-										size = Size.Big;
-										break;
-									case "medianos":
-										size = Size.Medium;
-										break;
-									case "pequeños":
-										size = Size.Small;
-										break;
-									default:
-										break;
-								}
-							}
-
-						}
-						break;
-				}
+				wholeText = wholeText + ' ' + e.Result.Words[i].Text.ToLower();
 			}
-			if (isValidStart)
+			if (LastInstructionLabel.Visibility == Visibility.Hidden)
             {
-				List<Shape> shapesCopy = new List<Shape>(this.shapes);
-				Boolean anyMatch = false;
-
-				for (int i = 0; i < shapesCopy.Count(); i++)
-				{
-					Shape shape = shapesCopy[i];
-					shape.Size = CalculateSizeFromIterator(i);
-
-					if (MatchesShape(shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2))
+				LastInstructionLabel.Visibility = Visibility.Visible;
+			}
+			LastInstruction.Text = wholeText;
+			string firstWord = e.Result.Words[0].Text.ToLower();
+			switch (firstWord)
+            {
+				case "escúchame":
+					Button_Click(null, null);
+					break;
+				case "empieza":
+					Button_Click(null, null);
+					break;
+				case "para":
+					Button_Click(null, null);
+					break;
+				case "deja":
+					Button_Click(null, null);
+					break;
+				case "reinicia":
+					if (isListening) Button_Click_Reset(null, null);
+					break;
+				case "genera":
+					if (isListening) Button_Click_Generate_Random_Canvas(null, null);
+					break;
+				case "interpreta":
+					if (isListening) this.speechEraser.ChangePositionInterpreter(e.Result.Words);
+					break;
+				case "borra":
+					if (e.Result.Words.Count > 2 && isListening)
 					{
-						this.shapes.Remove(shapesCopy[i]);
-						anyMatch = true;
+						this.shapes = this.speechEraser.EraseShapes(this.shapes, e.Result.Words);
+						PaintShapes();
 					}
-				}
-				if (!anyMatch)
-                {
-					MessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
-				}
-				PaintShapes();
+					break;
+				default:
+					break;
 			}
 				
 		}
 
-		private Boolean MatchesShape(
-			Shape shape, 
-			ShapeType shapeToSearch, 
-			SolidColorBrush color, 
-			Size size, 
-			Quadrants quadrantToSearch1,
-			Quadrants quadrantToSearch2)
-        {
-			Boolean matchesShape = false;
-			Boolean matchesColor = false;
-			Boolean matchesSize = false;
-			Boolean matchesQuadrant = false;
+		private void closeAutomatically()
+		{
+			Thread.Sleep(7000);
+			SendKeys.SendWait("{Enter}");//or Esc
+		}
 
-			if (shapeToSearch == shape.GeometricShape)
-			{
-				matchesShape = true;
-			}
-            if (color == shape.Color || color == System.Windows.Media.Brushes.White)
-            {
-                matchesColor = true;
-            }
-			if (size == shape.Size || size == Size.None)
-			{
-				matchesSize = true;
-			}
-			if (quadrantToSearch1 == shape.Quadrant || quadrantToSearch1 == Quadrants.None || quadrantToSearch2 == shape.Quadrant)
-			{
-				matchesQuadrant = true;
-			}
 
-			return matchesShape && matchesColor && matchesSize && matchesQuadrant;
-        }
+		public void ShowMessageAutoClose(string message)
+		{
+			System.Windows.MessageBox.Show(message);
+			(new System.Threading.Thread(closeAutomatically)).Start();
+		}
+
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             speechRecognizer.Dispose();
         }
-
-		private Size CalculateSizeFromIterator (int i)
-        {
-			if (i <= this.shapes.Count() / 3)
-			{
-				return Size.Big;
-			}
-			else if (i <= this.shapes.Count() * 2 / 3)
-			{
-				return Size.Medium;
-			}
-			else
-			{
-				return Size.Small;
-			}
-		}
     }
 }

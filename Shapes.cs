@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using System.Windows;
 
 namespace Visual_filtering_referable_objects
 {
@@ -51,7 +52,30 @@ namespace Visual_filtering_referable_objects
         Pink
     }
 
-    public class Shape
+    public enum SearchType
+    {
+        None,
+        Single,
+        Multiple
+    }
+
+    public enum Positions
+    {
+        None,
+        Right,
+        Left,
+        Top,
+        Bottom,
+    }
+
+    public abstract class AbstractShape
+    {
+        public ShapeType ShapeType { get; set; }
+        public abstract RectangleGeometry GetBoundingBox();
+
+    }
+
+    public class Shape : AbstractShape
     {
         public ShapeType GeometricShape { get; set; }
         public SolidColorBrush Color { get; set; }
@@ -80,6 +104,14 @@ namespace Visual_filtering_referable_objects
                     this.Area = -1;
                     break;
             }
+        }
+
+        public override RectangleGeometry GetBoundingBox()
+        {
+            PointCollection points = new PointCollection(Points);
+            Point bottom_right = new Point(points[1].X + 2, points[1].Y + 2);
+            Point top_left = new Point(points[0].X - 2, points[2].Y - 2);
+            return new RectangleGeometry(new Rect(top_left, bottom_right));
         }
 
     }
