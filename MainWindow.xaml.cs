@@ -455,6 +455,7 @@ namespace Visual_filtering_referable_objects
 					{
 						this.shapes = this.speechEraser.EraseShapes(this.shapes, e.Result.Words);
 						PaintShapes();
+						Button_Click(null, null);
 					}
 					break;
 				case "modo":
@@ -479,20 +480,6 @@ namespace Visual_filtering_referable_objects
 			}
 				
 		}
-
-		private void closeAutomatically()
-		{
-			Thread.Sleep(7000);
-			SendKeys.SendWait("{Enter}");//or Esc
-		}
-
-
-		public void ShowMessageAutoClose(string message)
-		{
-			System.Windows.MessageBox.Show(message);
-			(new System.Threading.Thread(closeAutomatically)).Start();
-		}
-
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {

@@ -75,7 +75,7 @@
                         <LineBreak/>
                         <Run Text="- (y) que sea el mas grande/pequeño"/>
                         <LineBreak/>
-                        <Run Text="- (y) Que esté más a la derecha/a la izquierda/arriba/abajo"/>
+                        <Run Text="- más a la derecha/a la izquierda/arriba/abajo"/>
                         <LineBreak/>
                     </Paragraph>
                 </FlowDocument>
