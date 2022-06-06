@@ -48,6 +48,7 @@ namespace Visual_filtering_referable_objects
 		SolidColorBrush lightModeCanvasBackground = new SolidColorBrush(Color.FromArgb(100, 230, 230, 230));
 		SolidColorBrush lightModeWindowBackground = new SolidColorBrush(Colors.White);
 		SolidColorBrush darkModeWindowBackground = new SolidColorBrush(Color.FromArgb(100, 86, 86, 86));
+		InstructionsGuide intructionsGuideWindow;
 
 		static T RandomEnumValue<T>()
 		{
@@ -294,7 +295,7 @@ namespace Visual_filtering_referable_objects
 
 		private void Button_Instructions_Guide(object sender, RoutedEventArgs e)
         {
-			InstructionsGuide intructionsGuideWindow = new InstructionsGuide(nightMode);
+			intructionsGuideWindow = new InstructionsGuide(nightMode);
 			intructionsGuideWindow.Show();
 		}
 
@@ -310,6 +311,8 @@ namespace Visual_filtering_referable_objects
 				Canvas_.Background = lightModeCanvasBackground;
 				CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Black);
 				this.nightMode = false;
+				LastInstructionLabel.Foreground = new SolidColorBrush(Colors.Black);
+				LastInstruction.Foreground = new SolidColorBrush(Colors.Black);
 			}
 			else
             {
@@ -321,6 +324,8 @@ namespace Visual_filtering_referable_objects
 				Canvas_.Background = this.Background;
 				CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
 				this.nightMode = true;
+				LastInstructionLabel.Foreground = new SolidColorBrush(Colors.White);
+				LastInstruction.Foreground = new SolidColorBrush(Colors.White);
 			}
 		}
 
@@ -419,21 +424,22 @@ namespace Visual_filtering_referable_objects
             {
 				LastInstructionLabel.Visibility = Visibility.Visible;
 			}
+
 			LastInstruction.Text = wholeText;
 			string firstWord = e.Result.Words[0].Text.ToLower();
 			switch (firstWord)
             {
 				case "escúchame":
-					Button_Click(null, null);
+					if (!isListening) Button_Click(null, null);
 					break;
 				case "empieza":
-					Button_Click(null, null);
+					if (!isListening) Button_Click(null, null);
 					break;
 				case "para":
-					Button_Click(null, null);
+					if (isListening)  Button_Click(null, null);
 					break;
 				case "deja":
-					Button_Click(null, null);
+					if (isListening) Button_Click(null, null);
 					break;
 				case "reinicia":
 					if (isListening) Button_Click_Reset(null, null);
@@ -450,6 +456,23 @@ namespace Visual_filtering_referable_objects
 						this.shapes = this.speechEraser.EraseShapes(this.shapes, e.Result.Words);
 						PaintShapes();
 					}
+					break;
+				case "modo":
+					if (e.Result.Words.Count > 2 && isListening)
+					{
+						Boolean isVoice = e.Result.Words[2].Text.ToLower() == "voz" ? true : false;
+						CustomMessageBox.SetActivated(!isVoice);
+					}
+					if (e.Result.Words.Count == 2 && isListening)
+					{
+						Button_Night_Mode(null, null);
+					}
+					break;
+				case "abre":
+					Button_Instructions_Guide(null, null);
+					break;
+				case "cierra":
+					intructionsGuideWindow.Close();
 					break;
 				default:
 					break;

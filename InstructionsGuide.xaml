@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Visual_filtering_referable_objects"
         mc:Ignorable="d"
-        Title="InstructionsGuide" Height="450" Width="800">
+        Title="InstructionsGuide" Height="596" Width="800">
     <ScrollViewer>
 
         <StackPanel>
@@ -17,7 +17,7 @@
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
-            <RichTextBox x:Name="SecondParagraph" Height="125" Width="690" TextChanged="RichTextBox_TextChanged_1" Margin="0,20,0,0"   Focusable="False" Cursor="Arrow">
+            <RichTextBox x:Name="SecondParagraph" Height="151" Width="690" TextChanged="RichTextBox_TextChanged_1" Margin="0,20,0,0"   Focusable="False" Cursor="Arrow">
                 <FlowDocument>
                     <Paragraph>
                         <Bold>
@@ -33,12 +33,16 @@
                         <LineBreak/>
                         <Run Text="- Genera un nuevo lienzo"/>
                         <LineBreak/>
-                        <Run Text="- Interpreta las posiciones como absolutas/relativas"/>
+                        <Run Text="- Modo solo voz/modo también texto"/>
+                        <LineBreak/>
+                        <Run Text="- Modo noche/dia"/>
+                        <LineBreak/>
+                        <Run Text="- Abre/cierra la guia de comandos"/>
                         <LineBreak/>
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
-            <RichTextBox x:Name="ThirdParagraph" Height="264" Width="691" Margin="0,20,0,30"   Focusable="False" Cursor="Arrow">
+            <RichTextBox x:Name="ThirdParagraph" Height="251" Width="691" Margin="0,20,0,30"   Focusable="False" Cursor="Arrow">
                 <FlowDocument>
                     <Paragraph>
                         <Bold>

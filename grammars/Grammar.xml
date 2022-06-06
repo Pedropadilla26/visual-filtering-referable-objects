@@ -78,6 +78,24 @@
       <item>
         Interpreta las posiciones como <ruleref uri="#InterpretacionesPosiciones"/>
       </item>
+      <item>
+        Modo solo voz
+      </item>
+      <item>
+        Modo también texto
+      </item>
+      <item>
+        Modo noche
+      </item>
+      <item>
+      Modo día
+      </item>
+      <item>
+      Abre la guia de comandos
+      </item>
+      <item>
+      Cierra la guia de comandos
+      </item>
     </one-of>  
   </rule>  
 
