@@ -420,51 +420,50 @@ namespace Visual_filtering_referable_objects
 			{
 				wholeText = wholeText + ' ' + e.Result.Words[i].Text.ToLower();
 			}
-			if (LastInstructionLabel.Visibility == Visibility.Hidden)
-            {
+			string firstWord = e.Result.Words[0].Text.ToLower();
+			Boolean validStart = isListening || (!isListening && ((firstWord == "escúchame") || (firstWord == "empieza")));
+			if (!validStart) return;
+
+			if (LastInstructionLabel.Visibility == Visibility.Hidden) 
 				LastInstructionLabel.Visibility = Visibility.Visible;
-			}
 
 			LastInstruction.Text = wholeText;
-			string firstWord = e.Result.Words[0].Text.ToLower();
+			
 			switch (firstWord)
             {
 				case "escúchame":
-					if (!isListening) Button_Click(null, null);
+					Button_Click(null, null);
 					break;
 				case "empieza":
-					if (!isListening) Button_Click(null, null);
+					Button_Click(null, null);
 					break;
 				case "para":
-					if (isListening)  Button_Click(null, null);
+					Button_Click(null, null);
 					break;
 				case "deja":
-					if (isListening) Button_Click(null, null);
+					Button_Click(null, null);
 					break;
 				case "reinicia":
-					if (isListening) Button_Click_Reset(null, null);
+					Button_Click_Reset(null, null);
 					break;
 				case "genera":
-					if (isListening) Button_Click_Generate_Random_Canvas(null, null);
+					Button_Click_Generate_Random_Canvas(null, null);
 					break;
 				case "interpreta":
-					if (isListening) this.speechEraser.ChangePositionInterpreter(e.Result.Words);
+					this.speechEraser.ChangePositionInterpreter(e.Result.Words);
 					break;
 				case "borra":
-					if (e.Result.Words.Count > 2 && isListening)
-					{
-						this.shapes = this.speechEraser.EraseShapes(this.shapes, e.Result.Words);
-						PaintShapes();
-						Button_Click(null, null);
-					}
+					this.shapes = this.speechEraser.EraseShapes(this.shapes, e.Result.Words);
+					PaintShapes();
+					Button_Click(null, null);
 					break;
 				case "modo":
-					if (e.Result.Words.Count > 2 && isListening)
+					if (e.Result.Words.Count > 2)
 					{
 						Boolean isVoice = e.Result.Words[2].Text.ToLower() == "voz" ? true : false;
 						CustomMessageBox.SetActivated(!isVoice);
 					}
-					if (e.Result.Words.Count == 2 && isListening)
+					if (e.Result.Words.Count == 2)
 					{
 						Button_Night_Mode(null, null);
 					}
