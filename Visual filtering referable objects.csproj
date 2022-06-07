@@ -141,6 +141,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="volume-xmark-solid.png" />
+    <Resource Include="trash-can-solid.png" />
+    <Resource Include="volume-high-solid.png" />
     <Resource Include="sun-solid.png" />
     <Resource Include="moon-white-solid.png" />
     <Resource Include="circle-info-solid.png" />

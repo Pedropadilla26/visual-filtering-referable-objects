@@ -116,6 +116,9 @@ namespace Visual_filtering_referable_objects
 
 			this.initialShapes = new List<Shape>(this.shapes);
 			speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
+
+			CustomMessageBox.SetTextField(chat);
+			CustomMessageBox.AddTextSystem("Hola, soy el asistente virtual de esta aplicación. Puedes usar los botones o los comandos de la guía de comandos para controlarla.");
 		}
 
 		private Boolean ShapesOverlap (Shape shape1, Shape shape2, Boolean paintsPath = false)
@@ -279,14 +282,14 @@ namespace Visual_filtering_referable_objects
 			if (isListening)
             {
 				isListening = false;
-				voiceText.Text = "Activar reconocimiento de voz";
+				voiceText.Text = "Activar";
 				voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-solid.png"));
 				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 212, 255, 191));
 			}
 			else
             {
 				isListening = true;
-				voiceText.Text = "Desactivar reconocimiento de voz";
+				voiceText.Text = "Desactivar";
 				voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-slash-solid.png"));
 
 				btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 255, 190, 190));
@@ -313,6 +316,9 @@ namespace Visual_filtering_referable_objects
 				this.nightMode = false;
 				LastInstructionLabel.Foreground = new SolidColorBrush(Colors.Black);
 				LastInstruction.Foreground = new SolidColorBrush(Colors.Black);
+				ChatBorder.Background = lightModeCanvasBackground;
+				chat.Foreground = new SolidColorBrush(Colors.Black);
+				ChatBorder.BorderBrush = new SolidColorBrush(Colors.Black);
 			}
 			else
             {
@@ -326,6 +332,9 @@ namespace Visual_filtering_referable_objects
 				this.nightMode = true;
 				LastInstructionLabel.Foreground = new SolidColorBrush(Colors.White);
 				LastInstruction.Foreground = new SolidColorBrush(Colors.White);
+				ChatBorder.Background = darkModeWindowBackground;
+				chat.Foreground = new SolidColorBrush(Colors.White);
+				ChatBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
 			}
 		}
 
@@ -333,6 +342,21 @@ namespace Visual_filtering_referable_objects
 		{
 			this.shapes = new List<Shape>(this.initialShapes);
 			PaintShapes();
+		}
+
+		private void Button_Click_Speaker(object sender, RoutedEventArgs e)
+		{
+			CustomMessageBox.ToggleSpeaker();
+			if (CustomMessageBox.speakerActivated)
+				btnActivateSpeakerIcon.Source = new BitmapImage(new Uri("pack://application:,,,/volume-high-solid.png"));
+			else
+				btnActivateSpeakerIcon.Source = new BitmapImage(new Uri("pack://application:,,,/volume-xmark-solid.png"));
+		}
+
+		private void Button_Click_Clear_Chat(object sender, RoutedEventArgs e)
+		{
+			chat.SelectAll();
+			chat.Selection.Text = "";
 		}
 
 		private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
@@ -424,30 +448,33 @@ namespace Visual_filtering_referable_objects
 			Boolean validStart = isListening || (!isListening && ((firstWord == "escúchame") || (firstWord == "empieza")));
 			if (!validStart) return;
 
-			if (LastInstructionLabel.Visibility == Visibility.Hidden) 
-				LastInstructionLabel.Visibility = Visibility.Visible;
+			CustomMessageBox.AddTextUser(wholeText);
 
-			LastInstruction.Text = wholeText;
-			
 			switch (firstWord)
             {
 				case "escúchame":
 					Button_Click(null, null);
+					CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
 					break;
 				case "empieza":
 					Button_Click(null, null);
+					CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
 					break;
 				case "para":
 					Button_Click(null, null);
+					CustomMessageBox.AddTextSystem("Se ha desactivado el reconocimiento de voz.");
 					break;
 				case "deja":
 					Button_Click(null, null);
+					CustomMessageBox.AddTextSystem("Se ha desactivado el reconocimiento de voz.");
 					break;
 				case "reinicia":
 					Button_Click_Reset(null, null);
+					CustomMessageBox.AddTextSystem("Hecho.");
 					break;
 				case "genera":
 					Button_Click_Generate_Random_Canvas(null, null);
+					CustomMessageBox.AddTextSystem("Hecho.");
 					break;
 				case "interpreta":
 					this.speechEraser.ChangePositionInterpreter(e.Result.Words);
@@ -458,26 +485,20 @@ namespace Visual_filtering_referable_objects
 					Button_Click(null, null);
 					break;
 				case "modo":
-					if (e.Result.Words.Count > 2)
-					{
-						Boolean isVoice = e.Result.Words[2].Text.ToLower() == "voz" ? true : false;
-						CustomMessageBox.SetActivated(!isVoice);
-					}
-					if (e.Result.Words.Count == 2)
-					{
-						Button_Night_Mode(null, null);
-					}
+					Button_Night_Mode(null, null);
+					CustomMessageBox.AddTextSystem("Hecho.");
 					break;
 				case "abre":
 					Button_Instructions_Guide(null, null);
+					CustomMessageBox.AddTextSystem("Hecho.");
 					break;
 				case "cierra":
 					intructionsGuideWindow.Close();
+					CustomMessageBox.AddTextSystem("Hecho.");
 					break;
 				default:
 					break;
 			}
-				
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

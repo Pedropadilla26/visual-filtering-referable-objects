@@ -29,7 +29,7 @@ namespace Visual_filtering_referable_objects
 			if (newInterpretation != this.positionInterpreter)
 			{
 
-				CustomMessageBox.Show("Se va a cambiar la interpretación de posiciones a " + newInterpretation);
+				CustomMessageBox.AddTextSystem("Se va a cambiar la interpretación de posiciones a " + newInterpretation);
 				this.positionInterpreter = words[words.Count-1].Text.ToLower();
 			}
 		}
@@ -51,6 +51,8 @@ namespace Visual_filtering_referable_objects
 			{
 				wholeText = wholeText + ' ' + words[i].Text;
 			}
+
+			CustomMessageBox.AddTextSystem("realizando borrado...");
 
 			switch (searchType)
 			{
@@ -74,7 +76,7 @@ namespace Visual_filtering_referable_objects
 					}
 					if (isValidStart)
 					{
-						CustomMessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
+						//CustomMessageBox.AddTextSystem("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
 
 						for (int i = 3; i < words.Count; i++)
 						{
@@ -148,10 +150,10 @@ namespace Visual_filtering_referable_objects
 											if (this.positionInterpreter == "")
 											{
 												string messageAboutPositionInterpreter = "Las posiciones que ha dicho son ambiguas, no sé si se refiere a los " + shapeString + " en esa posición con respecto a los otros o con respecto a todas las figuras." +
-													"\nPor defecto, asumo que se refiere a todas las figuras, si no habría dicho los " + shapeString + " más a " + secondPositionWord +
-													"\n\nSi quiere cambiar esto, use el comando de voz 'Interpreta las posiciones como absolutas/relativas";
+													"\nPor defecto, asumo que se refiere a todas las figuras, si no habría dicho 'los " + shapeString + " más a " + secondPositionWord +
+													"'\nSi quiere cambiar esto, use el comando de voz 'Interpreta las posiciones como absolutas/relativas";
 
-												CustomMessageBox.Show(messageAboutPositionInterpreter);
+												CustomMessageBox.AddTextSystem(messageAboutPositionInterpreter);
 												this.positionInterpreter = "absolutas";
 											}
 											if (this.positionInterpreter == "absolutas")
@@ -233,7 +235,7 @@ namespace Visual_filtering_referable_objects
 					}
 					break;
 				case SearchType.Single:
-					CustomMessageBox.Show("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
+					//CustomMessageBox.AddTextSystem("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
 					switch (shapeString)
 					{
 						case "triángulo":
@@ -357,7 +359,7 @@ namespace Visual_filtering_referable_objects
 								if (words.Count() > 3){
 									shapePropertiesMessage += " de color " + words[3].Text.ToLower();
 								}
-								CustomMessageBox.Show(shapePropertiesMessage + ", los voy a borrar todos, pero mejor hable en plural si hay varios.");
+								CustomMessageBox.AddTextSystem(shapePropertiesMessage + ", los voy a borrar todos, pero mejor hable en plural si hay varios.");
 								warnedAboutPlural = true;
 							}
 							initialShapes.Remove(geometricShapesList[i]);
@@ -368,7 +370,11 @@ namespace Visual_filtering_referable_objects
 
 				if (!anyMatch)
 				{
-					CustomMessageBox.Show("No encuentro ninguna forma que coincida con la descripción");
+					CustomMessageBox.AddTextSystem("No encuentro ninguna forma que coincida con la descripción");
+				}
+				else
+                {
+					CustomMessageBox.AddTextSystem("He borrado las figuras que coincidían.");
 				}
 			}
 			return initialShapes;
