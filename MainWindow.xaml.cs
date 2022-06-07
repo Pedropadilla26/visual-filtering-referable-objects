@@ -359,6 +359,17 @@ namespace Visual_filtering_referable_objects
 			chat.Selection.Text = "";
 		}
 
+		private void Button_Save_Shapes_To_File(object sender, RoutedEventArgs e)
+		{
+			FileParser.saveShapesToFile(shapes);
+		}
+		private void Button_Load_Shapes_From_File(object sender, RoutedEventArgs e)
+		{
+			this.shapes = FileParser.getShapesFromFile();
+			initialShapes = this.shapes;
+			PaintShapes();
+		}
+
 		private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
 		{
 			this.shapes = new List<Shape>();

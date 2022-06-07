@@ -152,5 +152,29 @@
             <RichTextBox x:Name="chat" HorizontalAlignment="Center" Height="388" Margin="0,5,0,0" IsReadOnly="True" VerticalAlignment="Top" Width="280" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0,0,0,0"/>
         </Border>
         <Label x:Name="DeveloperName" Content="Creado por Pedro Padilla Reyes" Margin="0,0,10,10" FontSize="10" Foreground="#FF6D6D6D" FontStyle="Italic" Width="145" Height="25" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        <Button x:Name="btnSaveToFile" Height="43" Background="#FFFFECC3" Click="Button_Save_Shapes_To_File" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.847,-0.953" Margin="362,555,566,192">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+
+                </Style>
+            </Button.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/floppy-disk-solid.png" Width="32" Height="22" RenderTransformOrigin="1,1" HorizontalAlignment="Left"/>
+                <TextBlock><Run Text="Guardar "/><Run Language="es-es" Text="lienzo"/></TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="btnLoadFromFile" Height="43" Background="#FFFFECC3" Click="Button_Load_Shapes_From_File" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.847,-0.953" Margin="220,603,720,144">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="7"/>
+
+                </Style>
+            </Button.Resources>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/file-arrow-up-solid.png" Width="28" Height="22" RenderTransformOrigin="1,1"/>
+                <TextBlock Width="92"><Run Language="es-es" Text="Cargar"/><Run Text=" "/><Run Text="lienzo"/></TextBlock>
+            </StackPanel>
+        </Button>
     </Grid>
 </Window>

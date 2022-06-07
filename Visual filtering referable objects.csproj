@@ -75,6 +75,7 @@
     <Compile Include="Circle.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CustomMessageBox.cs" />
+    <Compile Include="FileParser.cs" />
     <Compile Include="InstructionsGuide.xaml.cs">
       <DependentUpon>InstructionsGuide.xaml</DependentUpon>
     </Compile>
@@ -156,6 +157,8 @@
     <Resource Include="list-solid.png" />
     <Resource Include="solid.PNG" />
     <Resource Include="grammars\Grammar.xml" />
+    <Resource Include="floppy-disk-solid.png" />
+    <Resource Include="file-arrow-up-solid.png" />
     <Content Include="imgs\microphone-slash-solid.svg" />
     <Content Include="imgs\microphone-solid.svg" />
   </ItemGroup>
