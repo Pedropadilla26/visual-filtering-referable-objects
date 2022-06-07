@@ -44,7 +44,7 @@ namespace Visual_filtering_referable_objects
                         {
                             case "C":
                                 type = ShapeType.Circle;
-                                int.TryParse(line[3], out radius);
+                                int.TryParse(line[4], out radius);
                                 break;
                             case "T":
                                 type = ShapeType.Triangle;
@@ -56,12 +56,36 @@ namespace Visual_filtering_referable_objects
 
                         brush = brushConverter.ConvertFromString(line[1]) as SolidColorBrush;
 
-                        string[] pointsStrings = line[2].Split('(');
-                        foreach (var point in pointsStrings)
+                        switch (line[2])
                         {
-                            double.TryParse(point[0].ToString(), out double x);
-                            double.TryParse(point[2].ToString(), out double y);
-                            pointCollection.Add(new Point(x, y));
+                            case "Bottom_right":
+                                quadrant = Quadrants.Bottom_right;
+                                break;
+                            case "Bottom_left":
+                                quadrant = Quadrants.Bottom_left;
+                                break;
+                            case "Top_right":
+                                quadrant = Quadrants.Top_right;
+                                break;
+                            case "Top_left":
+                                quadrant = Quadrants.Top_left;
+                                break;
+                            case "Center":
+                                quadrant = Quadrants.Center;
+                                break;
+                        }
+
+                        string[] pointsStrings = line[3].Split('(');
+                        foreach (var pointString in pointsStrings)
+                        {
+                            if (pointString.Length > 0)
+                            {
+                                string[] point = pointString.Split(',');
+                                double.TryParse(point[0].ToString(), out double x);
+                                double.TryParse(point[1].ToString(), out double y);
+                                pointCollection.Add(new Point(x, y));
+                            }
+                            
                         }
 
                         if (type == ShapeType.Circle) shapes.Add(new Circle(brush, quadrant, pointCollection, radius));
@@ -81,6 +105,9 @@ namespace Visual_filtering_referable_objects
             {
                 switch (shape.GeometricShape)
                 {
+                    case ShapeType.Circle:
+                        result += "C-";
+                        break;
                     case ShapeType.Triangle:
                         result += "T-";
                         break;
@@ -94,18 +121,11 @@ namespace Visual_filtering_referable_objects
                 {
                     result += "(" + point.X + "," + point.Y + ")";
                 }
-                result += "\n";
-            }
-            foreach (Circle shape in shapes)
-            {
-                result += "C-";
-                result += shape.Color + "-";
-                result += shape.Quadrant + "-";
-                foreach (var point in shape.Points)
+                if (shape.GeometricShape == ShapeType.Circle)
                 {
-                    result += "(" + point.X + "," + point.Y + ")";
+                    var circle = (Circle)shape;
+                    result += "-" + circle.Radius.ToString();
                 }
-                result += "-" + shape.Radius.ToString();
                 result += "\n";
             }
 
