@@ -81,6 +81,7 @@ namespace Visual_filtering_referable_objects
                             if (pointString.Length > 0)
                             {
                                 string[] point = pointString.Split(',');
+                                point[1] = point[1].Trim(')');
                                 double.TryParse(point[0].ToString(), out double x);
                                 double.TryParse(point[1].ToString(), out double y);
                                 pointCollection.Add(new Point(x, y));
