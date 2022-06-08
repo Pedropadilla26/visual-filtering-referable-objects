@@ -507,6 +507,14 @@ namespace Visual_filtering_referable_objects
 					intructionsGuideWindow.Close();
 					CustomMessageBox.AddTextSystem("Hecho.");
 					break;
+				case "activa":
+					if (!CustomMessageBox.speakerActivated) Button_Click_Speaker(null, null);
+					CustomMessageBox.AddTextSystem("Hecho.");
+					break;
+				case "desactiva":
+					if (CustomMessageBox.speakerActivated) Button_Click_Speaker(null, null);
+					CustomMessageBox.AddTextSystem("Hecho.");
+					break;
 				default:
 					break;
 			}

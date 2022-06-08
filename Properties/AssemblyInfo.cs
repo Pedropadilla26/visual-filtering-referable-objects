@@ -8,11 +8,11 @@ using System.Windows;
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
 [assembly: AssemblyTitle("Visual filtering referable objects")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("App for the final bachelors' degree project made by Pedro Padilla Reyes")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("LG")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Visual filtering referable objects")]
-[assembly: AssemblyCopyright("Copyright © LG 2022")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

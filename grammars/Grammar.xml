@@ -96,6 +96,12 @@
       <item>
       Cierra la guia de comandos
       </item>
+      <item>
+      Activa el sonido
+      </item>
+      <item>
+      Desactiva el sonido
+      </item>
     </one-of>  
   </rule>  
 

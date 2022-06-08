@@ -39,6 +39,8 @@
                         <LineBreak/>
                         <Run Text="- Abre/cierra la guia de comandos"/>
                         <LineBreak/>
+                        <Run Text="- Activa/desactiva el sonido"/>
+                        <LineBreak/>
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
