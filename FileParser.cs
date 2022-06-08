@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -15,21 +11,23 @@ namespace Visual_filtering_referable_objects
     {
         public const string DEFAULT_FILE_PATH = "/objectFiles/shapes";
 
-        public static List<Shape> getShapesFromFile() {
+        public static List<Shape> getShapesFromFile()
+        {
             List<Shape> shapes = new List<Shape>();
             Stream myStream;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if ((myStream = openFileDialog1.OpenFile()) != null)
                 {
-                    var brushConverter = new BrushConverter();
-                    var sr = new StreamReader(myStream);
+                    BrushConverter brushConverter = new BrushConverter();
+                    StreamReader sr = new StreamReader(myStream);
                     string lineRead = "";
                     // Code to write the stream goes here.
                     while ((lineRead = sr.ReadLine()) != null)
@@ -76,7 +74,7 @@ namespace Visual_filtering_referable_objects
                         }
 
                         string[] pointsStrings = line[3].Split('(');
-                        foreach (var pointString in pointsStrings)
+                        foreach (string pointString in pointsStrings)
                         {
                             if (pointString.Length > 0)
                             {
@@ -86,7 +84,7 @@ namespace Visual_filtering_referable_objects
                                 double.TryParse(point[1].ToString(), out double y);
                                 pointCollection.Add(new Point(x, y));
                             }
-                            
+
                         }
 
                         if (type == ShapeType.Circle) shapes.Add(new Circle(brush, quadrant, pointCollection, radius));
@@ -118,32 +116,33 @@ namespace Visual_filtering_referable_objects
                 }
                 result += shape.Color + "-";
                 result += shape.Quadrant + "-";
-                foreach (var point in shape.Points)
+                foreach (Point point in shape.Points)
                 {
                     result += "(" + point.X + "," + point.Y + ")";
                 }
                 if (shape.GeometricShape == ShapeType.Circle)
                 {
-                    var circle = (Circle)shape;
+                    Circle circle = (Circle)shape;
                     result += "-" + circle.Radius.ToString();
                 }
                 result += "\n";
             }
 
             Stream myStream;
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.FilterIndex = 2;
-            saveFileDialog1.RestoreDirectory = true;
-            saveFileDialog1.DefaultExt = ".txt";
-            saveFileDialog1.FileName = "shapes"; // Default file name
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true,
+                DefaultExt = ".txt",
+                FileName = "shapes" // Default file name
+            };
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if ((myStream = saveFileDialog1.OpenFile()) != null)
                 {
-                    var sw = new StreamWriter(myStream);
+                    StreamWriter sw = new StreamWriter(myStream);
                     // Code to write the stream goes here.
                     sw.Write(result);
                     sw.Flush();//otherwise you are risking empty stream

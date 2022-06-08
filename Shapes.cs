@@ -1,14 +1,8 @@
-﻿/// 
+﻿using System.Windows;
+/// 
 /// Creado por Pedro Padilla Reyes para el trabajo fin de grado en Ingeniería Informática por la UGR.
 /// 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Shapes;
 using System.Windows.Media;
-using System.Windows;
 
 namespace Visual_filtering_referable_objects
 {
@@ -80,28 +74,28 @@ namespace Visual_filtering_referable_objects
         public ShapeType GeometricShape { get; set; }
         public SolidColorBrush Color { get; set; }
         public Size Size { get; set; }
-        public Quadrants Quadrant {get; set; }
+        public Quadrants Quadrant { get; set; }
         public PointCollection Points { get; set; }
 
         public double Area { get; set; }
 
         public Shape(ShapeType shape, SolidColorBrush color, Quadrants quadrant, PointCollection points)
         {
-            this.GeometricShape = shape;
-            this.Color = color;
-            this.Quadrant = quadrant;
-            this.Points = points;
+            GeometricShape = shape;
+            Color = color;
+            Quadrant = quadrant;
+            Points = points;
 
-            switch (this.GeometricShape)
+            switch (GeometricShape)
             {
                 case ShapeType.Triangle:
-                    this.Area = (points[1].X - points[0].X) * (points[1].Y - points[2].Y) / 2;
+                    Area = (points[1].X - points[0].X) * (points[1].Y - points[2].Y) / 2;
                     break;
                 case ShapeType.Square:
-                    this.Area = (points[1].X - points[0].X) * (points[1].Y - points[3].Y);
+                    Area = (points[1].X - points[0].X) * (points[1].Y - points[3].Y);
                     break;
                 default:
-                    this.Area = -1;
+                    Area = -1;
                     break;
             }
         }
