@@ -29,6 +29,7 @@ namespace Visual_filtering_referable_objects
         double canvasMinY = 0;
         double canvasMaxX = 0;
         double canvasMaxY = 0;
+        int numberToGenerate = 5;
 
         // Default speech recognizer state
         bool isListening = false;
@@ -50,7 +51,6 @@ namespace Visual_filtering_referable_objects
         {
             InitializeComponent();
             Canvas_.Background = lightModeCanvasBackground;
-            LastInstructionLabel.Visibility = Visibility.Hidden;
 
             // Set grammar and speech recognizer
             speechRecognizer.SpeechRecognized += speechRecognizer_SpeechRecognized;
@@ -315,7 +315,6 @@ namespace Visual_filtering_referable_objects
                 Canvas_.Background = lightModeCanvasBackground;
                 CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Black);
                 nightMode = false;
-                LastInstructionLabel.Foreground = new SolidColorBrush(Colors.Black);
                 LastInstruction.Foreground = new SolidColorBrush(Colors.Black);
                 ChatBorder.Background = lightModeCanvasBackground;
                 chat.Foreground = new SolidColorBrush(Colors.Black);
@@ -331,7 +330,6 @@ namespace Visual_filtering_referable_objects
                 Canvas_.Background = Background;
                 CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
                 nightMode = true;
-                LastInstructionLabel.Foreground = new SolidColorBrush(Colors.White);
                 LastInstruction.Foreground = new SolidColorBrush(Colors.White);
                 ChatBorder.Background = darkModeWindowBackground;
                 chat.Foreground = new SolidColorBrush(Colors.White);
@@ -360,6 +358,11 @@ namespace Visual_filtering_referable_objects
             chat.Selection.Text = "";
         }
 
+        private void Button_Click_Suggest(object sender, RoutedEventArgs e)
+        {
+            CommandSuggester.Suggest(shapes);
+        }
+
         private void Button_Save_Shapes_To_File(object sender, RoutedEventArgs e)
         {
             FileParser.saveShapesToFile(shapes);
@@ -374,7 +377,7 @@ namespace Visual_filtering_referable_objects
         private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
         {
             shapes = new List<Shape>();
-            GenerateRandomShapes(5);
+            GenerateRandomShapes(numberToGenerate);
             PaintShapes();
             Console.WriteLine("List of ordered shapes");
             foreach (Shape shape in shapes)
@@ -385,53 +388,51 @@ namespace Visual_filtering_referable_objects
 
         private void PaintShapes()
         {
-            if (shapes.Count > 0)
+            ClearCanvas();
+            Console.WriteLine("Painting canvas...");
+            foreach (Shape shape in shapes)
             {
-                ClearCanvas();
-                Console.WriteLine("Painting canvas...");
-                foreach (Shape shape in shapes)
+                if (shape.GeometricShape == ShapeType.Circle)
                 {
-                    if (shape.GeometricShape == ShapeType.Circle)
+                    Circle circle = (Circle)shape;
+                    Console.WriteLine("Painting a circle");
+                    Console.WriteLine(circle.Color);
+                    Console.WriteLine(circle.Points);
+
+                    Ellipse myEllipse = new Ellipse
                     {
-                        Circle circle = (Circle)shape;
-                        Console.WriteLine("Painting a circle");
-                        Console.WriteLine(circle.Color);
-                        Console.WriteLine(circle.Points);
-
-                        Ellipse myEllipse = new Ellipse
-                        {
-                            Width = circle.Radius * 2,
-                            Height = circle.Radius * 2,
-                            Stroke = System.Windows.Media.Brushes.Black,
-                            StrokeThickness = 2,
-                            Fill = circle.Color
-                        };
+                        Width = circle.Radius * 2,
+                        Height = circle.Radius * 2,
+                        Stroke = System.Windows.Media.Brushes.Black,
+                        StrokeThickness = 2,
+                        Fill = circle.Color
+                    };
 
 
-                        Canvas_.Children.Add(myEllipse);
+                    Canvas_.Children.Add(myEllipse);
 
-                        myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X - circle.Radius);
-                        myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y - circle.Radius);
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Painting a shape");
-                        Console.WriteLine(shape.Color);
-                        Console.WriteLine(shape.Points);
-
-                        Polygon myPolygon = new Polygon
-                        {
-                            Stroke = System.Windows.Media.Brushes.Black,
-                            Fill = shape.Color,
-                            StrokeThickness = 2,
-                            Points = shape.Points
-                        };
-                        Canvas_.Children.Add(myPolygon);
-                    }
+                    myEllipse.SetValue(Canvas.LeftProperty, (double)circle.Points[0].X - circle.Radius);
+                    myEllipse.SetValue(Canvas.TopProperty, (double)circle.Points[0].Y - circle.Radius);
 
                 }
+                else
+                {
+                    Console.WriteLine("Painting a shape");
+                    Console.WriteLine(shape.Color);
+                    Console.WriteLine(shape.Points);
+
+                    Polygon myPolygon = new Polygon
+                    {
+                        Stroke = System.Windows.Media.Brushes.Black,
+                        Fill = shape.Color,
+                        StrokeThickness = 2,
+                        Points = shape.Points
+                    };
+                    Canvas_.Children.Add(myPolygon);
+                }
+
             }
+            
         }
 
         private void ClearCanvas()
@@ -517,6 +518,22 @@ namespace Visual_filtering_referable_objects
                     if (CustomMessageBox.speakerActivated) Button_Click_Speaker(null, null);
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
+                case "sí":
+                    List<Shape> copy = speechEraser.AnswerYesToErase();
+                    if (copy.Count > 0)
+                    {
+                        shapes = copy;
+                        PaintShapes();
+                        Button_Click(null, null);
+                        CustomMessageBox.AddTextSystem("Vale.");
+                    }
+                    break;
+                case "no":
+                    if (speechEraser.AnswerNoToErase())
+                    {
+                        CustomMessageBox.AddTextSystem("Vale.");
+                    }
+                    break;
                 default:
                     break;
             }
@@ -525,6 +542,15 @@ namespace Visual_filtering_referable_objects
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             speechRecognizer.Dispose();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string text = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            if (text != null)
+            {
+                numberToGenerate = int.Parse(text);
+            }
         }
     }
 }

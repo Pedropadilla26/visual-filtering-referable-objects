@@ -102,6 +102,18 @@
       <item>
       Desactiva el sonido
       </item>
+      <item>
+       Sí
+      </item>
+      <item>
+       No
+      </item>
+      <item>
+      Los primeros
+      </item>
+      <item>
+      Los segundos
+      </item>
     </one-of>  
   </rule>  
 

@@ -27,7 +27,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <PublisherName>Pedro Padilla Reyes</PublisherName>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -79,8 +79,12 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -109,6 +113,7 @@
     </ApplicationDefinition>
     <Compile Include="Circle.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="CommandSuggester.cs" />
     <Compile Include="CustomMessageBox.cs" />
     <Compile Include="FileParser.cs" />
     <Compile Include="InstructionsGuide.xaml.cs">
@@ -145,6 +150,7 @@
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -178,6 +184,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="question-solid.png" />
     <Resource Include="volume-xmark-solid.png" />
     <Resource Include="trash-can-solid.png" />
     <Resource Include="volume-high-solid.png" />

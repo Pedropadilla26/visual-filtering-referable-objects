@@ -18,6 +18,10 @@ namespace Visual_filtering_referable_objects
             FirstParagraph.BorderBrush = null;
             SecondParagraph.BorderBrush = null;
             ThirdParagraph.BorderBrush = null;
+            FirstParagraph.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+            SecondParagraph.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+            ThirdParagraph.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+
 
             if (isNightMode)
             {

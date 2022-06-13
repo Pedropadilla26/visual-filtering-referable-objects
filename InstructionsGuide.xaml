@@ -8,19 +8,20 @@
         Title="InstructionsGuide" Height="596" Width="800">
     <ScrollViewer>
 
+        <Viewbox>
         <StackPanel>
             <Label x:Name="Title" Content="Guía de comandos" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="20"/>
-            <RichTextBox x:Name="FirstParagraph" HorizontalAlignment="Stretch" Height="23" Margin="0,20,0,0" Width="692" TextChanged="RichTextBox_TextChanged"   Focusable="False" Cursor="Arrow">
+            <RichTextBox x:Name="FirstParagraph" HorizontalAlignment="Stretch" Height="23" Margin="50,20,50,0" Width="692" TextChanged="RichTextBox_TextChanged"   Focusable="False" Cursor="Arrow" IsTabStop="False" IsHitTestVisible="False" AllowDrop="False" FontSize="14">
                 <FlowDocument>
                     <Paragraph>
                         ¡<Bold>Habla</Bold> cuando el reconocimiento de audio esté activado para que se ejecuten los comandos!
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
-            <RichTextBox x:Name="SecondParagraph" Height="151" Width="690" TextChanged="RichTextBox_TextChanged_1" Margin="0,20,0,0"   Focusable="False" Cursor="Arrow">
+            <RichTextBox x:Name="SecondParagraph" Height="168" Width="690" TextChanged="RichTextBox_TextChanged_1" Margin="-6,30,0,0" Cursor="Arrow" AllowDrop="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False">
                 <FlowDocument>
                     <Paragraph>
-                        <Bold>
+                        <Bold FontSize="14">
                             <Run Text="Comandos de accesibilidad"/>
                         </Bold>
                         <LineBreak/>
@@ -44,7 +45,7 @@
                     </Paragraph>
                 </FlowDocument>
             </RichTextBox>
-            <RichTextBox x:Name="ThirdParagraph" Height="251" Width="691" Margin="0,20,0,30"   Focusable="False" Cursor="Arrow">
+            <RichTextBox x:Name="ThirdParagraph" Height="251" Width="691" Margin="0,30,0,30"   Focusable="False" Cursor="Arrow" IsTabStop="False" IsHitTestVisible="False" AllowDrop="False">
                 <FlowDocument>
                     <Paragraph>
                         <Bold>
@@ -58,7 +59,7 @@
                         <LineBreak/>
                         <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
                         <LineBreak/>
-                        <Run Text="- que sean rojos/azule/negros/otroColor"/>
+                        <Run Text="- que sean rojos/azules/negros/morados/amarillos/verdes/naranjas/rosas"/>
                         <LineBreak/>
                         <Run Text="- (y) Que sean grandes/mediaños/pequeños"/>
                         <LineBreak/>
@@ -73,7 +74,7 @@
                         <LineBreak/>
                         <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
                         <LineBreak/>
-                        <Run Text="- que sea rojo/azul/negro/otroColor"/>
+                        <Run Text="- que sea rojo/azul/negro/morado/amarillo/verde/naranja/rosa"/>
                         <LineBreak/>
                         <Run Text="- (y) que sea el mas grande/pequeño"/>
                         <LineBreak/>
@@ -83,6 +84,7 @@
                 </FlowDocument>
             </RichTextBox>
         </StackPanel>
+        </Viewbox>
     </ScrollViewer>
 
 </Window>

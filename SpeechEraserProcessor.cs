@@ -9,6 +9,8 @@ namespace Visual_filtering_referable_objects
     internal class SpeechEraserProcessor
     {
         string positionInterpreter = "";
+        List<Shape> shapesWaitingForAnswer = new List<Shape>();
+        List<Shape> shapesWaitingForAnswer2 = new List<Shape>();
 
         public SpeechEraserProcessor()
         {
@@ -26,6 +28,33 @@ namespace Visual_filtering_referable_objects
                 CustomMessageBox.AddTextSystem("Se va a cambiar la interpretación de posiciones a " + newInterpretation);
                 positionInterpreter = words[words.Count - 1].Text.ToLower();
             }
+        }
+        public List<Shape> AnswerYesToErase()
+        {
+            List<Shape> copy = shapesWaitingForAnswer;
+            shapesWaitingForAnswer = new List<Shape> ();
+            return copy;
+        }
+        public bool AnswerNoToErase()
+        {
+
+            return shapesWaitingForAnswer.Count > 0 ? true : false;
+        }
+        public List<Shape> AnswerRelative()
+        {
+
+            List<Shape> copy = shapesWaitingForAnswer;
+            shapesWaitingForAnswer = new List<Shape>();
+            shapesWaitingForAnswer2 = new List<Shape>();
+            return copy;
+        }
+        public List<Shape> AnswerAbsolute()
+        {
+
+            List<Shape> copy = shapesWaitingForAnswer2;
+            shapesWaitingForAnswer = new List<Shape>();
+            shapesWaitingForAnswer2 = new List<Shape>();
+            return copy;
         }
         public List<Shape> EraseShapes(List<Shape> initialShapes, ReadOnlyCollection<RecognizedWordUnit> words)
         {
@@ -120,6 +149,7 @@ namespace Visual_filtering_referable_objects
                                                 default:
                                                     quadrantToSearch1 = Quadrants.Top_left;
                                                     quadrantToSearch2 = Quadrants.Top_right;
+                                                    positionToSearch = Positions.Top;
                                                     break;
                                             }
                                             break;
@@ -136,54 +166,28 @@ namespace Visual_filtering_referable_objects
                                                 default:
                                                     quadrantToSearch1 = Quadrants.Bottom_left;
                                                     quadrantToSearch2 = Quadrants.Bottom_right;
+                                                    positionToSearch = Positions.Bottom;
                                                     break;
                                             }
                                             break;
                                         case "a":
                                             secondPositionWord = words.Count > i + 3 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() : "";
-                                            if (positionInterpreter == "")
-                                            {
-                                                string messageAboutPositionInterpreter = "Las posiciones que ha dicho son ambiguas, no sé si se refiere a los " + shapeString + " en esa posición con respecto a los otros o con respecto a todas las figuras." +
-                                                    "\nPor defecto, asumo que se refiere a todas las figuras, si no habría dicho 'los " + shapeString + " más a " + secondPositionWord +
-                                                    "'\nSi quiere cambiar esto, use el comando de voz 'Interpreta las posiciones como absolutas/relativas";
-
-                                                CustomMessageBox.AddTextSystem(messageAboutPositionInterpreter);
-                                                positionInterpreter = "absolutas";
-                                            }
-                                            if (positionInterpreter == "absolutas")
-                                            {
                                                 switch (secondPositionWord)
                                                 {
                                                     case "la izquierda":
                                                         quadrantToSearch1 = Quadrants.Bottom_left;
                                                         quadrantToSearch2 = Quadrants.Top_left;
-                                                        break;
+                                                        positionToSearch = Positions.Left;
+
+                                                    break;
                                                     case "la derecha":
                                                         quadrantToSearch1 = Quadrants.Bottom_right;
-                                                        quadrantToSearch1 = Quadrants.Top_right;
-                                                        break;
+                                                        quadrantToSearch2 = Quadrants.Top_right;
+                                                        positionToSearch = Positions.Right;
+                                                    break;
                                                     default:
                                                         break;
                                                 }
-                                            }
-                                            else if (positionInterpreter == "relativas")
-                                            {
-                                                switch (secondPositionWord)
-                                                {
-                                                    case "la izquierda":
-                                                        positionToSearch = Positions.Left;
-                                                        break;
-                                                    case "la derecha":
-                                                        positionToSearch = Positions.Right;
-                                                        break;
-                                                    case "arriba":
-                                                        positionToSearch = Positions.Top;
-                                                        break;
-                                                    case "abajo":
-                                                        positionToSearch = Positions.Bottom;
-                                                        break;
-                                                }
-                                            }
                                             break;
                                         case "en":
                                             string centerWord = words.Count > i + 3 ? words[i + 2].Text.ToLower() + " " + words[i + 3].Text.ToLower() : "";
@@ -229,7 +233,6 @@ namespace Visual_filtering_referable_objects
                     }
                     break;
                 case SearchType.Single:
-                    //CustomMessageBox.AddTextSystem("Se va a ejecutar la siguiente acción de borrado: " + wholeText);
                     switch (shapeString)
                     {
                         case "triángulo":
@@ -336,6 +339,12 @@ namespace Visual_filtering_referable_objects
                             initialShapes.Remove(shapesCopy[i]);
                             anyMatch = true;
                         }
+                    }
+                    if ((shapesCopy.Count - initialShapes.Count) == 1)
+                    {
+                        CustomMessageBox.AddTextSystem("Solo hay un "+shapeString +" con las características descritas. ¿Quiere que lo borre?");
+                        shapesWaitingForAnswer = initialShapes;
+                        return shapesCopy;
                     }
                 }
                 else if (searchType == SearchType.Single)

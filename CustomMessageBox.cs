@@ -40,6 +40,10 @@ namespace Visual_filtering_referable_objects
         public static void ToggleSpeaker()
         {
             speakerActivated = !speakerActivated;
+            if (!speakerActivated)
+            {
+                speechSynthesizer.SpeakAsyncCancelAll();
+            }
         }
     }
 }
