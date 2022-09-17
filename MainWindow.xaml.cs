@@ -254,7 +254,7 @@ namespace Visual_filtering_referable_objects
 
         private SolidColorBrush GetColorFromString(string color)
         {
-            return (SolidColorBrush)new BrushConverter().ConvertFromString(color);
+            return color == "None" ? new SolidColorBrush(Colors.White) : (SolidColorBrush)new BrushConverter().ConvertFromString(color);
         }
 
         private void AddShape(Shape shape)

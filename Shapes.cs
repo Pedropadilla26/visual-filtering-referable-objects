@@ -9,33 +9,32 @@ namespace Visual_filtering_referable_objects
 
     public enum ShapeType
     {
-        None,
         Triangle,
         Square,
-        Circle
+        Circle,
+        None
     }
 
     public enum Size
     {
-        None,
         Big,
         Medium,
         Small,
+        None
     }
 
     public enum Quadrants
     {
-        None,
         Top_left,
         Top_right,
         Center,
         Bottom_left,
         Bottom_right,
+        None
     }
 
     public enum ColorsEnum
     {
-        None,
         Blue,
         Black,
         Red,
@@ -43,23 +42,24 @@ namespace Visual_filtering_referable_objects
         Yellow,
         Green,
         Orange,
-        Pink
+        Pink,
+        None
     }
 
     public enum SearchType
     {
-        None,
         Single,
-        Multiple
+        Multiple,
+        None
     }
 
     public enum Positions
     {
-        None,
         Right,
         Left,
         Top,
         Bottom,
+        None
     }
 
     public abstract class AbstractShape
