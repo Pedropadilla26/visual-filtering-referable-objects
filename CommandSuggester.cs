@@ -9,9 +9,20 @@ namespace Visual_filtering_referable_objects
 {
     internal class CommandSuggester
     {
-        int numberOfProperties = 19;
+        int numberOfProperties = 18;
+        int shapesNumber = 0;
 
         public int[,] shapesFramework;
+        public int[] propertiesVector;
+
+        SolidColorBrush black = new SolidColorBrush(Colors.Black);
+        SolidColorBrush white = new SolidColorBrush(Colors.White);
+        SolidColorBrush blue = new SolidColorBrush(Colors.Blue);
+        SolidColorBrush green = new SolidColorBrush(Colors.Green);
+        SolidColorBrush red = new SolidColorBrush(Colors.Red);
+        SolidColorBrush yellow = new SolidColorBrush(Colors.Yellow);
+        SolidColorBrush pink = new SolidColorBrush(Colors.Pink);
+        SolidColorBrush orange = new SolidColorBrush(Colors.Orange);
 
         // Create matrix for the properties of the shapes
         // Each i will be another shape
@@ -20,12 +31,14 @@ namespace Visual_filtering_referable_objects
         {
             // Initiate the matrix
             this.shapesFramework = new int[shapes.Count, numberOfProperties];
-            for (int i = 0; i < shapes.Count; i++)
-                for (int j = 0; j < numberOfProperties; j++)
+            for (int i = 0; i < shapes.Count - 1; i++)
+                for (int j = 0; j < numberOfProperties - 1; j++)
                     shapesFramework[i, j] = 0;
 
+            this.shapesNumber = shapes.Count;
+
             // Add shapeType properties
-            for (int i = 0; i < shapes.Count; i++)
+            for (int i = 0; i < shapes.Count - 1; i++)
             {
                 switch (shapes[i].ShapeType)
                 {
@@ -43,7 +56,7 @@ namespace Visual_filtering_referable_objects
             }
 
             // Initiate size properties
-            for (int i = 0; i < shapes.Count; i++)
+            for (int i = 0; i < shapes.Count - 1; i++)
             {
                 switch (shapes[i].Size)
                 {
@@ -60,7 +73,7 @@ namespace Visual_filtering_referable_objects
             }
 
             // Initiate quadrant properties
-            for (int i = 0; i < shapes.Count; i++)
+            for (int i = 0; i < shapes.Count - 1; i++)
             {
                 switch (shapes[i].Quadrant)
                 {
@@ -79,16 +92,36 @@ namespace Visual_filtering_referable_objects
                 }
             }
 
+            
+
             // Initite color properties
-            for (int i = 0; i < shapes.Count; i++)
+            for (int i = 0; i < shapes.Count - 1; i++)
             {
                 switch (shapes[i].Color)
                 {
-                    case System.Windows.Media.Brushes.Black:
+                    case black:
                         shapesFramework[i, 10] = 1;
                         break;
-                    case ColorsEnum.Blue:
+                    case white:
                         shapesFramework[i, 11] = 1;
+                        break;
+                    case blue:
+                        shapesFramework[i, 12] = 1;
+                        break;
+                    case green:
+                        shapesFramework[i, 13] = 1;
+                        break;
+                    case red:
+                        shapesFramework[i, 14] = 1;
+                        break;
+                    case yellow:
+                        shapesFramework[i, 15] = 1;
+                        break;
+                    case pink:
+                        shapesFramework[i, 16] = 1;
+                        break;
+                    case orange:
+                        shapesFramework[i, 17] = 1;
                         break;
 
                 }
@@ -97,30 +130,19 @@ namespace Visual_filtering_referable_objects
 
         }
 
-         case "azules":
-                                    color = System.Windows.Media.Brushes.Blue;
-                                    break;
-                                case "negros":
-                                    color = System.Windows.Media.Brushes.Black;
-                                    break;
-                                case "rojos":
-                                    color = System.Windows.Media.Brushes.Red;
-                                    break;
-                                case "morados":
-                                    color = System.Windows.Media.Brushes.Purple;
-                                    break;
-                                case "amarillos":
-                                    color = System.Windows.Media.Brushes.Yellow;
-                                    break;
-                                case "verdes":
-                                    color = System.Windows.Media.Brushes.Green;
-                                    break;
-                                case "naranjas":
-                                    color = System.Windows.Media.Brushes.Orange;
-                                    break;
-                                case "rosas":
-                                    color = System.Windows.Media.Brushes.Pink;
-                                    break;
+        public void createVector()
+        {
+            this.propertiesVector = new int[this.numberOfProperties];
+            for (int i = 0; i < this.numberOfProperties - 1; i++)
+            {
+                this.propertiesVector[i] = 0;
+                for (int j = 0; j < this.shapesNumber - 1; j++)
+                {
+                    this.propertiesVector[i] += shapesFramework[i, j];
+                }
+            }
+
+        }
 
  
 
@@ -163,4 +185,5 @@ namespace Visual_filtering_referable_objects
             CustomMessageBox.AddTextSystem("Te recomiendo que pruebes usando 'borra los " + shapeString + "'");
         }
     }
+
 }

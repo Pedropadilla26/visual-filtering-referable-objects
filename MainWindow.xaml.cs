@@ -252,7 +252,7 @@ namespace Visual_filtering_referable_objects
             initialShapes = new List<Shape>(shapes);
         }
 
-        private SolidColorBrush GetColorFromString(string color)
+        public SolidColorBrush GetColorFromString(string color)
         {
             return color == "None" ? new SolidColorBrush(Colors.White) : (SolidColorBrush)new BrushConverter().ConvertFromString(color);
         }
