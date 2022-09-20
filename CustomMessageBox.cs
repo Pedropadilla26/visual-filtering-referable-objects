@@ -10,6 +10,7 @@ namespace Visual_filtering_referable_objects
         public static RichTextBox textBlock;
         public static bool speakerActivated = true;
         public static SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+        public static Image sial = sial;
 
         public static void Show(string text)
         {
@@ -37,7 +38,10 @@ namespace Visual_filtering_referable_objects
         public static void AddTextSystem(string text)
         {
             textBlock.AppendText("-----------------------Sistema-----------------------\n" + text + "\n");
-            if (speakerActivated) speechSynthesizer.SpeakAsync(text);
+            if (speakerActivated)
+            {
+                speechSynthesizer.SpeakAsync(text);
+            }
         }
         public static void AddTextUser(string text)
         {

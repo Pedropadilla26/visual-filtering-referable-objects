@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="Software de filtrado visual" Height="863" Width="1103" Background="White">
     <Grid>
@@ -16,7 +17,6 @@
                 <Canvas Grid.ColumnSpan="9" Margin="4,0,64,0" HorizontalAlignment="Center">
                     <TextBlock Canvas.Left="157" TextWrapping="Wrap" Canvas.Top="137"><Run Language="es-es"/></TextBlock>
                 </Canvas>
-                
                 <TextBlock x:Name="LastInstruction" Height="22" TextWrapping="Wrap" Margin="132,256,0,0" Width="400"/>
                 <Button x:Name="btnNightMode" Height="41" Background="#FF4F4F4F" Click="Button_Night_Mode" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Width="150" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0">
                     <Button.Resources>
@@ -34,7 +34,7 @@
                     <Canvas x:Name="Canvas_" Height="400" Width="600" Background="White" Panel.ZIndex="100" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="5" Margin="0,0,0,0" >
                     </Canvas>
                 </Border>
-                <Button x:Name="btnInstructionsGuide" Height="43" Background="#FFF7E8FF" Click="Button_Instructions_Guide" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.847,-0.953" Margin="118,113,749,697" Width="236">
+                <Button x:Name="btnInstructionsGuide" Height="43" Background="#FFF7E8FF" Click="Button_Instructions_Guide" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" RenderTransformOrigin="0.847,-0.953" Margin="165,9,702,801" Width="236">
                     <Button.Resources>
                         <Style TargetType="{x:Type Border}">
                             <Setter Property="CornerRadius" Value="7"/>
@@ -206,6 +206,7 @@
                     </ComboBox>
 
                 </Border>
+                <Image x:Name="sial" gif:ImageBehavior.AnimatedSource="/sial-gif.gif" Margin="194,-316,789,316" Width="120" Source="/sial-gif.gif" />
 
 
             </Grid>
