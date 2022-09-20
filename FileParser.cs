@@ -76,7 +76,7 @@ namespace Visual_filtering_referable_objects
                         {
                             case "C":
                                 type = ShapeType.Circle;
-                                int.TryParse(line[4], out radius);
+                                int.TryParse(line[5], out radius);
                                 break;
                             case "T":
                                 type = ShapeType.Triangle;

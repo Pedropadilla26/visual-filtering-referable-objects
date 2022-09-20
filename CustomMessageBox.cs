@@ -1,4 +1,5 @@
 ﻿using System.Speech.Synthesis;
+using System.Text;
 using System.Windows.Controls;
 
 namespace Visual_filtering_referable_objects
@@ -28,14 +29,19 @@ namespace Visual_filtering_referable_objects
             textBlock = textBlockReference;
         }
 
+        public static void AppendTextSystemSilent(string text) {
+            textBlock.AppendText(text);
+            if (speakerActivated) speechSynthesizer.SpeakAsync(text);
+        }
+
         public static void AddTextSystem(string text)
         {
-            textBlock.AppendText("Sistema: " + text + "\n");
+            textBlock.AppendText("-----------------------Sistema-----------------------\n" + text + "\n");
             if (speakerActivated) speechSynthesizer.SpeakAsync(text);
         }
         public static void AddTextUser(string text)
         {
-            textBlock.AppendText("Usuario: " + text + "\n");
+            textBlock.AppendText("-----------------------Usuario-----------------------\n" + text + "\n");
         }
         public static void ToggleSpeaker()
         {
