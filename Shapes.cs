@@ -76,15 +76,23 @@ namespace Visual_filtering_referable_objects
         public Size Size { get; set; }
         public Quadrants Quadrant { get; set; }
         public PointCollection Points { get; set; }
+        public ColorsEnum ColorEnumGenerated { get; set; }
 
         public double Area { get; set; }
 
-        public Shape(ShapeType shape, SolidColorBrush color, Quadrants quadrant, PointCollection points)
+        public Shape(ShapeType shape, ColorsEnum colorEnumGenerated, SolidColorBrush color, Quadrants quadrant, PointCollection points)
         {
             GeometricShape = shape;
             Color = color;
             Quadrant = quadrant;
             Points = points;
+            ColorEnumGenerated = colorEnumGenerated;
+            Area = -1;
+
+            if (points.Count < 3)
+            {
+                MessageBox.Show("KFSKAFA");
+            }
 
             switch (GeometricShape)
             {
@@ -93,9 +101,6 @@ namespace Visual_filtering_referable_objects
                     break;
                 case ShapeType.Square:
                     Area = (points[1].X - points[0].X) * (points[1].Y - points[3].Y);
-                    break;
-                default:
-                    Area = -1;
                     break;
             }
         }

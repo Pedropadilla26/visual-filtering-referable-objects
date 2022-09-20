@@ -13,8 +13,8 @@ namespace Visual_filtering_referable_objects
 
         public int Radius { get; set; }
 
-        public Circle(SolidColorBrush color, Quadrants quadrant, PointCollection points, int radius)
-            : base(ShapeType.Circle, color, quadrant, points)
+        public Circle(ColorsEnum colorEnumGenerated, SolidColorBrush color, Quadrants quadrant, PointCollection points, int radius)
+            : base(ShapeType.Circle, colorEnumGenerated, color, quadrant, points)
         {
             Radius = radius;
             Area = Math.PI * Math.Pow(Radius, 2);

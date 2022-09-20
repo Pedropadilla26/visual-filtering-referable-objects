@@ -41,6 +41,7 @@ namespace Visual_filtering_referable_objects
         SolidColorBrush lightModeWindowBackground = new SolidColorBrush(Colors.White);
         SolidColorBrush darkModeWindowBackground = new SolidColorBrush(Color.FromArgb(100, 86, 86, 86));
         InstructionsGuide intructionsGuideWindow;
+        CommandSuggester suggester = new CommandSuggester();
 
         static T RandomEnumValue<T>()
         {
@@ -84,7 +85,7 @@ namespace Visual_filtering_referable_objects
                 Point2,
                 Point3
             };
-            Shape shape = new Shape(ShapeType.Triangle, System.Windows.Media.Brushes.Blue, Quadrants.Top_left, myPointCollection);
+            Shape shape = new Shape(ShapeType.Triangle, ColorsEnum.Blue, System.Windows.Media.Brushes.Blue, Quadrants.Top_left, myPointCollection);
             AddShape(shape);
 
             //SQUARE
@@ -99,7 +100,7 @@ namespace Visual_filtering_referable_objects
                 Point6,
                 Point7
             };
-            Shape shape2 = new Shape(ShapeType.Square, System.Windows.Media.Brushes.Red, Quadrants.Bottom_left, myPointCollection2);
+            Shape shape2 = new Shape(ShapeType.Square, ColorsEnum.Red, System.Windows.Media.Brushes.Red, Quadrants.Bottom_left, myPointCollection2);
             AddShape(shape2);
 
             //CIRCLE
@@ -108,7 +109,7 @@ namespace Visual_filtering_referable_objects
             {
                 Point8
             };
-            Shape shape3 = new Circle(GetColorFromString("Green"), Quadrants.Bottom_right, myPointCollection3, 25);
+            Shape shape3 = new Circle(ColorsEnum.Green, GetColorFromString("Green"), Quadrants.Bottom_right, myPointCollection3, 25);
             AddShape(shape3);
 
             initialShapes = new List<Shape>(shapes);
@@ -205,13 +206,14 @@ namespace Visual_filtering_referable_objects
                 System.Windows.Point firstPoint = new System.Windows.Point(_R.Next(450) + 70, _R.Next(260) + 70);
                 myPointCollection.Add(firstPoint);
                 Quadrants generatedQuadrant = GetQuadrantFromPoint(firstPoint);
-                SolidColorBrush colorGenerated = GetColorFromString(RandomEnumValue<ColorsEnum>().ToString());
+                ColorsEnum colorEnumGenerated = RandomEnumValue<ColorsEnum>();
+                SolidColorBrush colorGenerated = GetColorFromString(colorEnumGenerated.ToString());
 
                 // If the random shape is a circle, reduce size and add it with length as radius
                 if (randomShape == ShapeType.Circle)
                 {
                     if (shapeLength > 20) shapeLength = (int)(shapeLength - shapeLength * 0.3); // Circles are too big
-                    shapeToAdd = (new Circle(colorGenerated, generatedQuadrant, myPointCollection, shapeLength));
+                    shapeToAdd = (new Circle(colorEnumGenerated, colorGenerated, generatedQuadrant, myPointCollection, shapeLength));
                 }
                 // If the random shape is a triangle or circle, generate lefting points using the first one and length and then add it
                 else
@@ -227,7 +229,7 @@ namespace Visual_filtering_referable_objects
                         myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y - shapeLength));
                         myPointCollection.Add(new Point(firstPoint.X, firstPoint.Y - shapeLength));
                     }
-                    shapeToAdd = (new Shape(randomShape, colorGenerated, generatedQuadrant, myPointCollection));
+                    shapeToAdd = (new Shape(randomShape, colorEnumGenerated, colorGenerated, generatedQuadrant, myPointCollection));
                 }
 
                 // Check if the shape overlaps any other shape, if it does don't add it to the list of shapes 
@@ -360,7 +362,7 @@ namespace Visual_filtering_referable_objects
 
         private void Button_Click_Suggest(object sender, RoutedEventArgs e)
         {
-            CommandSuggester.Suggest(shapes);
+            suggester.Suggest(shapes);
         }
 
         private void Button_Save_Shapes_To_File(object sender, RoutedEventArgs e)
@@ -389,6 +391,8 @@ namespace Visual_filtering_referable_objects
         private void PaintShapes()
         {
             ClearCanvas();
+            suggester.CreateMatrix(this.shapes);
+            suggester.CreateVector();
             Console.WriteLine("Painting canvas...");
             foreach (Shape shape in shapes)
             {

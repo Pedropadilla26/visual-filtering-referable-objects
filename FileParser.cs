@@ -11,6 +11,40 @@ namespace Visual_filtering_referable_objects
     {
         public const string DEFAULT_FILE_PATH = "/objectFiles/shapes";
 
+        public static ColorsEnum GetColorEnum(string color)
+        {
+            ColorsEnum colorsEnum = ColorsEnum.None;
+
+            switch (color)
+            {
+                case "Blue":
+                    colorsEnum = ColorsEnum.Blue;
+                    break;
+                case "Black":
+                    colorsEnum = ColorsEnum.Black;
+                    break;
+                case "Red":
+                    colorsEnum = ColorsEnum.Red;
+                    break;
+                case "Purple":
+                    colorsEnum = ColorsEnum.Purple;
+                    break;
+                case "Yellow":
+                    colorsEnum = ColorsEnum.Yellow;
+                    break;
+                case "Green":
+                    colorsEnum = ColorsEnum.Green;
+                    break;
+                case "Pink":
+                    colorsEnum = ColorsEnum.Pink;
+                    break;
+                case "Orange":
+                    colorsEnum = ColorsEnum.Orange;
+                    break;
+            }
+            return colorsEnum;
+        }
+
         public static List<Shape> getShapesFromFile()
         {
             List<Shape> shapes = new List<Shape>();
@@ -52,9 +86,11 @@ namespace Visual_filtering_referable_objects
                                 break;
                         }
 
-                        brush = brushConverter.ConvertFromString(line[1]) as SolidColorBrush;
+                        ColorsEnum colorEnum = GetColorEnum(line[1]);
 
-                        switch (line[2])
+                        brush = brushConverter.ConvertFromString(line[2]) as SolidColorBrush;
+
+                        switch (line[3])
                         {
                             case "Bottom_right":
                                 quadrant = Quadrants.Bottom_right;
@@ -73,7 +109,7 @@ namespace Visual_filtering_referable_objects
                                 break;
                         }
 
-                        string[] pointsStrings = line[3].Split('(');
+                        string[] pointsStrings = line[4].Split('(');
                         foreach (string pointString in pointsStrings)
                         {
                             if (pointString.Length > 0)
@@ -87,8 +123,8 @@ namespace Visual_filtering_referable_objects
 
                         }
 
-                        if (type == ShapeType.Circle) shapes.Add(new Circle(brush, quadrant, pointCollection, radius));
-                        else shapes.Add(new Shape(type, brush, quadrant, pointCollection));
+                        if (type == ShapeType.Circle) shapes.Add(new Circle(colorEnum, brush, quadrant, pointCollection, radius));
+                        else shapes.Add(new Shape(type, colorEnum, brush, quadrant, pointCollection));
                     }
                     sr.Dispose();
                     myStream.Close();
@@ -114,6 +150,7 @@ namespace Visual_filtering_referable_objects
                         result += "S-";
                         break;
                 }
+                result += shape.ColorEnumGenerated.ToString() + "-";
                 result += shape.Color + "-";
                 result += shape.Quadrant + "-";
                 foreach (Point point in shape.Points)
