@@ -119,7 +119,7 @@ namespace Visual_filtering_referable_objects
             speechRecognizer.RecognizeAsync(RecognizeMode.Multiple);
 
             CustomMessageBox.SetTextField(chat);
-            CustomMessageBox.AddTextSystem("Hola, soy el asistente virtual de esta aplicación. Puedes usar los botones o los comandos de la guía de comandos para controlarla.");
+            CustomMessageBox.AddTextSystem("Hola, soy Syl, la asistente virtual de esta aplicación. Puedes usar los botones o los comandos de la guía de comandos para controlarla.");
         }
 
         private bool ShapesOverlap(Shape shape1, Shape shape2, bool paintsPath = false)
@@ -289,17 +289,15 @@ namespace Visual_filtering_referable_objects
             if (isListening)
             {
                 isListening = false;
-                voiceText.Text = "Activar";
                 voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-solid.png"));
-                btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 212, 255, 191));
+                btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 205, 240, 234));
             }
             else
             {
                 isListening = true;
-                voiceText.Text = "Desactivar";
                 voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-slash-solid.png"));
 
-                btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 255, 190, 190));
+                btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 246, 198, 234));
             }
         }
 
@@ -315,8 +313,8 @@ namespace Visual_filtering_referable_objects
             {
                 nightModeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/moon-white-solid.png"));
                 btnNightMode.Background = new SolidColorBrush(Color.FromArgb(255, 79, 79, 79));
-                nightModeText.Text = "Modo noche";
-                nightModeText.Foreground = new SolidColorBrush(Colors.White);
+                //nightModeText.Text = "Modo noche";
+                //nightModeText.Foreground = new SolidColorBrush(Colors.White);
                 Background = lightModeWindowBackground;
                 Canvas_.Background = lightModeCanvasBackground;
                 CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Black);
@@ -329,9 +327,9 @@ namespace Visual_filtering_referable_objects
             else
             {
                 btnNightMode.Background = new SolidColorBrush(Colors.LightGray);
-                nightModeText.Foreground = new SolidColorBrush(Colors.Black);
+                //nightModeText.Foreground = new SolidColorBrush(Colors.Black);
                 nightModeIcon.Source = new BitmapImage(new Uri("pack://application:,,,/sun-solid.png"));
-                nightModeText.Text = "Modo día";
+                //nightModeText.Text = "Modo día";
                 Background = darkModeWindowBackground;
                 Canvas_.Background = Background;
                 CanvasBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
