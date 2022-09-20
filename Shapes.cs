@@ -64,14 +64,14 @@ namespace Visual_filtering_referable_objects
 
     public abstract class AbstractShape
     {
-        public ShapeType ShapeType { get; set; }
+        public ShapeType GeometricShape { get; set; }
         public abstract RectangleGeometry GetBoundingBox();
 
     }
 
     public class Shape : AbstractShape
     {
-        public ShapeType GeometricShape { get; set; }
+        public new ShapeType GeometricShape { get; set; }
         public SolidColorBrush Color { get; set; }
         public Size Size { get; set; }
         public Quadrants Quadrant { get; set; }
@@ -82,7 +82,11 @@ namespace Visual_filtering_referable_objects
 
         public Shape(ShapeType shape, ColorsEnum colorEnumGenerated, SolidColorBrush color, Quadrants quadrant, PointCollection points)
         {
-            GeometricShape = shape;
+            if (shape == ShapeType.Triangle)
+            {
+
+            }
+            this.GeometricShape = shape;
             Color = color;
             Quadrant = quadrant;
             Points = points;
@@ -91,7 +95,6 @@ namespace Visual_filtering_referable_objects
 
             if (points.Count < 3)
             {
-                MessageBox.Show("KFSKAFA");
             }
 
             switch (GeometricShape)
@@ -108,6 +111,10 @@ namespace Visual_filtering_referable_objects
         public override RectangleGeometry GetBoundingBox()
         {
             PointCollection points = new PointCollection(Points);
+            if (points.Count < 3)
+            {
+
+            }
             Point bottom_right = new Point(points[1].X + 2, points[1].Y + 2);
             Point top_left = new Point(points[0].X - 2, points[2].Y - 2);
             return new RectangleGeometry(new Rect(top_left, bottom_right));

@@ -45,7 +45,7 @@ namespace Visual_filtering_referable_objects
             // Add shapeType properties
             for (int i = 0; i < shapes.Count - 1; i++)
             {
-                switch (shapes[i].ShapeType)
+                switch (shapes[i].GeometricShape)
                 {
                     case ShapeType.Triangle:
                         shapesFramework[i, 0] = 1;

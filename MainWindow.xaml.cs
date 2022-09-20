@@ -46,7 +46,10 @@ namespace Visual_filtering_referable_objects
         static T RandomEnumValue<T>()
         {
             Array v = Enum.GetValues(typeof(T));
-            return (T)v.GetValue(_R.Next(v.Length - 1) + 1);
+            // Decreases random number so we dont get None (last value) in random enum values
+            int random = _R.Next(v.Length - 2) + 1;
+            if (random < 0) random = 0;
+            return (T)v.GetValue(random);
         }
         public MainWindow()
         {
@@ -222,6 +225,7 @@ namespace Visual_filtering_referable_objects
                     {
                         myPointCollection.Add(new Point(firstPoint.X + shapeLength, firstPoint.Y));
                         myPointCollection.Add(new Point(firstPoint.X + shapeLength / 2, firstPoint.Y - shapeLength));
+
                     }
                     else if (randomShape == ShapeType.Square)
                     {
