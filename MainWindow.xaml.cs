@@ -47,7 +47,7 @@ namespace Visual_filtering_referable_objects
         {
             Array v = Enum.GetValues(typeof(T));
             // Decreases random number so we dont get None (last value) in random enum values
-            int random = _R.Next(v.Length - 2) + 1;
+            int random = _R.Next(v.Length - 1);
             if (random < 0) random = 0;
             return (T)v.GetValue(random);
         }
@@ -473,12 +473,12 @@ namespace Visual_filtering_referable_objects
             switch (firstWord)
             {
                 case "escúchame":
-                    Button_Click(null, null);
-                    CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
+                    //Button_Click(null, null);
+                    //CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
                     break;
                 case "empieza":
-                    Button_Click(null, null);
-                    CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
+                    //Button_Click(null, null);
+                    //CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
                     break;
                 case "para":
                     Button_Click(null, null);
