@@ -37,7 +37,7 @@ namespace Visual_filtering_referable_objects
 
         public static void AddTextSystem(string text)
         {
-            textBlock.AppendText("-------------------Sistema-------------------\n" + text + "\n");
+            textBlock.AppendText("---------------------SYL---------------------\n" + text + "\n");
             if (speakerActivated)
             {
                 speechSynthesizer.SpeakAsync(text);
@@ -45,7 +45,7 @@ namespace Visual_filtering_referable_objects
         }
         public static void AddTextUser(string text)
         {
-            textBlock.AppendText("-------------------Usuario-------------------\n" + text + "\n");
+            textBlock.AppendText("-------------------USUARIO-------------------\n" + text + "\n");
         }
         public static void ToggleSpeaker()
         {

@@ -24,6 +24,7 @@ namespace Visual_filtering_referable_objects
 
         List<Shape> shapes = new List<Shape>();
         List<Shape> initialShapes = new List<Shape>();
+        Stack<List<Shape>> lastShapes = new Stack<List<Shape>>();
         static Random _R = new Random();
         double canvasMinX = 0;
         double canvasMinY = 0;
@@ -344,7 +345,17 @@ namespace Visual_filtering_referable_objects
         private void Button_Click_Reset(object sender, RoutedEventArgs e)
         {
             shapes = new List<Shape>(initialShapes);
+            lastShapes.Push(shapes);
             PaintShapes();
+        }
+
+        private void Button_Click_Backward(object sender, RoutedEventArgs e)
+        {
+            if (lastShapes.Count > 0)
+            {
+                shapes = new List<Shape>(lastShapes.Pop());
+                PaintShapes();
+            }
         }
 
         private void Button_Click_Speaker(object sender, RoutedEventArgs e)
@@ -373,6 +384,7 @@ namespace Visual_filtering_referable_objects
         }
         private void Button_Load_Shapes_From_File(object sender, RoutedEventArgs e)
         {
+            lastShapes.Push(shapes);
             shapes = FileParser.getShapesFromFile();
             initialShapes = shapes;
             PaintShapes();
@@ -380,6 +392,7 @@ namespace Visual_filtering_referable_objects
 
         private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
         {
+            lastShapes.Push(shapes);
             shapes = new List<Shape>();
             GenerateRandomShapes(numberToGenerate);
             PaintShapes();
@@ -473,12 +486,12 @@ namespace Visual_filtering_referable_objects
             switch (firstWord)
             {
                 case "escúchame":
-                    //Button_Click(null, null);
-                    //CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
+                    Button_Click(null, null);
+                    CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
                     break;
                 case "empieza":
-                    //Button_Click(null, null);
-                    //CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
+                    Button_Click(null, null);
+                    CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
                     break;
                 case "para":
                     Button_Click(null, null);
@@ -500,6 +513,7 @@ namespace Visual_filtering_referable_objects
                     speechEraser.ChangePositionInterpreter(e.Result.Words);
                     break;
                 case "borra":
+                    lastShapes.Push(shapes);
                     shapes = speechEraser.EraseShapes(shapes, e.Result.Words);
                     PaintShapes();
                     Button_Click(null, null);
@@ -528,6 +542,7 @@ namespace Visual_filtering_referable_objects
                     List<Shape> copy = speechEraser.AnswerYesToErase();
                     if (copy.Count > 0)
                     {
+                        lastShapes.Push(shapes);
                         shapes = copy;
                         PaintShapes();
                         Button_Click(null, null);

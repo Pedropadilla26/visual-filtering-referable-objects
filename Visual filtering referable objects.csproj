@@ -199,6 +199,7 @@
     <Resource Include="microphone-slash-solid.png" />
     <Resource Include="microphone-solid.png" />
     <Resource Include="arrows-rotate-solid.png" />
+    <Resource Include="backward-step-solid.png" />
     <Content Include="circle-info-solid.svg" />
     <Resource Include="clipboard-check-solid.png" />
     <Resource Include="shuffle-solid.png" />

@@ -27,7 +27,7 @@
                     <TextBlock Canvas.Left="157" TextWrapping="Wrap" Canvas.Top="137"><Run Language="es-es"/></TextBlock>
                 </Canvas>
                 <TextBlock x:Name="LastInstruction" Height="22" TextWrapping="Wrap" Margin="132,256,0,0" Width="400"/>
-                
+
                 <Border x:Name="CanvasBorder" BorderThickness="2" 
          BorderBrush="Black" Margin="423,129,0,256" Width="604" Height="405" HorizontalAlignment="Stretch" CornerRadius="5,5,5,5">
                     <Canvas x:Name="Canvas_" Height="400" Width="600" Background="White" Panel.ZIndex="100" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="5" Margin="0,0,0,0" />
@@ -197,6 +197,16 @@
                     </Button.RenderTransform>
                     <StackPanel Orientation="Horizontal">
                         <Image x:Name="btnActivateSpeakerIcon" Source="/volume-high-solid.png" Width="24" Height="22" RenderTransformOrigin="1,1"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnBackward" Height="45" Background="#FFCDF0EA" Click="Button_Click_Backward" AutomationProperties.Name="btnDisable" FontSize="14" FontWeight="Bold" Margin="1093,344,10,471" Width="45">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                        </Style>
+                    </Button.Resources>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/backward-step-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
                     </StackPanel>
                 </Button>
 
