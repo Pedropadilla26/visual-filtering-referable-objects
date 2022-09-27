@@ -30,6 +30,25 @@ namespace Visual_filtering_referable_objects
         int quadrantQuantities = 5;
         int mostCommonShapeQuantityNow = 0;
 
+        bool colorSuggestion = true;
+        bool sizeSuggestion = false;
+        bool locationSuggestion = true;
+
+        public void setColorSuggestion (bool state)
+        {
+            colorSuggestion = state;
+        }
+
+        public void setSizeSuggestion (bool state)
+        {
+            sizeSuggestion = state;
+        }
+
+        public void setLocationSuggestion (bool state)
+        {
+            locationSuggestion = state;
+        }
+
         // Create matrix for the properties of the shapes
         // Each i will be another shape
         // Each j will be a property
@@ -163,6 +182,24 @@ namespace Visual_filtering_referable_objects
             CustomMessageBox.AppendTextSystemSilent("Lo cual borrará " + this.mostCommonShapeQuantityNow + " figuras\n\n");
         }
 
+        public bool ShouldIncrement (int shape, int size, int location, int color)
+        {
+            bool increment = shape == 1;
+            if (colorSuggestion)
+            {
+                increment = increment && color == 1;
+            }
+            if (sizeSuggestion)
+            {
+                increment = increment && size == 1;
+            }
+            if (locationSuggestion)
+            {
+                increment = increment && location == 1;
+            }
+            return increment;
+        }
+
         public List<string> GetMostCommon()
         {
             int numberOfMostCommon = 0;
@@ -173,6 +210,8 @@ namespace Visual_filtering_referable_objects
             List<string> suggestions = new List<string>();
             for (int w = 0; w < 3; w++)
             {
+                for (int x = 3; x < 6; x++)
+                {
                     for (int y = 6; y < 10; y++)
                     {
                         for (int z = 10; z < 18; z++)
@@ -180,8 +219,7 @@ namespace Visual_filtering_referable_objects
                             int numberOfShapes = 0;
                             for (int i = 0; i < shapesNumber; i++)
                             {
-
-                                if (this.shapesFramework[i, w] == 1 && this.shapesFramework[i, y] == 1 && this.shapesFramework[i, z] == 1)
+                                if (ShouldIncrement(this.shapesFramework[i,w], this.shapesFramework[i,x], this.shapesFramework[i,y], this.shapesFramework[i,z]))
                                 {
                                     numberOfShapes++;
                                 }
@@ -192,17 +230,20 @@ namespace Visual_filtering_referable_objects
                                 numberOfMostCommon = numberOfShapes;
                                 color = GetColorOfIteration(z);
                                 location = GetLocationOfIteration(y);
+                                size = GetSizeOfIteration(x);
                                 shape = GetShapeOfIteration(w);
-                                suggestions.Add(GetSuggestionOfProperties(shape, color, location));
+                                suggestions.Add(GetSuggestionOfProperties(shape, color, size, location));
                             }
                             else if (numberOfShapes == numberOfMostCommon)
                             {
                                 color = GetColorOfIteration(z);
                                 location = GetLocationOfIteration(y);
                                 shape = GetShapeOfIteration(w);
-                                suggestions.Add(GetSuggestionOfProperties(shape, color, location));
+                                size = GetSizeOfIteration(x);
+                                suggestions.Add(GetSuggestionOfProperties(shape, color, size, location));
                             }
                         }
+                    }
                    }
             }
             this.mostCommonShapeQuantityNow = numberOfMostCommon;
@@ -231,6 +272,7 @@ namespace Visual_filtering_referable_objects
 
         public string GetColorOfIteration(int z)
         {
+            if (!colorSuggestion) return "";
             string mostCommonColor = "";
             switch (z)
             {
@@ -261,6 +303,7 @@ namespace Visual_filtering_referable_objects
 
         public string GetSizeOfIteration(int x)
         {
+            if (!sizeSuggestion) return "";
             string mostCommonSize = "";
             switch (x)
             {
@@ -279,6 +322,7 @@ namespace Visual_filtering_referable_objects
 
         public string GetLocationOfIteration(int y)
         {
+            if (!locationSuggestion) return "";
             string mostCommonLocation = "";
             switch (y)
             {
@@ -298,9 +342,13 @@ namespace Visual_filtering_referable_objects
             return mostCommonLocation;
         }
 
-        public string GetSuggestionOfProperties(string shape, string color, string location)
+        public string GetSuggestionOfProperties(string shape, string color = "", string size = "", string location = "")
         {
-            return "- Borra los " + shape + " " + color + " que estén " + location + "\n";
+            string suggestion = "- Borra los " + shape;
+            if (colorSuggestion) suggestion += " " + color;
+            if (sizeSuggestion) suggestion += " " + size;
+            if (locationSuggestion) suggestion += " que estén " + location;
+            return suggestion + "\n";
         }
 
         public int GetMostCommonIteration(int firstIndex, int lastIndex)

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Speech.Recognition;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -31,6 +32,7 @@ namespace Visual_filtering_referable_objects
         double canvasMaxX = 0;
         double canvasMaxY = 0;
         int numberToGenerate = 5;
+        bool isSuggestionOptionsDesplegated = false;
 
         // Default speech recognizer state
         bool isListening = false;
@@ -299,6 +301,22 @@ namespace Visual_filtering_referable_objects
                 voiceIcon.Source = new BitmapImage(new Uri("pack://application:,,,/microphone-slash-solid.png"));
 
                 btnVoiceRecognizing.Background = new SolidColorBrush(Color.FromArgb(255, 246, 198, 234));
+            }
+        }
+
+        private void Button_Click_Suggestion_Options(object sender, RoutedEventArgs e)
+        {
+            if (isSuggestionOptionsDesplegated)
+            {
+                isSuggestionOptionsDesplegated = false;
+                optionsIcon.Source = new BitmapImage(new Uri("pack://application:,,,/arrow-down-solid.png"));
+                OptionsGrid.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                isSuggestionOptionsDesplegated = true;
+                optionsIcon.Source = new BitmapImage(new Uri("pack://application:,,,/arrow-up-solid.png"));
+                OptionsGrid.Visibility = Visibility.Visible;
             }
         }
 
@@ -571,6 +589,53 @@ namespace Visual_filtering_referable_objects
             if (text != null)
             {
                 numberToGenerate = int.Parse(text);
+            }
+        }
+
+        private void Shapes_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Color_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)(sender as ToggleButton).IsChecked)
+            {
+                // Code for Checked state
+                suggester.setColorSuggestion(true);
+            }
+            else
+            {
+                // Code for Un-Checked state
+                suggester.setColorSuggestion(false);
+            }
+        }
+
+        private void Size_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)(sender as ToggleButton).IsChecked)
+            {
+                // Code for Checked state
+                suggester.setSizeSuggestion(true);
+            }
+            else
+            {
+                // Code for Un-Checked state
+                suggester.setSizeSuggestion(false);
+            }
+        }
+
+        private void Location_checkbox_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)(sender as ToggleButton).IsChecked)
+            {
+                // Code for Checked state
+                suggester.setLocationSuggestion(true);
+            }
+            else
+            {
+                // Code for Un-Checked state
+                suggester.setLocationSuggestion(false);
             }
         }
     }
