@@ -33,6 +33,7 @@ namespace Visual_filtering_referable_objects
         public static void AppendTextSystemSilent(string text) {
             textBlock.AppendText(text);
             if (speakerActivated) speechSynthesizer.SpeakAsync(text);
+            textBlock.ScrollToEnd();
         }
 
         public static void AddTextSystem(string text)
@@ -42,10 +43,12 @@ namespace Visual_filtering_referable_objects
             {
                 speechSynthesizer.SpeakAsync(text);
             }
+            textBlock.ScrollToEnd();
         }
         public static void AddTextUser(string text)
         {
             textBlock.AppendText("-------------------USUARIO-------------------\n" + text + "\n");
+            textBlock.ScrollToEnd();
         }
         public static void ToggleSpeaker()
         {

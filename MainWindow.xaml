@@ -17,7 +17,8 @@
             </Button.Resources>
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="nightModeIcon" Source="/moon-white-solid.png" Width="30" Height="22" RenderTransformOrigin="1,1"/>
-                <TextBlock x:Name="nightModeText" Foreground="White"><Run Text=""/></TextBlock>
+                <TextBlock x:Name="nightModeText" Foreground="White"><Run Text=""/>
+                </TextBlock>
             </StackPanel>
         </Button>
         <Viewbox>
