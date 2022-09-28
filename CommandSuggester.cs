@@ -49,6 +49,22 @@ namespace Visual_filtering_referable_objects
             locationSuggestion = state;
         }
 
+        private Size CalculateSizeFromIterator(List<Shape> list, int i)
+        {
+            if (i <= list.Count() / 3)
+            {
+                return Size.Big;
+            }
+            else if (i <= list.Count() * 2 / 3)
+            {
+                return Size.Medium;
+            }
+            else
+            {
+                return Size.Small;
+            }
+        }
+
         // Create matrix for the properties of the shapes
         // Each i will be another shape
         // Each j will be a property
@@ -83,7 +99,8 @@ namespace Visual_filtering_referable_objects
             // Initiate size properties
             for (int i = 0; i < shapes.Count - 1; i++)
             {
-                switch (shapes[i].Size)
+                Size size = CalculateSizeFromIterator(shapes, i);
+                switch (size)
                 {
                     case Size.Small:
                         shapesFramework[i, 3] = 1;
@@ -172,9 +189,12 @@ namespace Visual_filtering_referable_objects
         public void Suggest(List<Shape> initialShapes, string suggestionType = "many")
         {
             string suggestion = "Te recomiendo que pruebes usando:";
-
-            CustomMessageBox.AddTextSystem(suggestion);
             List<string> suggestions = GetMostCommon();
+            if (suggestions.Count() < 1 || (suggestions[0].Length == 0 && suggestions.Count == 1))
+            {
+                CustomMessageBox.AddTextSystem("Lo siento, pero no he podido encontrar una expresión de referencia que coincida. Prueba a reducir el número de propiedades a sugerir.");
+                return;
+            }
             foreach (string text in suggestions)
             {
                 CustomMessageBox.AppendTextSystemSilent(text);
@@ -232,7 +252,8 @@ namespace Visual_filtering_referable_objects
                                 location = GetLocationOfIteration(y);
                                 size = GetSizeOfIteration(x);
                                 shape = GetShapeOfIteration(w);
-                                suggestions.Add(GetSuggestionOfProperties(shape, color, size, location));
+                                string suggestion = GetSuggestionOfProperties(shape, color, size, location);
+                                if (suggestions.IndexOf(suggestion) < 0) suggestions.Add(suggestion);
                             }
                             else if (numberOfShapes == numberOfMostCommon)
                             {
@@ -240,7 +261,8 @@ namespace Visual_filtering_referable_objects
                                 location = GetLocationOfIteration(y);
                                 shape = GetShapeOfIteration(w);
                                 size = GetSizeOfIteration(x);
-                                suggestions.Add(GetSuggestionOfProperties(shape, color, size, location));
+                                string suggestion = GetSuggestionOfProperties(shape, color, size, location);
+                                if (suggestions.IndexOf(suggestion) < 0) suggestions.Add(suggestion);
                             }
                         }
                     }
@@ -307,13 +329,13 @@ namespace Visual_filtering_referable_objects
             string mostCommonSize = "";
             switch (x)
             {
-                case 0:
+                case 3:
                     mostCommonSize = "pequeños";
                     break;
-                case 1:
+                case 4:
                     mostCommonSize = "medianos";
                     break;
-                case 2:
+                case 5:
                     mostCommonSize = "grandes";
                     break;
             }
@@ -344,6 +366,10 @@ namespace Visual_filtering_referable_objects
 
         public string GetSuggestionOfProperties(string shape, string color = "", string size = "", string location = "")
         {
+            if ((colorSuggestion && color.Length == 0) || (sizeSuggestion && size.Length == 0) || (locationSuggestion && location.Length == 0))
+            {
+                return "";
+            }
             string suggestion = "- Borra los " + shape;
             if (colorSuggestion) suggestion += " " + color;
             if (sizeSuggestion) suggestion += " " + size;

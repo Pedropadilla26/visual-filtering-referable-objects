@@ -202,7 +202,7 @@
                 <Grid x:Name="OptionsGrid" Visibility="Visible" HorizontalAlignment="Left" Height="139" Margin="592,622,0,0" VerticalAlignment="Top" Width="194">
                     <CheckBox x:Name="Shapes_checkbox" IsHitTestVisible="false" Content="Forma" HorizontalAlignment="Left" Margin="55,33,0,0" VerticalAlignment="Top" Height="21" Width="75" FontSize="16" Click="Shapes_checkbox_Click" IsChecked="True"/>
                     <CheckBox x:Name="Colors_checkbox" Content="Color" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Center" Height="21" Width="60" FontSize="16" Click="Color_checkbox_Click" IsChecked="True"/>
-                    <CheckBox x:Name="Size_checkbox" Visibility="Hidden" Content="Tamaño" HorizontalAlignment="Left" Margin="55,84,0,0" VerticalAlignment="Top" FontSize="16" Click="Size_checkbox_Click"/>
+                    <CheckBox x:Name="Size_checkbox" Content="Tamaño" HorizontalAlignment="Left" Margin="55,110,0,0" VerticalAlignment="Top" FontSize="16" Click="Size_checkbox_Click" RenderTransformOrigin="0.481,2.264"/>
                     <CheckBox x:Name="Location_checkbox" Content="Posición" HorizontalAlignment="Left" Margin="55,85,0,0" VerticalAlignment="Top" FontSize="16" RenderTransformOrigin="1.186,0.997" Click="Location_checkbox_Click" IsChecked="True"/>
                 </Grid>
                 <Button x:Name="btnSuggestionOptions" RenderTransformOrigin="0.5,1" Click="Button_Click_Suggestion_Options" Background="#FFCDF0EA" AutomationProperties.Name="BtnActivate" FontSize="14" FontWeight="Bold" Margin="662,616,437,230" Height="23">
