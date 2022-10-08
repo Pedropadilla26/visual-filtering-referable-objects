@@ -423,6 +423,13 @@ namespace Visual_filtering_referable_objects
                 Suggest();
 
             }
+            else if (words.Count == 6)
+            {
+                setColorSuggestion(false);
+                setSizeSuggestion(false);
+                setLocationSuggestion(false);
+                Suggest();
+            }
         }
     }
 

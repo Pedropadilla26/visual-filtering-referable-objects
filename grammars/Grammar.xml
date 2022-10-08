@@ -27,6 +27,7 @@
       <item> Sugiéreme una frase de borrado </item>  
       <item> Sugiere una frase de borrado </item>  
       <item> Haz una sugerencia de borrado </item>
+      <item> Sugiéreme una frase de borrado por forma </item>
       <item> Sugiéreme una frase de borrado por forma <ruleref uri="#PropiedadesFormas"/> </item>  
       <item> Sugiere una frase de borrado por forma <ruleref uri="#PropiedadesFormas"/> </item>  
       <item> Haz una sugerencia de borrado por forma <ruleref uri="#PropiedadesFormas"/> </item>
@@ -39,8 +40,16 @@
       <item> y tamaño </item>
       <item> y posición </item>
       <item> color y tamaño </item>
+      <item> tamaño y color </item>
+      <item> tamaño y posición </item>
       <item> color y posición </item>
+      <item> posición y color </item>
       <item> color posición y tamaño </item>
+      <item> color tamaño y posición </item>
+      <item> posición color y tamaño </item>
+      <item> posición tamaño y color </item>
+      <item> tamaño posición y color </item>  
+      <item> tamaño color y posición </item>  
       <item> posición y tamaño </item>
     </one-of>  
   </rule>  

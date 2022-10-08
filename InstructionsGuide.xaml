@@ -5,85 +5,107 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Visual_filtering_referable_objects"
         mc:Ignorable="d"
-        Title="InstructionsGuide" Height="596" Width="800">
+        Title="InstructionsGuide" Height="696" Width="800">
     <ScrollViewer>
 
         <Viewbox>
-        <StackPanel>
-            <Label x:Name="Title" Content="Guía de comandos" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="20"/>
-            <RichTextBox x:Name="FirstParagraph" HorizontalAlignment="Stretch" Height="23" Margin="50,20,50,0" Width="692" TextChanged="RichTextBox_TextChanged"   Focusable="False" Cursor="Arrow" IsTabStop="False" IsHitTestVisible="False" AllowDrop="False" FontSize="14">
-                <FlowDocument>
-                    <Paragraph>
-                        ¡<Bold>Habla</Bold> cuando el reconocimiento de audio esté activado para que se ejecuten los comandos!
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
-            <RichTextBox x:Name="SecondParagraph" Height="168" Width="690" TextChanged="RichTextBox_TextChanged_1" Margin="-6,30,0,0" Cursor="Arrow" AllowDrop="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False">
-                <FlowDocument>
-                    <Paragraph>
-                        <Bold FontSize="14">
-                            <Run Text="Comandos de accesibilidad"/>
-                        </Bold>
-                        <LineBreak/>
-                        <LineBreak/>
-                        <Run Text="- Escúchame/Empieza a escucharme"/>
-                        <LineBreak/>
-                        <Run Text="- Deja de escucharme/Para de escucharme"/>
-                        <LineBreak/>
-                        <Run Text="- Reinicia el lienzo"/>
-                        <LineBreak/>
-                        <Run Text="- Genera un nuevo lienzo"/>
-                        <LineBreak/>
-                        <Run Text="- Modo solo voz/modo también texto"/>
-                        <LineBreak/>
-                        <Run Text="- Modo noche/dia"/>
-                        <LineBreak/>
-                        <Run Text="- Abre/cierra la guia de comandos"/>
-                        <LineBreak/>
-                        <Run Text="- Activa/desactiva el sonido"/>
-                        <LineBreak/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
-            <RichTextBox x:Name="ThirdParagraph" Height="251" Width="691" Margin="0,30,0,30"   Focusable="False" Cursor="Arrow" IsTabStop="False" IsHitTestVisible="False" AllowDrop="False">
-                <FlowDocument>
-                    <Paragraph>
-                        <Bold>
-                            <Run Text="Comandos de borrado de figuras"/>
-                        </Bold>
-                        <LineBreak/>
-                        <LineBreak/>
-                        <Bold>
-                            <Run Text="- Borra los círculos/triángulos/cuadrados"/>
+            <StackPanel>
+                <Label x:Name="Title" Content="Guía de comandos" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="20"/>
+                <RichTextBox x:Name="FirstParagraph" HorizontalAlignment="Stretch" Height="23" Margin="50,20,50,0" Width="692" TextChanged="RichTextBox_TextChanged"   Focusable="False" Cursor="Arrow" IsTabStop="False" IsHitTestVisible="False" AllowDrop="False" FontSize="14">
+                    <FlowDocument>
+                        <Paragraph>
+                            ¡
+                            <Bold>Habla</Bold> cuando el reconocimiento de audio esté activado para que se ejecuten los comandos!
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <RichTextBox x:Name="SecondParagraph" Height="168" Width="690" TextChanged="RichTextBox_TextChanged_1" Margin="-6,30,0,0" Cursor="Arrow" AllowDrop="False" IsTabStop="False" IsHitTestVisible="False" Focusable="False">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Bold FontSize="14">
+                                <Run Text="Comandos de accesibilidad"/>
                             </Bold>
-                        <LineBreak/>
-                        <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
-                        <LineBreak/>
-                        <Run Text="- que sean rojos/azules/negros/morados/amarillos/verdes/naranjas/rosas"/>
-                        <LineBreak/>
-                        <Run Text="- (y) Que sean grandes/mediaños/pequeños"/>
-                        <LineBreak/>
-                        <Run Text="- (y) Que estén arriba/abajo/a la derecha/a la izquierda/en el centro/arriba a la derecha/abajo a la izquierda/arriba a la izquierda/abajo a la derecha"/>
-                        <LineBreak/>
-                        <Run Text="- (y) Que estén más a la derecha/a la izquierda/arriba/abajo"/>
-                        <LineBreak/>
-                        <LineBreak/>
-                        <Bold>
-                            <Run Text="- Borra el círculo/triángulo/cuadrado"/>
-                        </Bold>
-                        <LineBreak/>
-                        <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
-                        <LineBreak/>
-                        <Run Text="- que sea rojo/azul/negro/morado/amarillo/verde/naranja/rosa"/>
-                        <LineBreak/>
-                        <Run Text="- (y) que sea el mas grande/pequeño"/>
-                        <LineBreak/>
-                        <Run Text="- más a la derecha/a la izquierda/arriba/abajo"/>
-                        <LineBreak/>
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
-        </StackPanel>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run Text="- Escúchame/Empieza a escucharme"/>
+                            <LineBreak/>
+                            <Run Text="- Deja de escucharme/Para de escucharme"/>
+                            <LineBreak/>
+                            <Run Text="- Reinicia el lienzo"/>
+                            <LineBreak/>
+                            <Run Text="- Genera un nuevo lienzo/Genera un nuevo lienzo con x figuras. "/>
+                            <LineBreak/>
+                            <Run Text="- Modo solo voz/modo también texto"/>
+                            <LineBreak/>
+                            <Run Text="- Modo noche/dia"/>
+                            <LineBreak/>
+                            <Run Text="- Abre/cierra la guia de comandos"/>
+                            <LineBreak/>
+                            <Run Text="- Activa/desactiva el sonido"/>
+                            <LineBreak/>
+                            <Run Text="- Interpreta las posiciones como absolutas/relativas. "/>
+                            <LineBreak/>
+                            <Run Text="- Activa/desactiva el sonido. "/>
+                            <LineBreak/>
+                            <Run Text="- Deshacer/Deshaz la última acción. "/>
+                            <LineBreak/>
+                            <Run Text="- Vacía el chat. "/>
+                            <LineBreak/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                <RichTextBox x:Name="ThirdParagraph" Height="340" Width="692" Margin="0,30,0,30"   Focusable="False" Cursor="Arrow" IsTabStop="False" IsHitTestVisible="False" AllowDrop="False">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Bold>
+                                <Run Text="Comandos de borrado de figuras"/>
+                            </Bold>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Bold>
+                                <Run Text="- Borra los círculos/triángulos/cuadrados"/>
+                            </Bold>
+                            <LineBreak/>
+                            <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
+                            <LineBreak/>
+                            <Run Text="- que sean rojos/azules/negros/morados/amarillos/verdes/naranjas/rosas"/>
+                            <LineBreak/>
+                            <Run Text="- (y) Que sean grandes/mediaños/pequeños"/>
+                            <LineBreak/>
+                            <Run Text="- (y) Que estén arriba/abajo/a la derecha/a la izquierda/en el centro/arriba a la derecha/abajo a la izquierda/arriba a la izquierda/abajo a la derecha"/>
+                            <LineBreak/>
+                            <Run Text="- (y) Que estén más a la derecha/a la izquierda/arriba/abajo"/>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Bold>
+                                <Run Text="- Borra el círculo/triángulo/cuadrado"/>
+                            </Bold>
+                            <LineBreak/>
+                            <Run Text="A partir de aquí hay opciones de frases que añadirle al comando anterior:"/>
+                            <LineBreak/>
+                            <Run Text="- que sea rojo/azul/negro/morado/amarillo/verde/naranja/rosa"/>
+                            <LineBreak/>
+                            <Run Text="- (y) que sea el mas grande/pequeño"/>
+                            <LineBreak/>
+                            <Run Text="- más a la derecha/a la izquierda/arriba/abajo"/>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Bold>
+                                <Run Text="- Sugerencias de borrado"/>
+                            </Bold>
+                            <LineBreak/>
+                            <Run Text="Sugiéreme una frase de borrado/Sugiere una frase de borrado/Haz una sugerencia de borrado"/>
+                            <LineBreak/>
+                            <Run Text="Lo anterior + por forma / por forma y color / por forma y tamaño / por forma y posición"/>
+                            <LineBreak/>
+                            <Run Text="por forma, color y tamaño / por color y posición... "/>
+                            <LineBreak/>
+                            <Run Text="etc."/>
+                            <LineBreak/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </StackPanel>
         </Viewbox>
     </ScrollViewer>
 
