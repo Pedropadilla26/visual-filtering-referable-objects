@@ -10,6 +10,43 @@
 
   <rule id="Main">  
     <one-of>  
+      <item>
+        <ruleref uri="#Borrado"/>
+      </item>
+      <item>
+        <ruleref uri="#Accesibilidad"/>
+      </item>
+      <item>
+        <ruleref uri="#Sugerencias"/>
+      </item>
+    </one-of>  
+  </rule>  
+
+   <rule id="Sugerencias" scope="public">  
+    <one-of>  
+      <item> Sugiéreme una frase de borrado </item>  
+      <item> Sugiere una frase de borrado </item>  
+      <item> Haz una sugerencia de borrado </item>
+      <item> Sugiéreme una frase de borrado por forma <ruleref uri="#PropiedadesFormas"/> </item>  
+      <item> Sugiere una frase de borrado por forma <ruleref uri="#PropiedadesFormas"/> </item>  
+      <item> Haz una sugerencia de borrado por forma <ruleref uri="#PropiedadesFormas"/> </item>
+    </one-of>  
+  </rule>  
+
+   <rule id="PropiedadesFormas" scope="public">  
+    <one-of>  
+      <item> y color </item>
+      <item> y tamaño </item>
+      <item> y posición </item>
+      <item> color y tamaño </item>
+      <item> color y posición </item>
+      <item> color posición y tamaño </item>
+      <item> posición y tamaño </item>
+    </one-of>  
+  </rule>  
+
+  <rule id="Borrado" scope="public">  
+    <one-of>  
       <item>  
         Borra los <ruleref uri="#Shapes"/>  
       </item>  
@@ -48,10 +85,7 @@
       </item> 
        <item>  
         Borra el <ruleref uri="#Shape"/> <ruleref uri="#Color"/> <ruleref uri="#LocationsExtremeCases"/>
-      </item> 
-      <item>
-        <ruleref uri="#Accesibilidad"/>
-      </item>
+      </item>  
     </one-of>  
   </rule>  
 
@@ -74,6 +108,9 @@
       </item>
       <item>
         Genera un nuevo lienzo
+      </item>
+      <item>
+        Genera un nuevo lienzo con <ruleref uri="#Numeros"/> figuras
       </item>
       <item>
         Interpreta las posiciones como <ruleref uri="#InterpretacionesPosiciones"/>
@@ -114,6 +151,37 @@
       <item>
       Los segundos
       </item>
+      <item>
+      Deshacer
+      </item>
+      <item>
+      Deshaz la última acción
+      </item>
+      <item>
+      Vacía el chat
+      </item>
+
+    </one-of>  
+  </rule>  
+
+  <rule id="Numeros" scope="public">  
+    <one-of>  
+      <item> Cinco </item>  
+      <item> Seis </item>
+      <item> Siete </item>
+      <item> Ocho </item>
+      <item> Nueve </item>
+      <item> Diez </item>
+      <item> Once </item>
+      <item> Doce </item>
+      <item> Trece </item>
+      <item> Catorce </item>
+      <item> Quince </item>
+      <item> Dieciséis </item>
+      <item> Diecisiete </item>
+      <item> Dieciocho </item>
+      <item> Diecinueve </item>
+      <item> Veinte </item>
     </one-of>  
   </rule>  
 
@@ -123,7 +191,6 @@
       <item> Relativas </item>  
     </one-of>  
   </rule>  
-
 
   <rule id="Shapes" scope="public">  
     <one-of>  

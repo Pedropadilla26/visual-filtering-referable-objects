@@ -47,7 +47,7 @@ namespace Visual_filtering_referable_objects
         }
         public static void AddTextUser(string text)
         {
-            textBlock.AppendText("-------------------USUARIO-------------------\n" + text + "\n");
+            textBlock.AppendText("-----------------USUARIO-----------------\n" + text + "\n");
             textBlock.ScrollToEnd();
         }
         public static void ToggleSpeaker()

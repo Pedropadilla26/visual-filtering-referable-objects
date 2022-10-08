@@ -3,6 +3,7 @@
 /// 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -393,7 +394,7 @@ namespace Visual_filtering_referable_objects
 
         private void Button_Click_Suggest(object sender, RoutedEventArgs e)
         {
-            suggester.Suggest(shapes);
+            suggester.Suggest();
         }
 
         private void Button_Save_Shapes_To_File(object sender, RoutedEventArgs e)
@@ -410,9 +411,21 @@ namespace Visual_filtering_referable_objects
 
         private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
         {
+            GenerateRandomShapes(numberToGenerate);
+            PaintShapes();
+            Console.WriteLine("List of ordered shapes");
+            foreach (Shape shape in shapes)
+            {
+                Console.WriteLine(shape.GeometricShape.ToString() + ", " + shape.Size + ", " + shape.Area.ToString());
+            }
+        }
+
+        private void Button_Click_Generate_Random_Canvas_With_Text(object sender, RoutedEventArgs e, ReadOnlyCollection<RecognizedWordUnit> words = null)
+        {
             lastShapes.Push(shapes);
             shapes = new List<Shape>();
-            GenerateRandomShapes(numberToGenerate);
+            int howManyGenerate = words.Count > 5 ? ParseNumberString(words[5].Text) : numberToGenerate;
+            GenerateRandomShapes(howManyGenerate);
             PaintShapes();
             Console.WriteLine("List of ordered shapes");
             foreach (Shape shape in shapes)
@@ -524,7 +537,7 @@ namespace Visual_filtering_referable_objects
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
                 case "genera":
-                    Button_Click_Generate_Random_Canvas(null, null);
+                    Button_Click_Generate_Random_Canvas_With_Text(null, null, e.Result.Words);
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
                 case "interpreta":
@@ -572,6 +585,27 @@ namespace Visual_filtering_referable_objects
                     {
                         CustomMessageBox.AddTextSystem("Vale.");
                     }
+                    break;
+                case "deshacer":
+                    Button_Click_Backward(null, null);
+                    CustomMessageBox.AddTextSystem("Hecho.");
+                    break;
+                case "deshaz":
+                    Button_Click_Backward(null, null);
+                    CustomMessageBox.AddTextSystem("Hecho.");
+                    break;
+                case "vacía":
+                    CustomMessageBox.AddTextSystem("Hecho.");
+                    Button_Click_Clear_Chat(null, null);
+                    break;
+                case "sugiéreme":
+                    suggester.TryToSuggest(e.Result.Words);
+                    break;
+                case "sugiere":
+                    suggester.TryToSuggest(e.Result.Words);
+                    break;
+                case "haz":
+                    suggester.TryToSuggest(e.Result.Words);
                     break;
                 default:
                     break;
@@ -638,5 +672,76 @@ namespace Visual_filtering_referable_objects
                 suggester.setLocationSuggestion(false);
             }
         }
+
+        private int ParseNumberString(string numberWord)
+        {
+            switch (numberWord)
+            {
+                case "Una":
+                    return 1;
+                    break;
+                case "Dos":
+                    return 2;
+                    break;
+                case "Tres":
+                    return 3;
+                    break;
+                case "Cuatro":
+                    return 4;
+                    break;
+                case "Cinco":
+                    return 5;
+                    break;
+                case "Seis":
+                    return 6;
+                    break;
+                case "Siete":
+                    return 7;
+                    break;
+                case "Ocho":
+                    return 8;
+                    break;
+                case "Nueve":
+                    return 9;
+                    break;
+                case "Diez":
+                    return 10;
+                    break;
+                case "Once":
+                    return 11;
+                    break;
+                case "Doce":
+                    return 12;
+                    break;
+                case "Trece":
+                    return 13;
+                    break;
+                case "Catorce":
+                    return 14;
+                    break;
+                case "Quince":
+                    return 15;
+                    break;
+                case "Dieciseis":
+                    return 16;
+                    break;
+                case "Diecisiete":
+                    return 17;
+                    break;
+                case "Dieciocho":
+                    return 18;
+                    break;
+                case "Diecinueve":
+                    return 19;
+                    break;
+                case "Veinte":
+                    return 20;
+                    break;
+                default:
+                    return 0;
+                    break;
+            }
+        }
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Speech.Recognition;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -186,8 +188,9 @@ namespace Visual_filtering_referable_objects
 
         }
 
-        public void Suggest(List<Shape> initialShapes, string suggestionType = "many")
+        public void Suggest()
         {
+            CustomMessageBox.AddTextSystem("");
             string suggestion = "Te recomiendo que pruebes usando:";
             List<string> suggestions = GetMostCommon();
             if (suggestions.Count() < 1 || (suggestions[0].Length == 0 && suggestions.Count == 1))
@@ -389,6 +392,37 @@ namespace Visual_filtering_referable_objects
                 }
             }
             return result;
+        }
+
+        public void TryToSuggest(ReadOnlyCollection<RecognizedWordUnit> words)
+        {
+            if (words.Count == 5)
+            {
+                Suggest();
+            }
+            else if (words.Count > 7)
+            {
+                setColorSuggestion(false);
+                setSizeSuggestion(false);
+                setLocationSuggestion(false);
+                for (int i = 7; i < words.Count; i++)
+                {
+                    if (words[i].Text == "color")
+                    {
+                        setColorSuggestion(true);
+                    }
+                    else if (words[i].Text == "tamaño")
+                    {
+                        setSizeSuggestion(true);
+                    }
+                    else if (words[i].Text == "posición")
+                    {
+                        setLocationSuggestion(true);
+                    }
+                }
+                Suggest();
+
+            }
         }
     }
 
