@@ -201,6 +201,8 @@ namespace Visual_filtering_referable_objects
         private void GenerateRandomShapes(int howMany)
         {
             clearPathPaints();
+            ClearCanvas();
+            shapes = new List<Shape>();
 
             int i = 0;
             while (i < howMany)
