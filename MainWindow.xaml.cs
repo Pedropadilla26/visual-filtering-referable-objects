@@ -34,6 +34,7 @@ namespace Visual_filtering_referable_objects
         double canvasMaxY = 0;
         int numberToGenerate = 5;
         bool isSuggestionOptionsDesplegated = false;
+        bool isCommandGuideOpen = false;
 
         // Default speech recognizer state
         bool isListening = false;
@@ -327,6 +328,7 @@ namespace Visual_filtering_referable_objects
         {
             intructionsGuideWindow = new InstructionsGuide(nightMode);
             intructionsGuideWindow.Show();
+            isCommandGuideOpen = true;
         }
 
         private void Button_Night_Mode(object sender, RoutedEventArgs e)
@@ -345,6 +347,10 @@ namespace Visual_filtering_referable_objects
                 ChatBorder.Background = lightModeCanvasBackground;
                 chat.Foreground = new SolidColorBrush(Colors.Black);
                 ChatBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+                Shapes_checkbox.Foreground = new SolidColorBrush(Colors.Black);
+                Colors_checkbox.Foreground = new SolidColorBrush(Colors.Black);
+                Size_checkbox.Foreground = new SolidColorBrush(Colors.Black);
+                Location_checkbox.Foreground = new SolidColorBrush(Colors.Black);
             }
             else
             {
@@ -360,13 +366,22 @@ namespace Visual_filtering_referable_objects
                 ChatBorder.Background = darkModeWindowBackground;
                 chat.Foreground = new SolidColorBrush(Colors.White);
                 ChatBorder.BorderBrush = new SolidColorBrush(Colors.Gray);
+                Shapes_checkbox.Foreground = new SolidColorBrush(Colors.White);
+                Colors_checkbox.Foreground = new SolidColorBrush(Colors.White);
+                Size_checkbox.Foreground = new SolidColorBrush(Colors.White);
+                Location_checkbox.Foreground = new SolidColorBrush(Colors.White);
             }
+        }
+
+        private void SaveCurrentShapes()
+        {
+            lastShapes.Push(new List<Shape>(shapes));
         }
 
         private void Button_Click_Reset(object sender, RoutedEventArgs e)
         {
             shapes = new List<Shape>(initialShapes);
-            lastShapes.Push(shapes);
+            SaveCurrentShapes();
             PaintShapes();
         }
 
@@ -405,7 +420,7 @@ namespace Visual_filtering_referable_objects
         }
         private void Button_Load_Shapes_From_File(object sender, RoutedEventArgs e)
         {
-            lastShapes.Push(shapes);
+            SaveCurrentShapes();
             shapes = FileParser.getShapesFromFile();
             initialShapes = shapes;
             PaintShapes();
@@ -413,6 +428,7 @@ namespace Visual_filtering_referable_objects
 
         private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
         {
+            SaveCurrentShapes();
             GenerateRandomShapes(numberToGenerate);
             PaintShapes();
             Console.WriteLine("List of ordered shapes");
@@ -424,8 +440,7 @@ namespace Visual_filtering_referable_objects
 
         private void Button_Click_Generate_Random_Canvas_With_Text(object sender, RoutedEventArgs e, ReadOnlyCollection<RecognizedWordUnit> words = null)
         {
-            lastShapes.Push(shapes);
-            shapes = new List<Shape>();
+            SaveCurrentShapes();
             int howManyGenerate = words.Count > 5 ? ParseNumberString(words[5].Text) : numberToGenerate;
             GenerateRandomShapes(howManyGenerate);
             PaintShapes();
@@ -546,7 +561,7 @@ namespace Visual_filtering_referable_objects
                     speechEraser.ChangePositionInterpreter(e.Result.Words);
                     break;
                 case "borra":
-                    lastShapes.Push(shapes);
+                    SaveCurrentShapes();
                     shapes = speechEraser.EraseShapes(shapes, e.Result.Words);
                     PaintShapes();
                     Button_Click(null, null);
@@ -560,8 +575,16 @@ namespace Visual_filtering_referable_objects
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
                 case "cierra":
-                    intructionsGuideWindow.Close();
-                    CustomMessageBox.AddTextSystem("Hecho.");
+                    if (isCommandGuideOpen)
+                    {
+                        intructionsGuideWindow.Close();
+                        isCommandGuideOpen = false;
+                        CustomMessageBox.AddTextSystem("Hecho.");
+                    }
+                    else
+                    {
+                        CustomMessageBox.AddTextSystem("No está abierta.");
+                    }
                     break;
                 case "activa":
                     if (!CustomMessageBox.speakerActivated) Button_Click_Speaker(null, null);
@@ -575,7 +598,7 @@ namespace Visual_filtering_referable_objects
                     List<Shape> copy = speechEraser.AnswerYesToErase();
                     if (copy.Count > 0)
                     {
-                        lastShapes.Push(shapes);
+                        SaveCurrentShapes();
                         shapes = copy;
                         PaintShapes();
                         Button_Click(null, null);

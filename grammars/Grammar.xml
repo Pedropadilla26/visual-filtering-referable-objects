@@ -125,12 +125,6 @@
         Interpreta las posiciones como <ruleref uri="#InterpretacionesPosiciones"/>
       </item>
       <item>
-        Modo solo voz
-      </item>
-      <item>
-        Modo también texto
-      </item>
-      <item>
         Modo noche
       </item>
       <item>
