@@ -534,18 +534,38 @@ namespace Visual_filtering_referable_objects
             switch (firstWord)
             {
                 case "escúchame":
+                    if (isListening)
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     Button_Click(null, null);
                     CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
                     break;
                 case "empieza":
+                    if (isListening)
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     Button_Click(null, null);
                     CustomMessageBox.AddTextSystem("Se ha activado el reconocimiento de voz.");
                     break;
                 case "para":
+                    if (isListening)
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     Button_Click(null, null);
                     CustomMessageBox.AddTextSystem("Se ha desactivado el reconocimiento de voz.");
                     break;
                 case "deja":
+                    if (isListening)
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     Button_Click(null, null);
                     CustomMessageBox.AddTextSystem("Se ha desactivado el reconocimiento de voz.");
                     break;
@@ -567,6 +587,12 @@ namespace Visual_filtering_referable_objects
                     Button_Click(null, null);
                     break;
                 case "modo":
+                    string secondWord = e.Result.Words[1].Text.ToLower();
+                    if ((secondWord == "noche" && nightMode) || (secondWord == "día" && !nightMode))
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     Button_Night_Mode(null, null);
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
