@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -10,6 +12,12 @@ namespace Visual_filtering_referable_objects
     internal class FileParser
     {
         public const string DEFAULT_FILE_PATH = "/objectFiles/shapes";
+
+
+        public static void DisplayTimeElapsed(string node, TimeSpan ts)
+        {
+            CustomMessageBox.AddTextSystem("Tiempo en hacer algoritmo de " + node + ": " + ts.Milliseconds + " ms.");
+        }
 
         public static ColorsEnum GetColorEnum(string color)
         {
@@ -47,6 +55,8 @@ namespace Visual_filtering_referable_objects
 
         public static List<Shape> getShapesFromFile()
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<Shape> shapes = new List<Shape>();
             Stream myStream;
             OpenFileDialog openFileDialog1 = new OpenFileDialog
@@ -130,12 +140,17 @@ namespace Visual_filtering_referable_objects
                     myStream.Close();
                 }
             }
+            stopwatch.Stop();
+          //  DisplayTimeElapsed("Cargado", stopwatch.Elapsed);
+
 
             return shapes;
         }
         public static void saveShapesToFile(List<Shape> shapes)
         {
             string result = "";
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             foreach (Shape shape in shapes)
             {
                 switch (shape.GeometricShape)
@@ -187,6 +202,9 @@ namespace Visual_filtering_referable_objects
                     myStream.Close();
                 }
             }
+            stopwatch.Stop();
+           // DisplayTimeElapsed("Guardado", stopwatch.Elapsed);
+
         }
     }
 }

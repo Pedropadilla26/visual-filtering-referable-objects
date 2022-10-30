@@ -32,9 +32,16 @@ namespace Visual_filtering_referable_objects
         double canvasMinY = 0;
         double canvasMaxX = 0;
         double canvasMaxY = 0;
+
+        // Number of shapes to generate if not specified
         int numberToGenerate = 5;
+
         bool isSuggestionOptionsDesplegated = false;
         bool isCommandGuideOpen = false;
+        public Stopwatch stopwatch = new Stopwatch();
+
+        // If true SYL will show execution times of importaant functions
+        bool stopWatchDebug = false;
 
         // Default speech recognizer state
         bool isListening = false;
@@ -125,6 +132,11 @@ namespace Visual_filtering_referable_objects
 
             CustomMessageBox.SetTextField(chat);
             CustomMessageBox.AddTextSystem("Hola, soy Syl, la asistente virtual de esta aplicación. Puedes usar los botones o los comandos de la guía de comandos para controlarla.");
+        }
+
+        public void DisplayTimeElapsed(string node, TimeSpan ts)
+        {
+            if (stopWatchDebug) CustomMessageBox.AddTextSystem("Tiempo en hacer algoritmo de " + node + ": " + ts.Milliseconds + " ms.");
         }
 
         private bool ShapesOverlap(Shape shape1, Shape shape2, bool paintsPath = false)
@@ -434,7 +446,11 @@ namespace Visual_filtering_referable_objects
         private void Button_Click_Generate_Random_Canvas(object sender, RoutedEventArgs e)
         {
             SaveCurrentShapes();
+            stopwatch.Start();
             GenerateRandomShapes(numberToGenerate);
+            stopwatch.Stop();
+            DisplayTimeElapsed("generación", stopwatch.Elapsed);
+            stopwatch.Restart();
             PaintShapes();
             Console.WriteLine("List of ordered shapes");
             foreach (Shape shape in shapes)
@@ -447,7 +463,11 @@ namespace Visual_filtering_referable_objects
         {
             SaveCurrentShapes();
             int howManyGenerate = words.Count > 5 ? ParseNumberString(words[5].Text) : numberToGenerate;
+            stopwatch.Start();
             GenerateRandomShapes(howManyGenerate);
+            stopwatch.Stop();
+            DisplayTimeElapsed("generación", stopwatch.Elapsed);
+            stopwatch.Restart();
             PaintShapes();
             Console.WriteLine("List of ordered shapes");
             foreach (Shape shape in shapes)
@@ -458,6 +478,7 @@ namespace Visual_filtering_referable_objects
 
         private void PaintShapes()
         {
+            stopwatch.Start();
             ClearCanvas();
             suggester.CreateMatrix(this.shapes);
             suggester.CreateVector();
@@ -504,6 +525,9 @@ namespace Visual_filtering_referable_objects
                 }
 
             }
+            stopwatch.Stop();
+            DisplayTimeElapsed("Pintado", stopwatch.Elapsed);
+            stopwatch.Restart();
             
         }
 

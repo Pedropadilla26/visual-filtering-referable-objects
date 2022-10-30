@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Speech.Recognition;
 using System.Text;
@@ -35,6 +36,14 @@ namespace Visual_filtering_referable_objects
         bool colorSuggestion = true;
         bool sizeSuggestion = false;
         bool locationSuggestion = true;
+
+        bool stopWatchDebug = false;
+
+
+        public void DisplayTimeElapsed(string node, TimeSpan ts)
+        {
+            if (stopWatchDebug) CustomMessageBox.AddTextSystem("Tiempo en hacer algoritmo de " + node + ": " + ts.Milliseconds + " ms.");
+        }
 
         public void setColorSuggestion (bool state)
         {
@@ -192,7 +201,10 @@ namespace Visual_filtering_referable_objects
         {
             CustomMessageBox.AddTextSystem("");
             string suggestion = "Te recomiendo que pruebes usando:";
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             List<string> suggestions = GetMostCommon();
+
             if (suggestions.Count() < 1 || (suggestions[0].Length == 0 && suggestions.Count == 1))
             {
                 CustomMessageBox.AddTextSystem("Lo siento, pero no he podido encontrar una expresión de referencia que coincida. Prueba a reducir el número de propiedades a sugerir.");
@@ -203,6 +215,8 @@ namespace Visual_filtering_referable_objects
                 CustomMessageBox.AppendTextSystemSilent(text);
             }
             CustomMessageBox.AppendTextSystemSilent("Lo cual borrará " + this.mostCommonShapeQuantityNow + " figuras\n\n");
+            stopwatch.Stop();
+            DisplayTimeElapsed("Sugerencias", stopwatch.Elapsed);
         }
 
         public bool ShouldIncrement (int shape, int size, int location, int color)

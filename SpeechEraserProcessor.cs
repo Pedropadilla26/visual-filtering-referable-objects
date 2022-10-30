@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Speech.Recognition;
 using System.Windows.Media;
+using System;
 
 namespace Visual_filtering_referable_objects
 {
@@ -11,6 +13,13 @@ namespace Visual_filtering_referable_objects
         string positionInterpreter = "";
         List<Shape> shapesWaitingForAnswer = new List<Shape>();
         List<Shape> shapesWaitingForAnswer2 = new List<Shape>();
+        bool stopWatchDebug = true;
+
+
+        public void DisplayTimeElapsed(string node, TimeSpan ts)
+        {
+            if (stopWatchDebug) CustomMessageBox.AddTextSystem("Tiempo en hacer algoritmo de " + node + ": " + ts.Milliseconds + " ms.");
+        }
 
         public SpeechEraserProcessor()
         {
@@ -58,6 +67,8 @@ namespace Visual_filtering_referable_objects
         }
         public List<Shape> EraseShapes(List<Shape> initialShapes, ReadOnlyCollection<RecognizedWordUnit> words)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             Quadrants quadrantToSearch1 = Quadrants.None;
             Quadrants quadrantToSearch2 = Quadrants.None;
             ShapeType shapeToSearch = ShapeType.None;
@@ -385,6 +396,9 @@ namespace Visual_filtering_referable_objects
                     CustomMessageBox.AddTextSystem("He borrado las figuras que coincidían.");
                 }
             }
+            stopwatch.Stop();
+            DisplayTimeElapsed("Borrado", stopwatch.Elapsed);
+
             return initialShapes;
         }
         private bool MatchesShape(
