@@ -614,10 +614,20 @@ namespace Visual_filtering_referable_objects
                     break;
                 case "activa":
                     if (!CustomMessageBox.speakerActivated) Button_Click_Speaker(null, null);
+                    else
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
                 case "desactiva":
                     if (CustomMessageBox.speakerActivated) Button_Click_Speaker(null, null);
+                    else
+                    {
+                        CustomMessageBox.AddTextSystem("La aplicacion ya está en ese modo.");
+                        break;
+                    }
                     CustomMessageBox.AddTextSystem("Hecho.");
                     break;
                 case "sí":
