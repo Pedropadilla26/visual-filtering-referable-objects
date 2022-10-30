@@ -421,8 +421,8 @@ namespace Visual_filtering_referable_objects
         private void Button_Load_Shapes_From_File(object sender, RoutedEventArgs e)
         {
             SaveCurrentShapes();
-            shapes = FileParser.getShapesFromFile();
-            initialShapes = shapes;
+            this.shapes = FileParser.getShapesFromFile();
+            this.initialShapes = this.shapes;
             PaintShapes();
         }
 

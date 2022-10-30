@@ -355,7 +355,10 @@ namespace Visual_filtering_referable_objects
                     for (int i = 0; i < geometricShapesList.Count(); i++)
                     {
                         Shape shape = geometricShapesList[i];
-                        if ((color == shape.Color || color == System.Windows.Media.Brushes.White) && IsBiggestOrSmallestShape(geometricShapesList, size, i) && IsExtremePosition(geometricShapesList, positionToSearch, shape))
+                        bool isColor = color == System.Windows.Media.Brushes.White ? true : color.Color == shape.Color.Color;
+                        bool isBiggestOrSmallestSisze = IsBiggestOrSmallestShape(geometricShapesList, size, i);
+                        bool isExtremePosition = IsExtremePosition(geometricShapesList, positionToSearch, shape);
+                        if (isColor && isBiggestOrSmallestSisze && isExtremePosition)
                         {
                             if (anyMatch && !warnedAboutPlural)
                             {

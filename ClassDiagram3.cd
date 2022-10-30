@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Visual_filtering_referable_objects.App" Collapsed="true">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.Circle">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Circle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.CommandSuggester" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EEgGUApACEAEgAgAAAIUAAQABgQMIAAAIAABIQAABkA=</HashCode>
+      <FileName>CommandSuggester.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.CustomMessageBox">
+    <Position X="13.75" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAgAAQABAAABAgAAAgAAEAAAARAABAAAABAA=</HashCode>
+      <FileName>CustomMessageBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.FileParser">
+    <Position X="16" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAABAAAAAAAAAAAAAAAAAAAAABAEAAAAAAAAA=</HashCode>
+      <FileName>FileParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.InstructionsGuide" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="4" Width="1.75" />
+    <Members>
+      <Method Name="RichTextBox_TextChanged" Hidden="true" />
+      <Method Name="RichTextBox_TextChanged_1" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InstructionsGuide.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="2.5" Y="0.5" Width="3.5" />
+    <Members>
+      <Method Name="clearPathPaints" Hidden="true" />
+      <Method Name="Color_checkbox_Click" Hidden="true" />
+      <Method Name="ComboBox_SelectionChanged" Hidden="true" />
+      <Field Name="darkModeWindowBackground" Hidden="true" />
+      <Field Name="isCommandGuideOpen" Hidden="true" />
+      <Method Name="IsInBottomLeftQuadrant" Hidden="true" />
+      <Method Name="IsInBottomRightQuadrant" Hidden="true" />
+      <Method Name="IsInCenterQuadrant" Hidden="true" />
+      <Method Name="IsInTopLeftQuadrant" Hidden="true" />
+      <Method Name="IsInTopRightQuadrant" Hidden="true" />
+      <Field Name="isSuggestionOptionsDesplegated" Hidden="true" />
+      <Field Name="lightModeCanvasBackground" Hidden="true" />
+      <Field Name="lightModeWindowBackground" Hidden="true" />
+      <Method Name="Location_checkbox_Click" Hidden="true" />
+      <Method Name="ParseNumberString" Hidden="true" />
+      <Method Name="SaveCurrentShapes" Hidden="true" />
+      <Method Name="Shapes_checkbox_Click" Hidden="true" />
+      <Method Name="Size_checkbox_Click" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>QIgAK0iUAAgAECARMhQEBCEQDFRBCEADISKEgAMBBAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.AbstractShape">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.Shape">
+    <Position X="0.5" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAgBAAAAAAAAAgAAAAABAAAAAAgQAAAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.SpeechEraserProcessor">
+    <Position X="13.75" Y="5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAUAAAAAAAAAAAIAACAABAAGAABMAAAAAQAQAAE=</HashCode>
+      <FileName>SpeechEraserProcessor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.Properties.Resources">
+    <Position X="11" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Visual_filtering_referable_objects.Properties.Settings" Collapsed="true">
+    <Position X="10.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Visual_filtering_referable_objects.ShapeType">
+    <Position X="3.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAgAAAAAAAAgAAEAAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Visual_filtering_referable_objects.Size">
+    <Position X="5.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAABAAAAAAAAAAAAAAAEEAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Visual_filtering_referable_objects.Quadrants">
+    <Position X="5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAADAAAAAAAAAACAAAAAAEIAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Visual_filtering_referable_objects.ColorsEnum">
+    <Position X="3" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAAAAAAAhAAAAAABAAAAAAAAAAAAAAAADEAAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Visual_filtering_referable_objects.SearchType" Collapsed="true">
+    <Position X="7.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAACAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Visual_filtering_referable_objects.Positions">
+    <Position X="9.75" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAIAAAACACAAAEAAAA=</HashCode>
+      <FileName>Shapes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
