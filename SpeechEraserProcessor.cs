@@ -75,6 +75,7 @@ namespace Visual_filtering_referable_objects
             SolidColorBrush color = System.Windows.Media.Brushes.White;
             Size size = Size.None;
             Positions positionToSearch = Positions.None;
+            bool searchForExtreme = false;
 
             bool isValidStart = false;
             string startCommand = words[0].Text.ToLower() + " " + words[1].Text.ToLower();
@@ -299,12 +300,15 @@ namespace Visual_filtering_referable_objects
                             {
                                 case "grande":
                                     size = Size.Big;
+                                    searchForExtreme = true;
                                     break;
                                 case "mediano":
                                     size = Size.Medium;
+                                    searchForExtreme = true;
                                     break;
                                 case "pequeño":
                                     size = Size.Small;
+                                    searchForExtreme = true;
                                     break;
                                 case "a":
                                     string positionWord = word == "más" ? words[6].Text.ToLower() : words[7].Text.ToLower();
@@ -337,13 +341,21 @@ namespace Visual_filtering_referable_objects
             {
                 bool anyMatch = false;
 
+                if (searchForExtreme && AreAllSameSize(GetSortedShapesOfType(shapeToSearch, initialShapes)))
+                {
+                    CustomMessageBox.AddTextSystem("Todos los objetos son del mismo tamaño. ¿Quiere que los borre todos?");
+                    shapesWaitingForAnswer = new List<Shape>(initialShapes);
+                    shapesWaitingForAnswer.RemoveAll(shape => MatchesShapeType(shape, shapeToSearch));
+                    return initialShapes;
+                }
+
                 if (searchType == SearchType.Multiple)
                 {
                     List<Shape> shapesCopy = new List<Shape>(initialShapes);
                     for (int i = 0; i < shapesCopy.Count(); i++)
                     {
                         Shape shape = shapesCopy[i];
-                        shape.Size = CalculateSizeFromIterator(shapesCopy, i);
+                        shape.Size = CalculateSizeFromIterator(shapesCopy, i, size);
 
                         if (MatchesShape(shapesCopy, shape, shapeToSearch, color, size, quadrantToSearch1, quadrantToSearch2, positionToSearch))
                         {
@@ -436,13 +448,30 @@ namespace Visual_filtering_referable_objects
             return true;
         }
 
-        private Size CalculateSizeFromIterator(List<Shape> list, int i)
+        private Size CalculateSizeFromIterator(List<Shape> list, int i, Size sizeToSearch)
         {
-            if (i <= list.Count() / 3)
+            int iteratorForBig = list.Count() / 3;
+            int iteratorForMedium = list.Count() * 2 / 3;
+
+            // If it qualifies for something it means the user sees some Shape as this size, and they may have the same size
+            // of one of those that are designated that size, even if it is not in the correct iterator
+            bool qualifiesForBig = (list[i].Area == list[iteratorForBig].Area) && sizeToSearch == Size.Big;
+            bool qualifiesForMedium = (list[i].Area == list[iteratorForMedium].Area) && sizeToSearch == Size.Medium;
+            bool qualifiesForSmall = (list[i].Area == list[list.Count() - 1].Area) && sizeToSearch == Size.Small;
+
+            if (qualifiesForBig)
+                return Size.Big;
+            else if (qualifiesForMedium)
+                return Size.Medium;
+            else if (qualifiesForSmall)
+                return Size.Small;
+
+
+            if (i <= iteratorForBig)
             {
                 return Size.Big;
             }
-            else if (i <= list.Count() * 2 / 3)
+            else if (i <= iteratorForMedium)
             {
                 return Size.Medium;
             }
@@ -580,5 +609,26 @@ namespace Visual_filtering_referable_objects
             return result;
         }
 
+        private bool AreAllSameSize(List<Shape> shapes)
+        {
+            if (shapes[0] == shapes[shapes.Count - 1])
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private bool MatchesShapeType(Shape s, ShapeType shapeType)
+        {
+            if (s.GeometricShape.Equals(shapeType))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

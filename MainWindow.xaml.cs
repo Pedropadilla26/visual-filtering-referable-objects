@@ -661,14 +661,11 @@ namespace Visual_filtering_referable_objects
                     break;
                 case "sí":
                     List<Shape> copy = speechEraser.AnswerYesToErase();
-                    if (copy.Count > 0)
-                    {
                         SaveCurrentShapes();
                         shapes = copy;
                         PaintShapes();
                         Button_Click(null, null);
                         CustomMessageBox.AddTextSystem("Vale.");
-                    }
                     break;
                 case "no":
                     if (speechEraser.AnswerNoToErase())
