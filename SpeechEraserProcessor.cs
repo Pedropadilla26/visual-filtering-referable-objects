@@ -456,8 +456,8 @@ namespace Visual_filtering_referable_objects
             // If it qualifies for something it means the user sees some Shape as this size, and they may have the same size
             // of one of those that are designated that size, even if it is not in the correct iterator
             bool qualifiesForBig = (list[i].Area == list[iteratorForBig].Area) && sizeToSearch == Size.Big;
-            bool qualifiesForMedium = (list[i].Area == list[iteratorForMedium].Area) && sizeToSearch == Size.Medium;
-            bool qualifiesForSmall = (list[i].Area == list[list.Count() - 1].Area) && sizeToSearch == Size.Small;
+            bool qualifiesForMedium = (list[i].Area == list[iteratorForMedium].Area || list[i].Area == list[iteratorForBig+1].Area) && sizeToSearch == Size.Medium;
+            bool qualifiesForSmall = (list[i].Area == list[list.Count() - 1].Area || list[i].Area == list[iteratorForMedium + 1].Area) && sizeToSearch == Size.Small;
 
             if (qualifiesForBig)
                 return Size.Big;
